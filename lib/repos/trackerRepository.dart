@@ -38,39 +38,56 @@ class TrackerRepository {
 
   Future<String?> stopTracker({
     required Duration duration,
-    required String trackingDocId,
-    required String clientId,
     required int tag,
+    required String trackingDocId,
     required DateTime stop,
   }) async {
     AppUser user = authCubit.state.appUser!;
-    FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
-
-    HttpsCallable callable =
-        FirebaseFunctions.instance.httpsCallable('stopTracker');
 
     try {
-      final resp = await callable.call({
-        'clientId': clientId,
+      final result = await FirebaseFirestore.instance
+          .collection('companies')
+          .doc(user.companyId)
+          .collection('trackings')
+          .doc(trackingDocId)
+          .update({
         'duration': duration.inSeconds,
-        'trackingDocId': trackingDocId,
         'tag': tag,
-        'stop': stop.toString(),
-        'companyId': user.companyId,
+        'stop': stop,
+        'finished': true,
       });
-      return resp.data;
+
+      return "SUCCES";
     } on FirebaseFunctionsException catch (error) {
+      print(error);
       print(error.code);
       print(error.message);
     }
+
+    // FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+
+    // HttpsCallable callable =
+    //     FirebaseFunctions.instance.httpsCallable('stopTracker');
+
+    // try {
+    //   final resp = await callable.call({
+    //     'clientId': clientId,
+    //     'duration': duration.inSeconds,
+    //     'trackingDocId': trackingDocId,
+    //     'tag': tag,
+    //     'stop': stop.toString(),
+    //     'companyId': user.companyId,
+    //   });
+    //   return resp.data;
+    // } on FirebaseFunctionsException catch (error) {
+    //   print(error.code);
+    //   print(error.message);
+    // }
   }
 
   Future<String?> updateTracking({
-    required Duration duration,
-    required Duration originalDuration,
     required String trackingDocId,
-    required String clientId,
-    required DateTime start,
+    required Duration? duration,
     required int? tag,
   }) async {
     AppUser user = authCubit.state.appUser!;
@@ -78,19 +95,18 @@ class TrackerRepository {
     HttpsCallable callable =
         FirebaseFunctions.instance.httpsCallable('updateTracking');
 
-    print('jertto');
     try {
-      final resp = await callable.call({
-        'clientId': clientId,
-        'durationChange': (duration - originalDuration).inSeconds,
-        'duration': duration.inSeconds,
-        'trackingDocId': trackingDocId,
+      final result = await FirebaseFirestore.instance
+          .collection('companies')
+          .doc(user.companyId)
+          .collection('trackings')
+          .doc(trackingDocId)
+          .update({
+        'duration': duration != null ? duration.inSeconds : null,
         'tag': tag,
-        'start': start.toString(),
-        'companyId': user.companyId,
       });
-      print(resp);
-      return resp.data;
+
+      return "SUCCES";
     } on FirebaseFunctionsException catch (error) {
       print(error);
       print(error.code);

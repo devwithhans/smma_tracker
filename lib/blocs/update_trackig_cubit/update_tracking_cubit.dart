@@ -19,11 +19,11 @@ class UpdateTrackingCubit extends Cubit<UpdateTrackingState> {
 
     try {
       await _trackerRepository.updateTracking(
-        start: originalTracking.start,
-        duration: duration ?? Duration(),
-        originalDuration: originalTracking.duration,
+        // start: originalTracking.start,
+        duration: duration,
+        // originalDuration: originalTracking.duration,
         trackingDocId: originalTracking.id,
-        clientId: originalTracking.clientId,
+        // clientId: originalTracking.clientId,
         tag: tag != null ? tag.id : null,
       );
     } catch (e) {
