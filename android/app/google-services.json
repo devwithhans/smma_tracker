@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "913647369249",
+    "project_id": "bb-time-tracker",
+    "storage_bucket": "bb-time-tracker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913647369249:android:e68b5d6c5c07fdf3e5f760",
+        "android_client_info": {
+          "package_name": "com.example.agency_time"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913647369249-l0s40kkm98u8ausroqmo9msjaurpjthh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsb_gX0caEiptQ7X-LZZ5_JqWHEDGBnSI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913647369249-l0s40kkm98u8ausroqmo9msjaurpjthh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913647369249-b9g0di8v2gfg6rbl0697h6cl6ld9ehla.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.agencyTime"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
