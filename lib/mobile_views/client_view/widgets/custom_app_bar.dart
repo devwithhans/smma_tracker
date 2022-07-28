@@ -1,17 +1,19 @@
-import 'package:agency_time/models/client.dart';
 import 'package:flutter/material.dart';
 
-class ClientViewApp extends StatelessWidget {
-  const ClientViewApp({
+class CustomAppBar extends StatelessWidget {
+  const CustomAppBar({
     Key? key,
-    required this.client,
+    this.title = 'title',
+    this.icon,
   }) : super(key: key);
 
-  final Client client;
+  final String title;
+  final Widget? icon;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      height: 50,
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -21,7 +23,9 @@ class ClientViewApp extends StatelessWidget {
             child: Row(
               children: [
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                   child: Container(
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
@@ -35,20 +39,14 @@ class ClientViewApp extends StatelessWidget {
                 ),
                 SizedBox(width: 20),
                 Text(
-                  client.name,
+                  title,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
                 ),
               ],
             ),
           ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.edit,
-              color: Colors.black,
-            ),
-          ),
+          icon ?? SizedBox(),
         ],
       ),
     );

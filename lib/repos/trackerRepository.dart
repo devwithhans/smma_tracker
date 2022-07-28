@@ -7,6 +7,7 @@ import 'package:agency_time/models/tracking.dart';
 import 'package:agency_time/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class TrackerRepository {
   AuthCubit authCubit;
@@ -36,26 +37,32 @@ class TrackerRepository {
     }
   }
 
-  Future<String?> stopTracker({
-    required Duration duration,
-    required int tag,
+  Future<String?> updateTracker({
+    Duration? duration,
+    int? tag,
     required String trackingDocId,
-    required DateTime stop,
+    DateTime? stop,
   }) async {
     AppUser user = authCubit.state.appUser!;
 
     try {
+      Map<String, dynamic> updateObject = {
+        'duration': duration != null ? duration.inSeconds : null,
+        'tag': tag,
+        'finished': true,
+      };
+      if (stop != null) {
+        updateObject.addAll({
+          'stop': stop,
+        });
+      }
+
       final result = await FirebaseFirestore.instance
           .collection('companies')
           .doc(user.companyId)
           .collection('trackings')
           .doc(trackingDocId)
-          .update({
-        'duration': duration.inSeconds,
-        'tag': tag,
-        'stop': stop,
-        'finished': true,
-      });
+          .update(updateObject);
 
       return "SUCCES";
     } on FirebaseFunctionsException catch (error) {
@@ -63,50 +70,19 @@ class TrackerRepository {
       print(error.code);
       print(error.message);
     }
-
-    // FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
-
-    // HttpsCallable callable =
-    //     FirebaseFunctions.instance.httpsCallable('stopTracker');
-
-    // try {
-    //   final resp = await callable.call({
-    //     'clientId': clientId,
-    //     'duration': duration.inSeconds,
-    //     'trackingDocId': trackingDocId,
-    //     'tag': tag,
-    //     'stop': stop.toString(),
-    //     'companyId': user.companyId,
-    //   });
-    //   return resp.data;
-    // } on FirebaseFunctionsException catch (error) {
-    //   print(error.code);
-    //   print(error.message);
-    // }
   }
 
-  Future<String?> updateTracking({
+  Future<String?> deleteTracking({
     required String trackingDocId,
-    required Duration? duration,
-    required int? tag,
   }) async {
     AppUser user = authCubit.state.appUser!;
-
-    HttpsCallable callable =
-        FirebaseFunctions.instance.httpsCallable('updateTracking');
-
     try {
-      final result = await FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection('companies')
           .doc(user.companyId)
           .collection('trackings')
           .doc(trackingDocId)
-          .update({
-        'duration': duration != null ? duration.inSeconds : null,
-        'tag': tag,
-      });
-
-      return "SUCCES";
+          .delete();
     } on FirebaseFunctionsException catch (error) {
       print(error);
       print(error.code);
@@ -127,7 +103,6 @@ class TrackerRepository {
         .where('finished', isEqualTo: false)
         .get();
 
-    print(result.docs.first.id);
     if (result.docs.isNotEmpty) {
       QueryDocumentSnapshot<Object?> singleResult = result.docs.first;
       DateTime startTime = singleResult['start'].toDate();
@@ -147,6 +122,43 @@ class TrackerRepository {
     return null;
   }
 
+  Future<Client> editClient(Client newValues) async {
+    AppUser user = authCubit.state.appUser!;
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    print('${DateTime.now().year}-${DateTime.now().month}');
+    try {
+      await firebaseFirestore
+          .collection('companies')
+          .doc(user.companyId)
+          .collection('clients')
+          .doc(newValues.id)
+          .update({
+        'name': newValues.name,
+        'mrr': newValues.mrr,
+        'target_hourly_rate': newValues.hourlyRateTarget
+      });
+
+      await firebaseFirestore
+          .collection('companies')
+          .doc(user.companyId)
+          .collection('clients')
+          .doc(newValues.id)
+          .collection('months')
+          .doc('2022-7')
+          .update(
+        {
+          'name': newValues.name,
+          'mrr': newValues.mrr,
+          'target_hourly_rate': newValues.hourlyRateTarget
+        },
+      );
+      return newValues;
+    } on FirebaseException catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
   Future<void> addTag(
       {required String tag,
       required String description,
@@ -154,7 +166,7 @@ class TrackerRepository {
     AppUser user = authCubit.state.appUser!;
 
     try {
-      FirebaseFirestore.instance.useFirestoreEmulator('localHost', 8080);
+      // FirebaseFirestore.instance.useFirestoreEmulator('localHost', 8080);
 
       FirebaseFirestore.instance
           .collection('companies')
@@ -197,7 +209,7 @@ class TrackerRepository {
       for (var e in result.docs) {
         Map trackDoc = e.data();
         Timestamp start = trackDoc['start'];
-        Timestamp stop = trackDoc['stop'];
+        Timestamp stop = trackDoc['stop'] ?? Timestamp.now();
         Tag tag = authCubit.state.company!.tags
             .firstWhere((element) => element.id == trackDoc['tag']);
 

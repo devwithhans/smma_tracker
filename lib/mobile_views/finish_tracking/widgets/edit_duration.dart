@@ -34,7 +34,7 @@ Future<Duration?> editDuration(BuildContext context, Duration duration) {
                         Row(
                           children: [
                             Expanded(
-                              child: CustomButton(
+                              child: CustomElevatedButton(
                                 text: 'Annuler',
                                 onPressed: () {
                                   Navigator.pop(context);
@@ -43,7 +43,7 @@ Future<Duration?> editDuration(BuildContext context, Duration duration) {
                             ),
                             SizedBox(width: 10),
                             Expanded(
-                              child: CustomButton(
+                              child: CustomElevatedButton(
                                 text: 'Gem',
                                 onPressed: () {
                                   Navigator.pop(context, _duration);

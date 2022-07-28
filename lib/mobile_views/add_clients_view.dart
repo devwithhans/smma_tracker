@@ -107,18 +107,18 @@ class AddClient extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          CustomButton(
-                              text: 'Add Client',
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  context.read<NewClientCubit>().addClient(
-                                        name: name!,
-                                        mrr: mrr!,
-                                        hourly_rate_target: hourly_rate_target!,
-                                      );
-                                }
-                              },
-                              active: true),
+                          CustomElevatedButton(
+                            text: 'Add Client',
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                context.read<NewClientCubit>().addClient(
+                                      name: name!,
+                                      mrr: mrr!,
+                                      hourly_rate_target: hourly_rate_target!,
+                                    );
+                              }
+                            },
+                          ),
                           // SizedBox(height: 15),
                         ],
                       ))

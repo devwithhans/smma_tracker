@@ -80,16 +80,16 @@ class WelcomeView extends StatelessWidget {
                           hintText: 'Enter password',
                         ),
                         SizedBox(height: 40),
-                        CustomButton(
-                            text: 'Log Ind',
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                context
-                                    .read<LoginCubit>()
-                                    .loginUser(password, email);
-                              }
-                            },
-                            active: true),
+                        CustomElevatedButton(
+                          text: 'Log Ind',
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              context
+                                  .read<LoginCubit>()
+                                  .loginUser(password, email);
+                            }
+                          },
+                        ),
                         state is LoginFailed
                             ? Text(
                                 state.errorMessage,

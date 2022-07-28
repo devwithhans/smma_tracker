@@ -1,4 +1,5 @@
 import 'package:agency_time/blocs/trackings_cubit/trackings_cubit.dart';
+import 'package:agency_time/mobile_views/client_view/edit_client_view.dart';
 import 'package:agency_time/mobile_views/client_view/widgets/client_stats.dart';
 import 'package:agency_time/mobile_views/client_view/widgets/custom_app_bar.dart';
 import 'package:agency_time/repos/trackerRepository.dart';
@@ -20,7 +21,19 @@ class ClientView extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            ClientViewApp(client: client),
+            CustomAppBar(
+                title: client.name,
+                icon: IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditClientView(
+                                  client: client,
+                                )));
+                  },
+                )),
             Expanded(
               child: ListView(
                 padding: EdgeInsets.only(top: 20, left: 20, right: 20),

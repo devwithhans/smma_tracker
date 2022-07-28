@@ -1,8 +1,10 @@
+import 'package:agency_time/main.dart';
 import 'package:agency_time/models/tag.dart';
 import 'package:agency_time/models/tracking.dart';
 import 'package:agency_time/repos/trackerRepository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 part 'update_tracking_state.dart';
 
@@ -14,16 +16,10 @@ class UpdateTrackingCubit extends Cubit<UpdateTrackingState> {
   Future<void> updateTracking(
       Tracking originalTracking, Duration? duration, Tag? tag) async {
     emit(UpdateTrackingLoading());
-    print(tag);
-    print(duration);
-
     try {
-      await _trackerRepository.updateTracking(
-        // start: originalTracking.start,
+      await _trackerRepository.updateTracker(
         duration: duration,
-        // originalDuration: originalTracking.duration,
         trackingDocId: originalTracking.id,
-        // clientId: originalTracking.clientId,
         tag: tag != null ? tag.id : null,
       );
     } catch (e) {
@@ -31,5 +27,16 @@ class UpdateTrackingCubit extends Cubit<UpdateTrackingState> {
       emit(UpdateTrackingFailed());
     }
     emit(UpdateTrackingSucces());
+    Navigator.pop(navigatorKey.currentContext!);
+  }
+
+  Future<void> deleteTracking(
+    String trackingId,
+  ) async {
+    emit(UpdateTrackingLoading());
+    await _trackerRepository.deleteTracking(trackingDocId: trackingId);
+    emit(UpdateTrackingSucces());
+    Navigator.pop(navigatorKey.currentContext!);
+    Navigator.popUntil(navigatorKey.currentContext!, (route) => route.isFirst);
   }
 }

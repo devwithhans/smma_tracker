@@ -1,3 +1,4 @@
+import 'package:agency_time/mobile_views/settings_view/settings_view.dart';
 import 'package:agency_time/utils/widgets/select_month.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +30,10 @@ class CustomAppBar extends StatelessWidget {
           ),
           IconButton(
             splashRadius: 20,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SettingsView()));
+            },
             icon: Icon(Icons.settings),
           )
         ],

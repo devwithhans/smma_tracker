@@ -92,8 +92,7 @@ class _SelectTagState extends State<SelectTag> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Expanded(
-                            child: CustomButton(
-                              buttonStyle: CustomButtonStyle.blackborder,
+                            child: CustomElevatedButton(
                               text: 'Cancel',
                               onPressed: () {
                                 _newTag = false;
@@ -103,7 +102,7 @@ class _SelectTagState extends State<SelectTag> {
                           ),
                           SizedBox(width: 10),
                           Expanded(
-                            child: CustomButton(
+                            child: CustomElevatedButton(
                               text: 'Save',
                               onPressed: () {
                                 if (_newTag &&

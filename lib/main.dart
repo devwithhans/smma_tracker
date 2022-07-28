@@ -4,6 +4,7 @@ import 'package:agency_time/mobile_views/add_clients_view.dart';
 import 'package:agency_time/repos/trackerRepository.dart';
 import 'package:agency_time/wrapper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,10 +14,9 @@ import 'package:overlay_support/overlay_support.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // FirebaseFunctions.instanceFor().useFunctionsEmulator('localhost', 8080);
 
-  FirebaseFirestore.instance.settings = const Settings(
-      host: 'localhost:8080', sslEnabled: false, persistenceEnabled: false);
+  // FirebaseFirestore.instance.settings = const Settings(
+  //     host: 'localhost:8080', sslEnabled: false, persistenceEnabled: false);
 
   runApp(const MyApp());
 }

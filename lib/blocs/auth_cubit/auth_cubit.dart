@@ -44,8 +44,6 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<Company> getCompany(AppUser user) async {
     try {
-      FirebaseFirestore.instance.useFirestoreEmulator('localHost', 8080);
-
       DocumentSnapshot<Map<String, dynamic>> companyRaw =
           await FirebaseFirestore.instance
               .collection('companies')

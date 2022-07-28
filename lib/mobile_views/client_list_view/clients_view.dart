@@ -96,7 +96,7 @@ class _ClientsViewState extends State<ClientsView> {
                         width: double.infinity,
                         height: 20,
                       ),
-                      CustomButton(
+                      CustomElevatedButton(
                         text: 'Add Client',
                         onPressed: () {
                           Navigator.pushNamed(context, AddClient.id);

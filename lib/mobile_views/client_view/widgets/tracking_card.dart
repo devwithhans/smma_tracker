@@ -1,4 +1,5 @@
-import 'package:agency_time/mobile_views/client_view/widgets/edit_sheet.dart';
+import 'package:agency_time/mobile_views/client_view/edit_tracking_view.dart';
+
 import 'package:agency_time/models/tracking.dart';
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:agency_time/utils/functions/print_duration.dart';

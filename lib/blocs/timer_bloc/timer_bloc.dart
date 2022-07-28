@@ -78,8 +78,9 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
 
     TimerRunning timerRunningSnapshot = state as TimerRunning;
     DateTime stop = timerRunningSnapshot.start.add(event.duration);
+    print(stop);
     emit(timerRunningSnapshot.copyWith(timerStatus: TimerStatus.loading));
-    await trackerRepository.stopTracker(
+    await trackerRepository.updateTracker(
       stop: stop,
       trackingDocId: timerRunningSnapshot.documentId!,
       duration: event.duration,

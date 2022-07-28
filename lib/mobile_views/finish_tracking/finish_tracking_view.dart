@@ -121,7 +121,7 @@ class _FinishTrackingDialogState extends State<FinishTrackingDialog> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          child: CustomButton(
+                          child: CustomElevatedButton(
                             text: 'Slet arbejde',
                             onPressed: () {
                               widget.onDelete();
@@ -130,7 +130,7 @@ class _FinishTrackingDialogState extends State<FinishTrackingDialog> {
                         ),
                         SizedBox(width: 10),
                         Expanded(
-                          child: CustomButton(
+                          child: CustomElevatedButton(
                             text: 'Gem arbejde',
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
