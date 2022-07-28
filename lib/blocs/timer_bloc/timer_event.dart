@@ -22,8 +22,8 @@ class TimerStarted extends TimerEvent {
 
 class TimerReset extends TimerEvent {
   final Duration duration;
-  final int tag;
-  const TimerReset({required this.duration, required this.tag});
+  final Tag newTag;
+  const TimerReset({required this.duration, required this.newTag});
 }
 
 class AddDocumentId extends TimerEvent {
@@ -38,3 +38,5 @@ class TimerTicked extends TimerEvent {
   @override
   List<Object> get props => [duration];
 }
+
+class CancelTracking extends TimerEvent {}

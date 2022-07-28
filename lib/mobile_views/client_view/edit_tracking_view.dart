@@ -72,9 +72,12 @@ class _EditTrackingState extends State<EditTracking> {
                           backgroundColor: kColorGreen,
                           onPressed: () {
                             context.read<UpdateTrackingCubit>().updateTracking(
-                                widget.tracking,
-                                _newDuration ?? widget.tracking.duration,
-                                _newTag ?? widget.tracking.tag);
+                                  widget.tracking,
+                                  _newDuration ?? widget.tracking.duration,
+                                  _newTag != null
+                                      ? _newTag!.id
+                                      : widget.tracking.tag.id,
+                                );
                           },
                         ),
                         CustomTextButton(

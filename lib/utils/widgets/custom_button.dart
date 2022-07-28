@@ -19,6 +19,7 @@ class CustomElevatedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
+          minimumSize: MaterialStateProperty.all<Size>(Size(100, 45)),
           elevation: MaterialStateProperty.all<double>(0),
           backgroundColor: MaterialStateProperty.all<Color>(backgroundColor)),
       onPressed: onPressed,
@@ -48,6 +49,7 @@ class CustomTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       style: ButtonStyle(
+        minimumSize: MaterialStateProperty.all<Size>(Size(100, 45)),
         overlayColor:
             MaterialStateProperty.all<Color>(backgroundColor.withOpacity(0.1)),
       ),

@@ -14,13 +14,13 @@ class UpdateTrackingCubit extends Cubit<UpdateTrackingState> {
   UpdateTrackingCubit(this._trackerRepository) : super(UpdateTrackingInitial());
 
   Future<void> updateTracking(
-      Tracking originalTracking, Duration? duration, Tag? tag) async {
+      Tracking originalTracking, Duration? duration, int? tag) async {
     emit(UpdateTrackingLoading());
     try {
       await _trackerRepository.updateTracker(
         duration: duration,
         trackingDocId: originalTracking.id,
-        tag: tag != null ? tag.id : null,
+        tag: tag,
       );
     } catch (e) {
       print(e);

@@ -1,20 +1,18 @@
-import 'package:agency_time/mobile_views/finish_tracking/finish_tracking_view.dart';
-import 'package:agency_time/mobile_views/finish_tracking/widgets/edit_duration.dart';
-import 'package:agency_time/mobile_views/finish_tracking/widgets/select_tag.dart';
+import 'package:agency_time/mobile_views/finish_tracking/widgets/duration_formfield.dart';
+import 'package:agency_time/mobile_views/finish_tracking/widgets/search_tags.dart';
+import 'package:agency_time/models/client.dart';
 import 'package:agency_time/models/tag.dart';
-import 'package:agency_time/repos/trackerRepository.dart';
+import 'package:agency_time/utils/constants/colors.dart';
 import 'package:agency_time/utils/functions/print_duration.dart';
+import 'package:agency_time/utils/widgets/custom_alert_dialog.dart';
 import 'package:agency_time/utils/widgets/custom_button.dart';
-import 'package:agency_time/utils/widgets/custom_input_form.dart';
-import 'package:agency_time/utils/widgets/filter_scroll.dart';
-import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FinishTrackingDialog extends StatefulWidget {
   const FinishTrackingDialog({
     Key? key,
     required this.tags,
+    required this.client,
     required this.onDelete,
     required this.onSave,
     required this.duration,
@@ -22,7 +20,8 @@ class FinishTrackingDialog extends StatefulWidget {
 
   final Duration duration;
   final List<Tag> tags;
-  final void Function(int selected, Duration duration) onSave;
+  final Client client;
+  final void Function(Tag selected, Duration duration) onSave;
   final void Function() onDelete;
 
   @override
@@ -31,7 +30,9 @@ class FinishTrackingDialog extends StatefulWidget {
 
 class _FinishTrackingDialogState extends State<FinishTrackingDialog> {
   Duration _duration = const Duration();
-  int? selectedTagId;
+  Duration? _newDuration;
+
+  Tag? selectedTag;
   List<Tag> tags = [];
   bool newTag = false;
   String typedTag = '';
@@ -56,98 +57,126 @@ class _FinishTrackingDialogState extends State<FinishTrackingDialog> {
           topRight: Radius.circular(10),
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Finish tracking',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      printDuration(Duration(seconds: _duration.inSeconds)),
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                    ),
-                    IconButton(
-                      onPressed: () async {
-                        Duration? editedDuration =
-                            await editDuration(context, _duration);
-                        if (editedDuration != null) {
-                          _duration = editedDuration;
-                        }
-                        setState(() {});
-                      },
-                      icon: Icon(Icons.edit),
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          Form(
-            key: _formKey,
-            child: Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(0.0),
+              child: Stack(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: FormField(
-                      validator: (v) {
-                        print(selected == null);
-                        if (selected == null) {
-                          return 'Please choose a category';
-                        }
-                      },
-                      builder: (state) {
-                        return SelectTag(
-                          onSelected: ((tag) => selected = tag.id),
-                        );
-                      },
-                    ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.close),
+                    padding: EdgeInsets.zero,
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: CustomElevatedButton(
-                            text: 'Slet arbejde',
-                            onPressed: () {
-                              widget.onDelete();
-                            },
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: CustomElevatedButton(
-                            text: 'Gem arbejde',
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                widget.onSave(selected!, _duration);
-                              }
-                            },
-                          ),
-                        )
-                      ],
+                    padding: const EdgeInsets.all(10.0),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Finish ${widget.client.name} tracking',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w500),
+                      ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(),
                 ],
               ),
             ),
-          )
-        ],
+            Divider(
+              height: 0,
+            ),
+            Expanded(
+                child: ListView(
+              padding: EdgeInsets.all(20),
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Original: ${printDuration(_duration)}',
+                    ),
+                    DurationFormField(
+                      initialDuration: _newDuration ?? _duration,
+                      onChanged: (v) {
+                        _newDuration = v;
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                SearchTags(
+                  onChange: (v) {
+                    selectedTag = v;
+                  },
+                  tags: tags,
+                )
+              ],
+            )),
+            Divider(
+              height: 0,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  FormField(validator: (v) {
+                    if (selectedTag == null) {
+                      return 'You need to select or create a tag';
+                    }
+                  }, builder: (formState) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        formState.hasError
+                            ? Text(
+                                formState.errorText ?? '',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.red),
+                              )
+                            : SizedBox(),
+                        CustomElevatedButton(
+                          text: 'SAVE',
+                          onPressed: () {
+                            print(_formKey.currentState!.validate());
+                            if (_formKey.currentState!.validate()) {
+                              widget.onSave(
+                                  selectedTag!, _newDuration ?? _duration);
+                            }
+                          },
+                          backgroundColor: kColorGreen,
+                        ),
+                      ],
+                    );
+                  }),
+                  CustomTextButton(
+                    text: 'Delete',
+                    onPressed: () {
+                      customAlertDialog(
+                        context: context,
+                        title: 'Are you sure you wanna delete this tracking?',
+                        description: 'You cannot restore this tracking',
+                        onAccepted: () {
+                          widget.onDelete();
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                    backgroundColor: kColorRed,
+                    textColor: kColorRed,
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

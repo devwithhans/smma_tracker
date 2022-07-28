@@ -106,9 +106,7 @@ class _SelectTagState extends State<SelectTag> {
                               text: 'Save',
                               onPressed: () {
                                 if (_newTag &&
-                                    _formKey.currentState!.validate()) {
-                                  addNewTag(tags);
-                                }
+                                    _formKey.currentState!.validate()) {}
                               },
                             ),
                           )
@@ -131,22 +129,6 @@ class _SelectTagState extends State<SelectTag> {
         SizedBox(height: 20),
       ],
     );
-  }
-
-  addNewTag(List<Tag> tags) {
-    // Setting a unique id with a timestamp
-    int newTagId = DateTime.now().millisecondsSinceEpoch;
-    // Creating the object to push to the
-    Tag newTagMap = Tag(description: '', id: newTagId, tag: typedTag!);
-    tags.insert(0, newTagMap);
-    _newTag = false;
-    selectTag(newTagMap);
-    RepositoryProvider.of<TrackerRepository>(context).addTag(
-      tag: typedTag!,
-      description: '',
-      id: newTagId,
-    );
-    setState(() {});
   }
 
   tagsWidgets(List<Tag> tags) {

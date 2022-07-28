@@ -23,7 +23,7 @@ class Month {
     Duration _duration = Duration(seconds: value['duration'] ?? 0);
     return Month(
       hourlyRate: (value['mrr'] ?? mrr) / _duration.inHours,
-      mrr: value['mrr'].toDouble() ?? mrr.toDouble(),
+      mrr: value['mrr'] ?? mrr,
       hourlyRateTarget: value['hourlyRateTarget'] ?? 0,
       tags: value['tags'] ?? {},
       duration: _duration,

@@ -3,8 +3,7 @@ import 'package:agency_time/firebase_options.dart';
 import 'package:agency_time/mobile_views/add_clients_view.dart';
 import 'package:agency_time/repos/trackerRepository.dart';
 import 'package:agency_time/wrapper.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

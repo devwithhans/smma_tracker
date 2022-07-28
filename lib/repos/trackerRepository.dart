@@ -40,15 +40,22 @@ class TrackerRepository {
   Future<String?> updateTracker({
     Duration? duration,
     int? tag,
+    Tag? newTag,
     required String trackingDocId,
     DateTime? stop,
   }) async {
     AppUser user = authCubit.state.appUser!;
-
+    if (newTag != null) {
+      if (authCubit.state.company!.tags
+          .where((element) => element.id == newTag.id)
+          .isEmpty) {
+        addTag(newTag);
+      }
+    }
     try {
       Map<String, dynamic> updateObject = {
         'duration': duration != null ? duration.inSeconds : null,
-        'tag': tag,
+        'tag': newTag != null ? newTag.id : tag,
         'finished': true,
       };
       if (stop != null) {
@@ -88,6 +95,18 @@ class TrackerRepository {
       print(error.code);
       print(error.message);
     }
+  }
+
+  Stream<DocumentSnapshot<Map<String, dynamic>>> trackerSubscription(
+      String documentId) {
+    AppUser user = authCubit.state.appUser!;
+
+    return FirebaseFirestore.instance
+        .collection('companies')
+        .doc(user.companyId)
+        .collection('trackings')
+        .doc(documentId)
+        .snapshots();
   }
 
   Future<TimerEvent?> checkForRunningTimer() async {
@@ -159,10 +178,7 @@ class TrackerRepository {
     }
   }
 
-  Future<void> addTag(
-      {required String tag,
-      required String description,
-      required int id}) async {
+  Future<void> addTag(Tag tag) async {
     AppUser user = authCubit.state.appUser!;
 
     try {
@@ -172,9 +188,9 @@ class TrackerRepository {
           .collection('companies')
           .doc(user.companyId)
           .update({
-        'tags.$id': {
-          'tag': tag,
-          'description': description,
+        'tags.${tag.id}': {
+          'tag': tag.tag,
+          'description': tag.description,
         }
       });
     } on FirebaseFunctionsException catch (error) {
