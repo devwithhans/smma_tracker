@@ -144,8 +144,10 @@ class TrackerRepository {
   Future<Client> editClient(Client newValues) async {
     AppUser user = authCubit.state.appUser!;
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    print('${DateTime.now().year}-${DateTime.now().month}');
     try {
+      print(user.companyId);
+      print(newValues.id);
+      print('${DateTime.now().year}-${DateTime.now().month}');
       await firebaseFirestore
           .collection('companies')
           .doc(user.companyId)
@@ -156,14 +158,13 @@ class TrackerRepository {
         'mrr': newValues.mrr,
         'target_hourly_rate': newValues.hourlyRateTarget
       });
-
       await firebaseFirestore
           .collection('companies')
           .doc(user.companyId)
           .collection('clients')
           .doc(newValues.id)
           .collection('months')
-          .doc('2022-7')
+          .doc('${DateTime.now().year}-${DateTime.now().month}')
           .update(
         {
           'name': newValues.name,
@@ -173,7 +174,8 @@ class TrackerRepository {
       );
       return newValues;
     } on FirebaseException catch (e) {
-      print(e);
+      print(e.message);
+      print(e.code);
       rethrow;
     }
   }
@@ -182,7 +184,7 @@ class TrackerRepository {
     AppUser user = authCubit.state.appUser!;
 
     try {
-      // FirebaseFirestore.instance.useFirestoreEmulator('localHost', 8080);
+      FirebaseFirestore.instance.useFirestoreEmulator('localHost', 8080);
 
       FirebaseFirestore.instance
           .collection('companies')

@@ -165,7 +165,7 @@ class _FinishTrackingDialogState extends State<FinishTrackingDialog> {
                         description: 'You cannot restore this tracking',
                         onAccepted: () {
                           widget.onDelete();
-                          Navigator.pop(context);
+                          Navigator.popUntil(context, (route) => route.isFirst);
                         },
                       );
                     },

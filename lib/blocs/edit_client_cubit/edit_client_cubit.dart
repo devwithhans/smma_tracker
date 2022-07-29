@@ -20,7 +20,8 @@ class EditClientCubit extends Cubit<EditClientState> {
     } catch (e) {
       emit(EditClientFailed());
     }
-    Navigator.pop(navigatorKey.currentContext!);
+
+    Navigator.popUntil(navigatorKey.currentContext!, (route) => route.isFirst);
 
     emit(EditClientSucces());
   }

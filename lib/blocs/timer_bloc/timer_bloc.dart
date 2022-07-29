@@ -15,25 +15,21 @@ part 'timer_state.dart';
 class TimerBloc extends Bloc<TimerEvent, TimerState> {
   final Ticker _ticker;
   StreamSubscription<int>? _tickerSubscription;
+  StreamSubscription? _trackingStream;
+
   TrackerRepository trackerRepository;
   String companyId;
-
-  late StreamSubscription _trackingStream;
 
   TimerBloc(this.companyId,
       {required Ticker ticker, required this.trackerRepository})
       : _ticker = ticker,
         super(TimerInitial()) {
-    on<TimerEvent>(
-      (event, emit) {
-        print(state);
-      },
-    );
+    _checkCurrentTrackings();
     on<TimerStarted>(_onStarted);
     on<TimerReset>(_onReset);
     on<TimerTicked>(_onTicked);
     on<AddDocumentId>(_addDocumentId);
-    on<CancelTracking>(_cancelTracking);
+    on<CancelTracking>(_cancelTracker);
   }
 
   @override
@@ -42,8 +38,11 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
     return super.close();
   }
 
-  void _cancelTracking(CancelTracking event, Emitter emit) {
-    emit(TimerInitial());
+  Future<void> _checkCurrentTrackings() async {
+    TimerEvent? timerEvent = await trackerRepository.checkForRunningTimer();
+    if (timerEvent != null) {
+      add(timerEvent);
+    }
   }
 
   void _onStarted(TimerStarted event, Emitter<TimerState> emit) async {
@@ -58,8 +57,8 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
       );
       return;
     }
-    DateTime start = event.start ?? DateTime.now();
 
+    DateTime start = event.start ?? DateTime.now();
     emit(
       TimerRunning(
         client: event.client,
@@ -68,21 +67,39 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
         duration: event.duration.inSeconds,
       ),
     );
-    _tickerSubscription?.cancel();
 
+    _tickerSubscription?.cancel();
     _tickerSubscription = _ticker.tick(event.duration.inSeconds).listen(
       (duration) async {
         add(TimerTicked(duration: duration));
       },
     );
+
     TimerRunning timerState = state as TimerRunning;
-    if (timerState.documentId != null) {
-      _trackingStream = trackerRepository
-          .trackerSubscription(timerState.documentId!)
-          .listen((event) {
-        print(event);
+    String? docId;
+    if (event.documentId == null) {
+      print('GETTING DOC');
+      docId = await trackerRepository.beginTracking(
+          client: event.client, start: start);
+      emit(timerState.copyWith(documentId: docId));
+    } else {
+      docId = event.documentId;
+    }
+
+    if (docId != null) {
+      _trackingStream =
+          trackerRepository.trackerSubscription(docId).listen((event) {
+        if (!event.exists) {
+          add(CancelTracking());
+        }
+        print(event.exists);
       });
     }
+  }
+
+  void _cancelTracker(CancelTracking event, Emitter emit) {
+    _tickerSubscription?.cancel();
+    emit(TimerInitial());
   }
 
   void _onReset(TimerReset event, Emitter<TimerState> emit) async {
@@ -99,8 +116,9 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
       duration: event.duration,
       newTag: event.newTag,
     );
-    _tickerSubscription?.cancel();
-    emit(TimerInitial());
+    add(CancelTracking());
+    // _tickerSubscription?.cancel();
+    // emit(TimerInitial());
   }
 
   void _onTicked(TimerTicked event, Emitter<TimerState> emit) {

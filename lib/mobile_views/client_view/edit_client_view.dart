@@ -71,8 +71,9 @@ class EditClientView extends StatelessWidget {
                                   locale: 'da', decimalDigits: 0, symbol: '')
                               .format(client.mrr.toStringAsFixed(0)),
                           onChanged: (value) {
-                            newClient.mrr =
-                                double.parse(value.replaceAll('.', ''));
+                            newClient.mrr = value.isNotEmpty
+                                ? double.parse(value.replaceAll('.', ''))
+                                : 0;
                           },
                           validator: (v) {
                             if (v == null || v.isEmpty) {

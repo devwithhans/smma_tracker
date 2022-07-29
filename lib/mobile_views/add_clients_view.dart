@@ -61,7 +61,9 @@ class AddClient extends StatelessWidget {
                         SizedBox(height: 30),
                         CustomInputForm(
                           onChanged: (value) {
-                            mrr = double.parse(value.replaceAll('.', ''));
+                            mrr = value.isNotEmpty
+                                ? double.parse(value.replaceAll('.', ''))
+                                : 0;
                           },
                           validator: (v) {
                             if (v == null || v.isEmpty) {

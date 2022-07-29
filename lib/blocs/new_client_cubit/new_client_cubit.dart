@@ -31,13 +31,6 @@ class NewClientCubit extends Cubit<NewClientState> {
           'name': name,
           'mrr': mrr,
           'hourly_rate_target': hourly_rate_target,
-          'months': {
-            thisMonthString: {
-              'duration': 0,
-              'mrr': mrr,
-              'updatedAt': Timestamp.now()
-            }
-          },
         },
       );
     } on FirebaseException catch (e) {

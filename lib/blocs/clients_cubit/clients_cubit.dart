@@ -42,12 +42,9 @@ class ClientsCubit extends Cubit<ClientsState> {
             Map<String, dynamic> thisMonthRaw =
                 client['months'][thisMonthString];
             thisMonth = Month.convertClient(thisMonthRaw, client['mrr']);
-
             thisTotalMonth.mrr = thisTotalMonth.mrr + thisMonth.mrr;
             thisTotalMonth.duration =
                 thisTotalMonth.duration + thisMonth.duration;
-            thisTotalMonth.hourlyRate =
-                thisTotalMonth.hourlyRate + thisMonth.hourlyRate;
           }
           if (client['months'][lastMonthString] != null) {
             Map<String, dynamic> lastMonthRaw =
@@ -56,7 +53,6 @@ class ClientsCubit extends Cubit<ClientsState> {
             lastTotalMonth.mrr = lastTotalMonth.mrr + lastMonth.mrr;
             lastTotalMonth.duration =
                 lastTotalMonth.duration + lastMonth.duration;
-            lastTotalMonth.hourlyRate = lastTotalMonth.hourlyRate;
           }
         }
 
@@ -95,6 +91,11 @@ class ClientsCubit extends Cubit<ClientsState> {
               (element) => element.name == newClient.name)] = newClient;
         }
       }
+
+      thisTotalMonth.hourlyRate =
+          thisTotalMonth.mrr / thisTotalMonth.duration.inHours;
+
+      print(thisTotalMonth.hourlyRate);
 
       emit(
         state.copyWith(

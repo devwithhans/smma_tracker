@@ -27,7 +27,7 @@ class UpdateTrackingCubit extends Cubit<UpdateTrackingState> {
       emit(UpdateTrackingFailed());
     }
     emit(UpdateTrackingSucces());
-    Navigator.pop(navigatorKey.currentContext!);
+    Navigator.popUntil(navigatorKey.currentContext!, (route) => route.isFirst);
   }
 
   Future<void> deleteTracking(
@@ -36,7 +36,6 @@ class UpdateTrackingCubit extends Cubit<UpdateTrackingState> {
     emit(UpdateTrackingLoading());
     await _trackerRepository.deleteTracking(trackingDocId: trackingId);
     emit(UpdateTrackingSucces());
-    Navigator.pop(navigatorKey.currentContext!);
     Navigator.popUntil(navigatorKey.currentContext!, (route) => route.isFirst);
   }
 }
