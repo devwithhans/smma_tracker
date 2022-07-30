@@ -71,7 +71,7 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
 
   Future<void> _addClient(AddClient event, Emitter emit) async {
     Map<String, dynamic> clientMap = event.client.data();
-    Map<String, dynamic> monthsMap = clientMap['months'];
+    Map<String, dynamic> monthsMap = clientMap['months'] ?? {};
     List<Month> savedMonths = [];
     monthsMap.forEach((key, value) {
       savedMonths.add(Month.convertMonth(value, key)!);

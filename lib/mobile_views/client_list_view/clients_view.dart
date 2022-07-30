@@ -1,18 +1,13 @@
 import 'package:agency_time/blocs/clients_bloc/clients_bloc.dart';
-import 'package:agency_time/blocs/timer_bloc/timer_bloc.dart';
-import 'package:agency_time/mobile_views/add_clients_view.dart';
-
+import 'package:agency_time/mobile_views/client_list_view/components/client_result_list.dart';
+import 'package:agency_time/mobile_views/client_list_view/components/client_view_header.dart';
+import 'package:agency_time/mobile_views/client_list_view/components/no_clients.dart';
 import 'package:agency_time/models/client.dart';
-import 'package:agency_time/utils/widgets/clients_card.dart';
-import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/utils/widgets/custom_searchfield.dart';
 import 'package:agency_time/utils/widgets/filter_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 class ClientsView extends StatefulWidget {
   const ClientsView({Key? key}) : super(key: key);
@@ -35,56 +30,8 @@ class _ClientsViewState extends State<ClientsView> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Clients',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 18),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AddClientView(),
-                              ),
-                            );
-                          },
-                          icon: Icon(Icons.add_circle),
-                          splashRadius: 20,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          DateFormat('MMMM')
-                              .format(state.month ?? DateTime.now()),
-                          style: TextStyle(fontSize: 12),
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            DateTime? selectedDateTime = await showMonthPicker(
-                              context: context,
-                              initialDate: state.month ?? DateTime.now(),
-                            );
-                            context.read<ClientsBloc>().add(GetClientsWithMonth(
-                                  month: selectedDateTime,
-                                ));
-                          },
-                          icon: Icon(Icons.calendar_month),
-                          splashRadius: 20,
-                        ),
-                      ],
-                    )
-                  ],
-                ),
+              Header(
+                state: state,
               ),
               SizedBox(height: 10),
               Padding(
@@ -116,79 +63,12 @@ class _ClientsViewState extends State<ClientsView> {
                     bool currentMonth = state.month == null ||
                         state.month!.month == DateTime.now().month;
                     if (clients.isEmpty) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            currentMonth
-                                ? 'You dont have any client '
-                                : 'You had no clients in ${DateFormat('MMMM').format(state.month!)}',
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 20,
-                          ),
-                          currentMonth
-                              ? CustomElevatedButton(
-                                  text: 'Add Client',
-                                  onPressed: () {
-                                    Navigator.pushNamed(
-                                        context, AddClientView.id);
-                                  },
-                                )
-                              : CustomElevatedButton(
-                                  text: 'Change month',
-                                  onPressed: () async {
-                                    DateTime? selectedDateTime =
-                                        await showMonthPicker(
-                                      lastDate: DateTime.now(),
-                                      context: context,
-                                      initialDate:
-                                          state.month ?? DateTime.now(),
-                                    );
-                                    context
-                                        .read<ClientsBloc>()
-                                        .add(GetClientsWithMonth(
-                                          month: selectedDateTime,
-                                        ));
-                                  },
-                                )
-                        ],
+                      return NoClients(
+                        currentMonth: currentMonth,
+                        state: state,
                       );
                     }
-                    return Builder(
-                      builder: (context) {
-                        state.clients.sort(filterFuction);
-                        searchResult = state.clients
-                            .where((element) =>
-                                element.name
-                                    .toLowerCase()
-                                    .contains(search.toLowerCase()) &&
-                                element.activeMonth)
-                            .toList();
-                        return ListView.builder(
-                          padding: EdgeInsets.all(20),
-                          itemCount: searchResult.length,
-                          itemBuilder: ((c, index) {
-                            return ClientCard(
-                              client: searchResult[index],
-                              isTracking: false,
-                              onDoubleTap: () {
-                                HapticFeedback.mediumImpact();
-                                context.read<TimerBloc>().add(TimerStarted(
-                                    duration: Duration(),
-                                    client: ClientLite.fromClient(
-                                        searchResult[index])));
-                              },
-                              duration:
-                                  searchResult[index].selectedMonth.duration,
-                            );
-                          }),
-                        );
-                      },
-                    );
+                    return ClientResultList(state: state, search: search);
                   },
                 ),
               )
