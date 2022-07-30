@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Month {
+  DateTime month;
   Duration duration;
   double mrr;
   double hourlyRate;
@@ -10,6 +11,7 @@ class Month {
   DateTime updatedAt;
 
   Month({
+    required this.month,
     this.mrr = 0,
     this.hourlyRateTarget = 0,
     this.hourlyRate = 0,
@@ -18,7 +20,7 @@ class Month {
     required this.updatedAt,
     this.tags = const {},
   });
-  static Month? convertClient(Map<String, dynamic>? value) {
+  static Month? convertMonth(Map<String, dynamic>? value, String monthId) {
     if (value == null) {
       return null;
     }
@@ -29,16 +31,14 @@ class Month {
 
     List<ClientMonthEmployee> employees = [];
     if (value['employees'] != null) {
-      value['employees'].forEach((key, value) {
-        print(value);
-      });
-      // for (var employee in value['employees']) {
-      // }
+      value['employees'].forEach((key, value) {});
     }
 
     Timestamp updatedAtStamp = value['updatedAt'];
 
     return Month(
+      month: DateTime(int.parse(monthId.split('-').first),
+          int.parse(monthId.split('-').last)),
       duration: duration,
       mrr: newMrr,
       hourlyRate: newMrr / duration.inHours,

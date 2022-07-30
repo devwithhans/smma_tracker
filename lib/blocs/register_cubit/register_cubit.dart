@@ -11,7 +11,6 @@ class RegisterCubit extends Cubit<RegisterState> {
   RegisterCubit() : super(RegisterState());
 
   void setStep(int step) {
-    print(step);
     emit(state.copyWith(step: step));
   }
 

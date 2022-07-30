@@ -15,7 +15,6 @@ class TrackerRepository {
 
   Future<String?> beginTracking(
       {required ClientLite client, required DateTime start}) async {
-    print('Start was called');
     AppUser user = authCubit.state.appUser!;
 
     try {
@@ -172,9 +171,6 @@ class TrackerRepository {
     AppUser user = authCubit.state.appUser!;
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     try {
-      print(user.companyId);
-      print(newValues.id);
-      print('${DateTime.now().year}-${DateTime.now().month}');
       await firebaseFirestore
           .collection('companies')
           .doc(user.companyId)
@@ -235,9 +231,7 @@ class TrackerRepository {
       int skip, String clientId, int limit) async {
     AppUser user = authCubit.state.appUser!;
     List<Tracking> resultArray = [];
-    print('this far');
     try {
-      print(skip);
       QuerySnapshot<Map<String, dynamic>> result = await FirebaseFirestore
           .instance
           .collection('companies')

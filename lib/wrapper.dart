@@ -13,7 +13,6 @@ class Wrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: ((context, state) {
-        print(state.authStatus);
         if (state.authStatus == AuthStatus.signedIn) {
           return const BottomNav();
           // const BottomNav();

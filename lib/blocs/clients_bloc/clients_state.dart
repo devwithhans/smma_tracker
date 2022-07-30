@@ -6,7 +6,12 @@ class ClientsState extends Equatable {
   const ClientsState({
     this.status = Status.initial,
     this.clients = const [],
+    this.month,
+    this.compareMonth,
   });
+
+  final DateTime? month;
+  final DateTime? compareMonth;
 
   final Status status;
 
@@ -15,13 +20,16 @@ class ClientsState extends Equatable {
   ClientsState copyWith({
     List<Client>? clients,
     Status? status,
+    DateTime? month,
+    DateTime? compareMonth,
   }) {
     return ClientsState(
-      status: status ?? this.status,
-      clients: clients ?? this.clients,
-    );
+        status: status ?? this.status,
+        clients: clients ?? this.clients,
+        month: month ?? this.month,
+        compareMonth: compareMonth ?? this.compareMonth);
   }
 
   @override
-  List get props => [clients, status];
+  List get props => [clients, status, month, compareMonth];
 }

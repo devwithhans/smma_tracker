@@ -1,13 +1,15 @@
 part of 'clients_bloc.dart';
 
 abstract class ClientsEvent extends Equatable {
-  const ClientsEvent({this.compareMonth, this.month});
+  const ClientsEvent();
+  @override
+  List<Object?> get props => [];
+}
 
+class GetClientsWithMonth extends ClientsEvent {
   final DateTime? month;
   final DateTime? compareMonth;
-
-  @override
-  List<Object?> get props => [compareMonth, month];
+  const GetClientsWithMonth({this.compareMonth, this.month});
 }
 
 class AddClient extends ClientsEvent {

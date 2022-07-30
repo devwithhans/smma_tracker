@@ -78,7 +78,6 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
     TimerRunning timerState = state as TimerRunning;
     String? docId;
     if (event.documentId == null) {
-      print('GETTING DOC');
       docId = await trackerRepository.beginTracking(
           client: event.client, start: start);
       emit(timerState.copyWith(documentId: docId));
@@ -92,7 +91,6 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
         if (!event.exists) {
           add(CancelTracking());
         }
-        print(event.exists);
       });
     }
   }
@@ -108,7 +106,6 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
 
     TimerRunning timerRunningSnapshot = state as TimerRunning;
     DateTime stop = timerRunningSnapshot.start.add(event.duration);
-    print(stop);
     emit(timerRunningSnapshot.copyWith(timerStatus: TimerStatus.loading));
     await trackerRepository.updateTracker(
       stop: stop,

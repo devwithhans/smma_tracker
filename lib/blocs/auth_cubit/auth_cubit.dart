@@ -33,7 +33,6 @@ class AuthCubit extends Cubit<AuthState> {
           ));
         } on FirebaseException catch (error) {
           emit(state.copyWith(authStatus: AuthStatus.noCompany));
-          print('errorFUCKING');
           print(error.code);
         }
       } else {

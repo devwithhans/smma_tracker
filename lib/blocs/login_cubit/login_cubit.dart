@@ -29,7 +29,6 @@ class LoginCubit extends Cubit<LoginState> {
   void registerUser(
       String password, String email, String name, bool newletter) async {
     emit(LoginLoading());
-    print('shee');
 
     try {
       UserCredential userCredential = await FirebaseAuth.instance

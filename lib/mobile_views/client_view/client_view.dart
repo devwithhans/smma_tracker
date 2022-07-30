@@ -52,7 +52,6 @@ class ClientView extends StatelessWidget {
                           ..fetchTrackings(client.id),
                     child: BlocBuilder<TrackingsCubit, TrackingsState>(
                       builder: (context, state) {
-                        print(state);
                         List<Tracking> trackings = state.trackings ?? [];
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,

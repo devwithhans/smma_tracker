@@ -31,7 +31,6 @@ class _FiltersScrollState extends State<FiltersScroll> {
 
   @override
   Widget build(BuildContext context) {
-    print(selected);
     return SizedBox(
       height: 30,
       child: ListView(

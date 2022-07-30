@@ -8,8 +8,11 @@ import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/utils/widgets/custom_searchfield.dart';
 import 'package:agency_time/utils/widgets/filter_scroll.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 class ClientsView extends StatefulWidget {
   const ClientsView({Key? key}) : super(key: key);
@@ -26,118 +29,172 @@ class _ClientsViewState extends State<ClientsView> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
+      child: BlocBuilder<ClientsBloc, ClientsState>(
+        builder: (context, state) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Clients',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                    Row(
+                      children: [
+                        Text(
+                          'Clients',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 18),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AddClientView(),
+                              ),
+                            );
+                          },
+                          icon: Icon(Icons.add_circle),
+                          splashRadius: 20,
+                        ),
+                      ],
                     ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddClientView(),
-                          ),
-                        );
-                      },
-                      icon: Icon(Icons.add_circle),
-                      splashRadius: 20,
+                    Row(
+                      children: [
+                        Text(
+                          DateFormat('MMMM')
+                              .format(state.month ?? DateTime.now()),
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            DateTime? selectedDateTime = await showMonthPicker(
+                              context: context,
+                              initialDate: state.month ?? DateTime.now(),
+                            );
+                            context.read<ClientsBloc>().add(GetClientsWithMonth(
+                                  month: selectedDateTime,
+                                ));
+                          },
+                          icon: Icon(Icons.calendar_month),
+                          splashRadius: 20,
+                        ),
+                      ],
                     )
                   ],
                 ),
-                CircleAvatar()
-              ],
-            ),
-          ),
-          SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: CustomSearchField(
-              hintText: 'Search for client',
-              onSearch: (value) {
-                search = value;
-                setState(() {});
-              },
-            ),
-          ),
-          SizedBox(height: 10),
-          FiltersScroll(
-            inital: 'Latest',
-            filters: filters.keys.toList(),
-            onTap: (v, topDown) {
-              filterFuction = filters[v]![topDown];
-              setState(() {});
-            },
-          ),
-          SizedBox(height: 10),
-          Expanded(
-            child: BlocBuilder<ClientsBloc, ClientsState>(
-              builder: (context, state) {
-                if (state.clients.isEmpty) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'You dont have any clients yet',
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 20,
-                      ),
-                      CustomElevatedButton(
-                        text: 'Add Client',
-                        onPressed: () {
-                          Navigator.pushNamed(context, AddClientView.id);
-                        },
-                      )
-                    ],
-                  );
-                }
-                return Builder(
+              ),
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: CustomSearchField(
+                  hintText: 'Search for client',
+                  onSearch: (value) {
+                    search = value;
+                    setState(() {});
+                  },
+                ),
+              ),
+              SizedBox(height: 10),
+              FiltersScroll(
+                inital: 'Latest',
+                filters: filters.keys.toList(),
+                onTap: (v, topDown) {
+                  filterFuction = filters[v]![topDown];
+                  setState(() {});
+                },
+              ),
+              SizedBox(height: 10),
+              Expanded(
+                child: Builder(
                   builder: (context) {
-                    state.clients.sort(filterFuction);
-                    searchResult = state.clients
-                        .where((element) => element.name
-                            .toLowerCase()
-                            .contains(search.toLowerCase()))
+                    List<Client> clients = state.clients
+                        .where((element) => element.activeMonth)
                         .toList();
-                    return ListView.builder(
-                      padding: EdgeInsets.all(20),
-                      itemCount: searchResult.length,
-                      itemBuilder: ((c, index) {
-                        return ClientCard(
-                          client: searchResult[index],
-                          isTracking: false,
-                          onDoubleTap: () {
-                            HapticFeedback.mediumImpact();
-                            context.read<TimerBloc>().add(TimerStarted(
-                                duration: Duration(),
-                                client: ClientLite.fromClient(
-                                    searchResult[index])));
-                          },
-                          duration: searchResult[index].selectedMonth.duration,
+                    bool currentMonth = state.month == null ||
+                        state.month!.month == DateTime.now().month;
+                    if (clients.isEmpty) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            currentMonth
+                                ? 'You dont have any client '
+                                : 'You had no clients in ${DateFormat('MMMM').format(state.month!)}',
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 20,
+                          ),
+                          currentMonth
+                              ? CustomElevatedButton(
+                                  text: 'Add Client',
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                        context, AddClientView.id);
+                                  },
+                                )
+                              : CustomElevatedButton(
+                                  text: 'Change month',
+                                  onPressed: () async {
+                                    DateTime? selectedDateTime =
+                                        await showMonthPicker(
+                                      lastDate: DateTime.now(),
+                                      context: context,
+                                      initialDate:
+                                          state.month ?? DateTime.now(),
+                                    );
+                                    context
+                                        .read<ClientsBloc>()
+                                        .add(GetClientsWithMonth(
+                                          month: selectedDateTime,
+                                        ));
+                                  },
+                                )
+                        ],
+                      );
+                    }
+                    return Builder(
+                      builder: (context) {
+                        state.clients.sort(filterFuction);
+                        searchResult = state.clients
+                            .where((element) =>
+                                element.name
+                                    .toLowerCase()
+                                    .contains(search.toLowerCase()) &&
+                                element.activeMonth)
+                            .toList();
+                        return ListView.builder(
+                          padding: EdgeInsets.all(20),
+                          itemCount: searchResult.length,
+                          itemBuilder: ((c, index) {
+                            return ClientCard(
+                              client: searchResult[index],
+                              isTracking: false,
+                              onDoubleTap: () {
+                                HapticFeedback.mediumImpact();
+                                context.read<TimerBloc>().add(TimerStarted(
+                                    duration: Duration(),
+                                    client: ClientLite.fromClient(
+                                        searchResult[index])));
+                              },
+                              duration:
+                                  searchResult[index].selectedMonth.duration,
+                            );
+                          }),
                         );
-                      }),
+                      },
                     );
                   },
-                );
-              },
-            ),
-          )
-        ],
+                ),
+              )
+            ],
+          );
+        },
       ),
     );
   }
