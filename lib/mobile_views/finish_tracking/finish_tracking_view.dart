@@ -20,7 +20,7 @@ class FinishTrackingDialog extends StatefulWidget {
 
   final Duration duration;
   final List<Tag> tags;
-  final Client client;
+  final ClientLite client;
   final void Function(Tag selected, Duration duration) onSave;
   final void Function() onDelete;
 

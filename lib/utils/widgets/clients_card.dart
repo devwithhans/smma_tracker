@@ -1,4 +1,5 @@
 import 'package:agency_time/blocs/timer_bloc/timer_bloc.dart';
+import 'package:agency_time/functions/data_explanation.dart';
 import 'package:agency_time/mobile_views/client_view/client_view.dart';
 import 'package:agency_time/models/client.dart';
 import 'package:agency_time/utils/constants/colors.dart';
@@ -24,6 +25,18 @@ class ClientCard extends StatelessWidget {
   final void Function()? onDoubleTap;
   @override
   Widget build(BuildContext context) {
+    final moneyFormatter =
+        NumberFormat.currency(locale: 'da', name: 'Kr.', decimalDigits: 0);
+
+    bool noCompareMonth = client.compareMonth == null;
+
+    Duration compareDuration = noCompareMonth
+        ? const Duration()
+        : client.compareMonth!.duration - client.selectedMonth.duration;
+    double compareHourlyRate = getChangeProcentage(
+        noCompareMonth ? 0 : client.selectedMonth.hourlyRate,
+        client.selectedMonth.hourlyRate);
+
     return GestureDetector(
       onDoubleTap: onDoubleTap,
       onTap: () {
@@ -39,20 +52,8 @@ class ClientCard extends StatelessWidget {
           int intDuration = duration.inSeconds;
           if (state is TimerRunning && state.client.id == client.id) {
             intDuration += state.duration;
-
             isTracking = true;
           }
-
-          final moneyFormatter = NumberFormat.currency(
-              locale: 'da', name: 'Kr.', decimalDigits: 0);
-
-          double currentHouryRate = client.mrr / duration.inHours;
-          double lastHouryRate = client.lastMonth!.mrr;
-          double hourlyRateChange =
-              (currentHouryRate - lastHouryRate) / currentHouryRate * 100;
-
-          Duration durationChange =
-              client.thisMonth!.duration - client.lastMonth!.duration;
 
           return Container(
             height: 90,
@@ -82,7 +83,7 @@ class ClientCard extends StatelessWidget {
                               fontWeight: FontWeight.w600, fontSize: 16),
                         ),
                         Text(
-                          '${moneyFormatter.format(client.mrr)} / mth',
+                          '${moneyFormatter.format(client.selectedMonth.mrr)} / mth',
                           style: TextStyle(fontSize: 12),
                         ),
                       ],
@@ -102,9 +103,9 @@ class ClientCard extends StatelessWidget {
                               fontWeight: FontWeight.w600, fontSize: 16),
                         ),
                         Text(
-                          durationChange.isNegative
-                              ? 'h / last'
-                              : '+${durationChange.inHours}h / last',
+                          compareDuration.isNegative
+                              ? '${compareDuration.inHours}h / last'
+                              : '+${compareDuration.inHours}h / last',
                           style: const TextStyle(fontSize: 10),
                         ),
                       ],
@@ -119,22 +120,22 @@ class ClientCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          currentHouryRate > 50000
+                          client.selectedMonth.hourlyRate > 50000
                               ? '+50k'
-                              : '${moneyFormatter.format(currentHouryRate)} ',
+                              : '${moneyFormatter.format(client.selectedMonth.hourlyRate)} ',
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
-                            color: client.thisMonth!.hourlyRate <
-                                    client.hourlyRateTarget
+                            color: client.selectedMonth.hourlyRate <
+                                    client.selectedMonth.hourlyRateTarget
                                 ? Colors.red
                                 : Colors.black,
                           ),
                         ),
                         ProcentageChange(
-                            procentage: hourlyRateChange.isInfinite
+                            procentage: compareHourlyRate.isInfinite
                                 ? 100
-                                : hourlyRateChange)
+                                : compareHourlyRate)
                       ],
                     ),
                   ),

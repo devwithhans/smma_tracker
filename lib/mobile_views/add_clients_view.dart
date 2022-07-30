@@ -8,10 +8,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
-class AddClient extends StatelessWidget {
+class AddClientView extends StatelessWidget {
   static String id = 'AddClient';
 
-  AddClient({Key? key}) : super(key: key);
+  AddClientView({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
 

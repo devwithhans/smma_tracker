@@ -3,11 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Month {
   Duration duration;
   double mrr;
-  double hourlyRateTarget;
   double hourlyRate;
-  DateTime? updatedAt;
+  double hourlyRateTarget;
   List<ClientMonthEmployee> employees;
-  Map<String, dynamic> tags;
+  Map tags;
+  DateTime updatedAt;
 
   Month({
     this.mrr = 0,
@@ -15,24 +15,37 @@ class Month {
     this.hourlyRate = 0,
     this.duration = const Duration(),
     this.employees = const [],
-    this.updatedAt,
+    required this.updatedAt,
     this.tags = const {},
   });
-  static Month convertClient(Map<String, dynamic> value, double mrr) {
-    Timestamp updatedAt = value['updatedAt'];
-    Duration _duration = Duration(seconds: value['duration'] ?? 0);
+  static Month? convertClient(Map<String, dynamic>? value) {
+    if (value == null) {
+      return null;
+    }
 
-    double newMrr =
-        (value['mrr'] != null ? value['mrr'].toDouble() : null) ?? mrr;
+    Duration duration = Duration(seconds: value['duration'] ?? 0);
+
+    double newMrr = value['mrr'] != null ? value['mrr'].toDouble() : 0;
+
+    List<ClientMonthEmployee> employees = [];
+    if (value['employees'] != null) {
+      value['employees'].forEach((key, value) {
+        print(value);
+      });
+      // for (var employee in value['employees']) {
+      // }
+    }
+
+    Timestamp updatedAtStamp = value['updatedAt'];
 
     return Month(
-      hourlyRate: mrr / _duration.inHours,
+      duration: duration,
       mrr: newMrr,
+      hourlyRate: newMrr / duration.inHours,
       hourlyRateTarget: value['hourlyRateTarget'] ?? 0,
       tags: value['tags'] ?? {},
-      duration: _duration,
-      updatedAt:
-          DateTime.fromMillisecondsSinceEpoch(updatedAt.millisecondsSinceEpoch),
+      updatedAt: DateTime.fromMicrosecondsSinceEpoch(
+          updatedAtStamp.microsecondsSinceEpoch),
     );
   }
 }
@@ -40,7 +53,12 @@ class Month {
 class ClientMonthEmployee {
   final String id;
   final int duration;
+  final Map<String, int> tags;
   final DateTime stopped;
-  ClientMonthEmployee(
-      {required this.id, required this.stopped, required this.duration});
+  ClientMonthEmployee({
+    required this.id,
+    required this.stopped,
+    required this.duration,
+    required this.tags,
+  });
 }

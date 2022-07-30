@@ -15,7 +15,7 @@ class TimerStarted extends TimerEvent {
     this.start,
   });
   final Duration duration;
-  final Client client;
+  final ClientLite client;
   final DateTime? start;
   final String? documentId;
 }

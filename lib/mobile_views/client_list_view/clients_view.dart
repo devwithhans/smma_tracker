@@ -1,6 +1,7 @@
-import 'package:agency_time/blocs/clients_cubit/clients_cubit.dart';
+import 'package:agency_time/blocs/clients_bloc/clients_bloc.dart';
 import 'package:agency_time/blocs/timer_bloc/timer_bloc.dart';
 import 'package:agency_time/mobile_views/add_clients_view.dart';
+
 import 'package:agency_time/models/client.dart';
 import 'package:agency_time/utils/widgets/clients_card.dart';
 import 'package:agency_time/utils/widgets/custom_button.dart';
@@ -46,7 +47,7 @@ class _ClientsViewState extends State<ClientsView> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => AddClient(),
+                            builder: (context) => AddClientView(),
                           ),
                         );
                       },
@@ -81,7 +82,7 @@ class _ClientsViewState extends State<ClientsView> {
           ),
           SizedBox(height: 10),
           Expanded(
-            child: BlocBuilder<ClientsCubit, ClientsState>(
+            child: BlocBuilder<ClientsBloc, ClientsState>(
               builder: (context, state) {
                 if (state.clients.isEmpty) {
                   return Column(
@@ -99,7 +100,7 @@ class _ClientsViewState extends State<ClientsView> {
                       CustomElevatedButton(
                         text: 'Add Client',
                         onPressed: () {
-                          Navigator.pushNamed(context, AddClient.id);
+                          Navigator.pushNamed(context, AddClientView.id);
                         },
                       )
                     ],
@@ -124,9 +125,10 @@ class _ClientsViewState extends State<ClientsView> {
                             HapticFeedback.mediumImpact();
                             context.read<TimerBloc>().add(TimerStarted(
                                 duration: Duration(),
-                                client: searchResult[index]));
+                                client: ClientLite.fromClient(
+                                    searchResult[index])));
                           },
-                          duration: searchResult[index].thisMonth!.duration,
+                          duration: searchResult[index].selectedMonth.duration,
                         );
                       }),
                     );
@@ -177,8 +179,8 @@ int inversSortAlphabetical(Client a, Client b) {
 }
 
 int sortOnHourlyRate(Client a, Client b) {
-  double houryRateA = a.mrr / (a.thisMonth!.duration.inHours);
-  double houryRateB = b.mrr / (b.thisMonth!.duration.inHours);
+  double houryRateA = a.selectedMonth.mrr / (a.selectedMonth.duration.inHours);
+  double houryRateB = b.selectedMonth.mrr / (b.selectedMonth.duration.inHours);
   if (houryRateA < houryRateB) {
     return -1;
   } else if (houryRateA > houryRateB) {
@@ -189,8 +191,8 @@ int sortOnHourlyRate(Client a, Client b) {
 }
 
 int inversSortOnHourlyRate(Client a, Client b) {
-  double houryRateA = a.mrr / (a.thisMonth!.duration.inHours);
-  double houryRateB = b.mrr / (b.thisMonth!.duration.inHours);
+  double houryRateA = a.selectedMonth.mrr / (a.selectedMonth.duration.inHours);
+  double houryRateB = b.selectedMonth.mrr / (b.selectedMonth.duration.inHours);
   if (houryRateA > houryRateB) {
     return -1;
   } else if (houryRateA < houryRateB) {
@@ -201,9 +203,9 @@ int inversSortOnHourlyRate(Client a, Client b) {
 }
 
 int inversSortOnMrr(a, b) {
-  if (a.mrr > b.mrr) {
+  if (a.selectedMonth!.mrr > b.selectedMonth!.mrr) {
     return -1;
-  } else if (a.mrr < b.mrr) {
+  } else if (a.selectedMonth!.mrr < b.selectedMonth!.mrr) {
     return 1;
   } else {
     return 0;
@@ -211,9 +213,9 @@ int inversSortOnMrr(a, b) {
 }
 
 int sortOnMrr(a, b) {
-  if (a.mrr < b.mrr) {
+  if (a.selectedMonth!.mrr < b.selectedMonth!.mrr) {
     return -1;
-  } else if (a.mrr > b.mrr) {
+  } else if (a.selectedMonth!.mrr > b.selectedMonth!.mrr) {
     return 1;
   } else {
     return 0;
@@ -233,14 +235,14 @@ int sortOnLatest(Client a, Client b) {
 }
 
 int sortOnChange(Client a, Client b) {
-  double aChange =
-      ((a.thisMonth!.duration.inSeconds - a.lastMonth!.duration.inSeconds) /
-          a.thisMonth!.duration.inSeconds *
-          100);
-  double bChange =
-      ((b.thisMonth!.duration.inSeconds - b.lastMonth!.duration.inSeconds) /
-          b.thisMonth!.duration.inSeconds *
-          100);
+  double aChange = ((a.selectedMonth.duration.inSeconds -
+          a.compareMonth!.duration.inSeconds) /
+      a.selectedMonth.duration.inSeconds *
+      100);
+  double bChange = ((b.selectedMonth.duration.inSeconds -
+          b.compareMonth!.duration.inSeconds) /
+      b.selectedMonth.duration.inSeconds *
+      100);
 
   aChange = aChange.isInfinite || aChange.isNaN ? -10000 : aChange;
   bChange = bChange.isInfinite || bChange.isNaN ? -10000 : bChange;
@@ -255,14 +257,14 @@ int sortOnChange(Client a, Client b) {
 }
 
 int inversSortOnChange(Client a, Client b) {
-  double aChange =
-      ((a.thisMonth!.duration.inSeconds - a.lastMonth!.duration.inSeconds) /
-          a.thisMonth!.duration.inSeconds *
-          100);
-  double bChange =
-      ((b.thisMonth!.duration.inSeconds - b.lastMonth!.duration.inSeconds) /
-          b.thisMonth!.duration.inSeconds *
-          100);
+  double aChange = ((a.selectedMonth.duration.inSeconds -
+          a.compareMonth!.duration.inSeconds) /
+      a.selectedMonth.duration.inSeconds *
+      100);
+  double bChange = ((b.selectedMonth.duration.inSeconds -
+          b.compareMonth!.duration.inSeconds) /
+      b.selectedMonth.duration.inSeconds *
+      100);
 
   aChange = aChange.isInfinite || aChange.isNaN ? -10000 : aChange;
   bChange = bChange.isInfinite || bChange.isNaN ? -10000 : bChange;

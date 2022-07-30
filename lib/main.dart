@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
                   ),
                   routes: {
                     '/': (context) => Wrapper(),
-                    AddClient.id: (context) => AddClient(),
+                    AddClientView.id: (context) => AddClientView(),
                     // ClientView.id: (context) => ClientView(),
                   },
                 ),

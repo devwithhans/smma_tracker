@@ -1,5 +1,5 @@
 import 'package:agency_time/blocs/auth_cubit/auth_cubit.dart';
-import 'package:agency_time/blocs/clients_cubit/clients_cubit.dart';
+import 'package:agency_time/blocs/clients_bloc/clients_bloc.dart';
 import 'package:agency_time/blocs/navigation_cubit/navigation_cubit.dart';
 import 'package:agency_time/blocs/timer_bloc/ticker.dart';
 import 'package:agency_time/blocs/timer_bloc/timer_bloc.dart';
@@ -36,8 +36,8 @@ class BottomNav extends StatelessWidget {
                 ticker: Ticker(),
                 trackerRepository: context.read<TrackerRepository>())),
         BlocProvider(
-            create: (context) => ClientsCubit(
-                context.read<AuthCubit>().state.appUser!.companyId)),
+            create: (context) => ClientsBloc(
+                trackerRepository: context.read<TrackerRepository>())),
       ],
       child: BlocBuilder<NavigationCubit, NavigationState>(
         builder: (context, state) {

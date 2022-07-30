@@ -12,7 +12,7 @@ class TimerInitial extends TimerState {}
 class TimerLoading extends TimerState {}
 
 class TimerRunning extends TimerState {
-  final Client client;
+  final ClientLite client;
   final int duration;
   final String? documentId;
   final DateTime start;
@@ -28,7 +28,7 @@ class TimerRunning extends TimerState {
 
   TimerRunning copyWith({
     TimerStatus? timerStatus,
-    Client? client,
+    ClientLite? client,
     int? duration,
     String? documentId,
     DateTime? start,

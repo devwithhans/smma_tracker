@@ -45,10 +45,10 @@ class EditClientView extends StatelessWidget {
                           initialValue: CurrencyTextInputFormatter(
                                   locale: 'da', decimalDigits: 0, symbol: '')
                               .format(
-                            client.hourlyRateTarget.toStringAsFixed(0),
+                            client.selectedMonth.hourlyRate.toStringAsFixed(0),
                           ),
                           onChanged: (value) {
-                            newClient.hourlyRateTarget =
+                            newClient.selectedMonth.hourlyRate =
                                 double.parse(value.replaceAll('.', ''));
                           },
                           validator: (v) {
@@ -69,9 +69,10 @@ class EditClientView extends StatelessWidget {
                         CustomInputForm(
                           initialValue: CurrencyTextInputFormatter(
                                   locale: 'da', decimalDigits: 0, symbol: '')
-                              .format(client.mrr.toStringAsFixed(0)),
+                              .format(
+                                  client.selectedMonth.mrr.toStringAsFixed(0)),
                           onChanged: (value) {
-                            newClient.mrr = value.isNotEmpty
+                            newClient.selectedMonth.mrr = value.isNotEmpty
                                 ? double.parse(value.replaceAll('.', ''))
                                 : 0;
                           },

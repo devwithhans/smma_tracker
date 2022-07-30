@@ -14,7 +14,7 @@ class TrackerRepository {
   TrackerRepository(this.authCubit);
 
   Future<String?> beginTracking(
-      {required Client client, required DateTime start}) async {
+      {required ClientLite client, required DateTime start}) async {
     print('Start was called');
     AppUser user = authCubit.state.appUser!;
 
@@ -109,6 +109,16 @@ class TrackerRepository {
         .snapshots();
   }
 
+  Stream<QuerySnapshot<Map<String, dynamic>>> clientsSubscription() {
+    AppUser user = authCubit.state.appUser!;
+
+    return FirebaseFirestore.instance
+        .collection('companies')
+        .doc(user.companyId)
+        .collection('clients')
+        .snapshots();
+  }
+
   Future<TimerEvent?> checkForRunningTimer() async {
     AppUser user = authCubit.state.appUser!;
 
@@ -130,13 +140,30 @@ class TrackerRepository {
         duration: Duration(seconds: seconds),
         documentId: singleResult.id,
         start: startTime,
-        client: Client(
-          hourlyRateTarget: 0,
+        client: ClientLite(
           id: singleResult['clientId'],
           name: singleResult['clientName'],
-          mrr: 0,
         ),
       );
+    }
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> getClientMonth(
+      String monthId, String clientId) async {
+    AppUser user = authCubit.state.appUser!;
+
+    DocumentSnapshot result = await FirebaseFirestore.instance
+        .collection('companies')
+        .doc(user.companyId)
+        .collection('clients')
+        .doc(clientId)
+        .collection('months')
+        .doc(monthId)
+        .get();
+
+    if (result.exists) {
+      return result.data() as Map<String, dynamic>;
     }
     return null;
   }
@@ -155,8 +182,8 @@ class TrackerRepository {
           .doc(newValues.id)
           .update({
         'name': newValues.name,
-        'mrr': newValues.mrr,
-        'target_hourly_rate': newValues.hourlyRateTarget
+        'mrr': newValues.selectedMonth.mrr,
+        'target_hourly_rate': newValues.selectedMonth.hourlyRateTarget
       });
       await firebaseFirestore
           .collection('companies')
@@ -168,8 +195,8 @@ class TrackerRepository {
           .update(
         {
           'name': newValues.name,
-          'mrr': newValues.mrr,
-          'target_hourly_rate': newValues.hourlyRateTarget
+          'mrr': newValues.selectedMonth.mrr,
+          'target_hourly_rate': newValues.selectedMonth.hourlyRateTarget
         },
       );
       return newValues;

@@ -3,49 +3,60 @@ import 'package:agency_time/models/clientMonth.dart';
 class Client {
   String id;
   String name;
-  double hourlyRateTarget;
-  double mrr;
-  Month? thisMonth;
-  Month? lastMonth;
+  Month selectedMonth;
+  Month? compareMonth;
   DateTime? updatedAt;
 
-  double mrrChange;
-  double durationChange;
-  double hourlyRateChange;
-
   Client copyWith({
+    String? name,
     String? id,
     DateTime? updatedAt,
-    String? name,
-    double? hourlyRateTarget,
-    double? mrr,
-    Month? thisMonth,
-    Month? lastMonth,
-    double? mrrChange,
-    double? durationChange,
-    double? hourlyRateChange,
+    Month? selectedMonth,
+    Month? compareMonth,
   }) {
     return Client(
       updatedAt: updatedAt ?? this.updatedAt,
       id: id ?? this.id,
       name: name ?? this.name,
-      mrr: mrr ?? this.mrr,
-      hourlyRateTarget: hourlyRateTarget ?? this.hourlyRateTarget,
-      thisMonth: thisMonth ?? this.thisMonth,
-      lastMonth: lastMonth ?? this.lastMonth,
+      selectedMonth: selectedMonth ?? this.selectedMonth,
+      compareMonth: compareMonth ?? this.compareMonth,
     );
   }
 
   Client({
-    this.thisMonth,
-    this.lastMonth,
+    required this.selectedMonth,
+    this.compareMonth,
     this.updatedAt,
-    this.mrrChange = 100,
-    this.durationChange = 100,
-    this.hourlyRateChange = 100,
     required this.id,
     required this.name,
-    required this.mrr,
-    required this.hourlyRateTarget,
+  });
+}
+
+class ClientLite {
+  String id;
+  String name;
+
+  ClientLite copyWith({
+    String? name,
+    String? id,
+  }) {
+    return ClientLite(
+      id: id ?? this.id,
+      name: name ?? this.name,
+    );
+  }
+
+  static ClientLite fromClient(
+    Client client,
+  ) {
+    return ClientLite(
+      id: client.id,
+      name: client.name,
+    );
+  }
+
+  ClientLite({
+    required this.id,
+    required this.name,
   });
 }
