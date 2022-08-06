@@ -1,7 +1,8 @@
-import 'package:agency_time/blocs/timer_bloc/timer_bloc.dart';
-import 'package:agency_time/mobile_views/finish_tracking/finish_tracking_view.dart';
-import 'package:agency_time/models/tag.dart';
-import 'package:agency_time/repos/trackerRepository.dart';
+import 'package:agency_time/functions/tracking/blocs/timer_bloc/timer_bloc.dart';
+import 'package:agency_time/functions/tracking/models/tag.dart';
+import 'package:agency_time/functions/tracking/views/finish_tracking/finish_tracking_view.dart';
+import 'package:agency_time/functions/clients/repos/client_repo.dart';
+import 'package:agency_time/functions/tracking/repos/tracker_repo.dart';
 import 'package:agency_time/utils/functions/print_duration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,17 +62,17 @@ class TimerBox extends StatelessWidget {
                   }
                   return FinishTrackingDialog(
                     onDelete: () {
-                      context.read<TrackerRepository>().deleteTracking(
+                      context.read<TrackerRepo>().deleteTracking(
                           trackingDocId: timerState.documentId!);
                     },
-                    onSave: (Tag newTag, Duration duration) {
+                    onSave: (Tag? newTag, Duration duration) {
                       context.read<TimerBloc>().add(
                             TimerReset(duration: duration, newTag: newTag),
                           );
                     },
                     client: timerState.client,
                     duration: Duration(seconds: timerState.duration),
-                    tags: context.read<TrackerRepository>().getTags(),
+                    tags: context.read<ClientsRepo>().getTags(),
                   );
                 },
               );

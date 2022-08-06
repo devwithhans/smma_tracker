@@ -673,7 +673,9 @@ PODS:
   - FirebaseMessagingInterop (9.3.0)
   - FirebaseSharedSwift (9.3.0)
   - Flutter (1.0.0)
-  - GoogleDataTransport (9.1.4):
+  - flutter_secure_storage (3.3.1):
+    - Flutter
+  - GoogleDataTransport (9.2.0):
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
@@ -785,6 +787,7 @@ DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
+  - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - stripe_ios (from `.symlinks/plugins/stripe_ios/ios`)
 
 SPEC REPOS:
@@ -829,6 +832,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   Flutter:
     :path: Flutter
+  flutter_secure_storage:
+    :path: ".symlinks/plugins/flutter_secure_storage/ios"
   stripe_ios:
     :path: ".symlinks/plugins/stripe_ios/ios"
 
@@ -852,7 +857,8 @@ SPEC CHECKSUMS:
   FirebaseMessagingInterop: af98663efee05115924de2f4123321183c3a2be6
   FirebaseSharedSwift: 8becafc1096ca5703ac03065ed80496023880ac0
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  GoogleDataTransport: 5fffe35792f8b96ec8d6775f5eccd83c998d5a3b
+  flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
+  GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   "gRPC-C++": 9675f953ace2b3de7c506039d77be1f2e77a8db2
   gRPC-Core: 943e491cb0d45598b0b0eb9e910c88080369290b
@@ -868,6 +874,6 @@ SPEC CHECKSUMS:
   StripeFinancialConnections: 982115b82af429968d8aa78d329a42ed7ba3feab
   StripeUICore: 08c1efbd7e3c54ee7fa74334a37a1d4c08ba944d
 
-PODFILE CHECKSUM: af6b891fb448119e2e3d0a226fcad7567aa13204
+PODFILE CHECKSUM: 4e8f8b2be68aeea4c0d5beb6ff1e79fface1d048
 
 COCOAPODS: 1.11.3

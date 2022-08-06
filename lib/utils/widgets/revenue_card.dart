@@ -1,6 +1,7 @@
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:agency_time/utils/widgets/procentage_card.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 enum StatCardType { black, white }
 
@@ -10,6 +11,7 @@ class StatCard extends StatelessWidget {
       required this.title,
       required this.value,
       required this.subText,
+      this.loading = false,
       this.type = StatCardType.black})
       : super(key: key);
 
@@ -17,9 +19,24 @@ class StatCard extends StatelessWidget {
   final String title;
   final String value;
   final dynamic subText;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
+    if (loading) {
+      return Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Container(
+              height: 150,
+              decoration: BoxDecoration(
+                  border: type == StatCardType.white
+                      ? Border.all(color: kColorGrey)
+                      : null,
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.black)));
+    }
+
     return Container(
       height: 150,
       decoration: BoxDecoration(

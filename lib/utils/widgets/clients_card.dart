@@ -1,7 +1,8 @@
-import 'package:agency_time/blocs/timer_bloc/timer_bloc.dart';
-import 'package:agency_time/functions/data_explanation.dart';
-import 'package:agency_time/mobile_views/client_view/client_view.dart';
-import 'package:agency_time/models/client.dart';
+import 'package:agency_time/functions/app/blocs/settings_bloc/settings_bloc.dart';
+import 'package:agency_time/functions/clients/views/client_view/client_view.dart';
+import 'package:agency_time/functions/tracking/blocs/timer_bloc/timer_bloc.dart';
+import 'package:agency_time/utils/functions/data_explanation.dart';
+import 'package:agency_time/functions/clients/models/client.dart';
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:agency_time/utils/functions/print_duration.dart';
 
@@ -25,8 +26,9 @@ class ClientCard extends StatelessWidget {
   final void Function()? onDoubleTap;
   @override
   Widget build(BuildContext context) {
-    final moneyFormatter =
-        NumberFormat.currency(locale: 'da', name: 'Kr.', decimalDigits: 0);
+    ;
+    final moneyFormatter = NumberFormat.simpleCurrency(
+        locale: context.read<SettingsBloc>().state.countryCode);
 
     bool noCompareMonth = client.compareMonth == null;
 
@@ -57,7 +59,7 @@ class ClientCard extends StatelessWidget {
 
           return Container(
             height: 90,
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(20),
             margin: EdgeInsets.only(bottom: 10),
             width: double.infinity,
             decoration: BoxDecoration(
@@ -82,64 +84,86 @@ class ClientCard extends StatelessWidget {
                           style: const TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 16),
                         ),
-                        Text(
-                          '${moneyFormatter.format(client.selectedMonth.mrr)} / mth',
-                          style: TextStyle(fontSize: 12),
-                        ),
+                        client.internal
+                            ? SizedBox()
+                            : Text(
+                                '${moneyFormatter.format(client.selectedMonth.mrr)}',
+                                style: TextStyle(fontSize: 12),
+                              ),
                       ],
                     ),
                   ),
                 ),
-                Expanded(
-                  flex: 6,
-                  child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          printDuration(Duration(seconds: intDuration)),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 16),
-                        ),
-                        Text(
-                          compareDuration.isNegative
-                              ? '${compareDuration.inHours}h / last'
-                              : '+${compareDuration.inHours}h / last',
-                          style: const TextStyle(fontSize: 10),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 4,
-                  child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          client.selectedMonth.hourlyRate > 50000
-                              ? '+50k'
-                              : '${moneyFormatter.format(client.selectedMonth.hourlyRate)} ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: client.selectedMonth.hourlyRate <
-                                    client.selectedMonth.hourlyRateTarget
-                                ? Colors.red
-                                : Colors.black,
+                client.internal
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            printDuration(Duration(seconds: intDuration)),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 16),
+                          ),
+                          Text(
+                            compareDuration.isNegative
+                                ? '${compareDuration.inHours}h / last'
+                                : '+${compareDuration.inHours}h / last',
+                            style: const TextStyle(fontSize: 10),
+                          ),
+                        ],
+                      )
+                    : Expanded(
+                        flex: 6,
+                        child: Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                printDuration(Duration(seconds: intDuration)),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 16),
+                              ),
+                              Text(
+                                compareDuration.isNegative
+                                    ? '${compareDuration.inHours}h / last'
+                                    : '+${compareDuration.inHours}h / last',
+                                style: const TextStyle(fontSize: 10),
+                              ),
+                            ],
                           ),
                         ),
-                        ProcentageChange(
-                            procentage: compareHourlyRate.isInfinite
-                                ? 100
-                                : compareHourlyRate)
-                      ],
-                    ),
-                  ),
-                ),
+                      ),
+                client.internal
+                    ? SizedBox()
+                    : Expanded(
+                        flex: 5,
+                        child: Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                client.selectedMonth.hourlyRate > 50000
+                                    ? '+50k'
+                                    : '${moneyFormatter.format(client.selectedMonth.hourlyRate)} ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  color: client.selectedMonth.hourlyRate <
+                                          client.selectedMonth.hourlyRateTarget
+                                      ? Colors.red
+                                      : Colors.black,
+                                ),
+                              ),
+                              ProcentageChange(
+                                  procentage: compareHourlyRate.isInfinite
+                                      ? 100
+                                      : compareHourlyRate)
+                            ],
+                          ),
+                        ),
+                      ),
               ],
             ),
           );

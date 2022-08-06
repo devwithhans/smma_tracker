@@ -1,4 +1,4 @@
-import 'package:agency_time/blocs/auth_cubit/auth_cubit.dart';
+import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
 import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
@@ -60,7 +60,6 @@ Future<void> stopTracker({
       'userId': userId,
       'userName': userName,
     });
-    print(resp);
   } on FirebaseFunctionsException catch (error) {
     print(error.code);
     print(error.message);

@@ -1,10 +1,11 @@
-import 'package:agency_time/blocs/auth_cubit/auth_cubit.dart';
 import 'package:agency_time/firebase_options.dart';
-import 'package:agency_time/mobile_views/add_clients_view.dart';
-import 'package:agency_time/repos/trackerRepository.dart';
-import 'package:agency_time/wrapper.dart';
+import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
+import 'package:agency_time/functions/clients/views/add_clients_view.dart';
+import 'package:agency_time/functions/clients/repos/client_repo.dart';
+import 'package:agency_time/functions/app/repos/settings_repo.dart';
+import 'package:agency_time/functions/tracking/repos/tracker_repo.dart';
+import 'package:agency_time/functions/authentication/views/wrapper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,8 +31,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (context) => AuthCubit(),
-        child: RepositoryProvider(
-          create: (context) => TrackerRepository(context.read<AuthCubit>()),
+        child: MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider(
+                create: (context) => TrackerRepo(context.read<AuthCubit>())),
+            RepositoryProvider(
+                create: (context) => SettingsRepo(context.read<AuthCubit>())),
+            RepositoryProvider(
+                create: (context) => ClientsRepo(context.read<AuthCubit>())),
+          ],
           child: GestureDetector(
               onTap: () {
                 FocusManager.instance.primaryFocus?.unfocus();
