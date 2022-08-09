@@ -90,7 +90,7 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
         ));
       }
     }
-    emit(state.copyWith(clients: updatedClients));
+    emit(state.copyWith(clients: updatedClients, month: event.month));
   }
 
   Future<void> _addClient(AddClient event, Emitter emit) async {

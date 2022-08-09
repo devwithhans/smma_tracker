@@ -1,12 +1,20 @@
+import 'package:agency_time/functions/app/blocs/stats_bloc/stats_bloc.dart';
 import 'package:agency_time/functions/app/views/settings_view/settings_view.dart';
+import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/utils/widgets/select_month.dart';
 import 'package:flutter/material.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
+import 'package:intl/intl.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({
+    required this.onSelectMonth,
+    required this.selectedMonth,
     Key? key,
   }) : super(key: key);
 
+  final void Function()? onSelectMonth;
+  final DateTime selectedMonth;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -14,28 +22,16 @@ class CustomAppBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Dashboard',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600),
-              ),
-              MonthModal(),
-            ],
+          const Text(
+            'Dashboard',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Colors.black, fontSize: 20, fontWeight: FontWeight.w600),
           ),
-          IconButton(
-            splashRadius: 20,
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SettingsView()));
-            },
-            icon: Icon(Icons.settings),
-          )
+          CustomMonthButton(
+              icon: Icons.calendar_month,
+              onPressed: onSelectMonth,
+              text: DateFormat('MMM, y').format(selectedMonth))
         ],
       ),
     );

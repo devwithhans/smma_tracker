@@ -33,8 +33,6 @@ class ClientsRepo {
 
   Future<Client> editClient(Client newValues) async {
     AppUser user = authCubit.state.appUser!;
-    print(newValues.id);
-    print('${DateTime.now().year}-${DateTime.now().month}');
 
     DocumentReference clientDocument = firestore
         .collection('companies')
@@ -137,7 +135,6 @@ class ClientsRepo {
           ),
         );
       }
-
       return resultArray;
     } on FirebaseException catch (e) {
       print(e);

@@ -1,5 +1,6 @@
 import 'package:agency_time/functions/clients/blocs/clients_bloc/clients_bloc.dart';
 import 'package:agency_time/functions/clients/views/add_clients_view.dart';
+import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
@@ -10,9 +11,12 @@ class Header extends StatelessWidget {
     required this.state,
     required this.title,
     required this.onPressed,
+    required this.onSelectMonth,
+    required this.selectedMonth,
     Key? key,
   }) : super(key: key);
-
+  final void Function()? onSelectMonth;
+  final DateTime selectedMonth;
   final ClientsState state;
   final String title;
   final void Function()? onPressed;
@@ -37,27 +41,10 @@ class Header extends StatelessWidget {
               ),
             ],
           ),
-          Row(
-            children: [
-              Text(
-                DateFormat('MMMM').format(state.month ?? DateTime.now()),
-                style: TextStyle(fontSize: 12),
-              ),
-              IconButton(
-                onPressed: () async {
-                  DateTime? selectedDateTime = await showMonthPicker(
-                    context: context,
-                    initialDate: state.month ?? DateTime.now(),
-                  );
-                  BlocProvider.of<ClientsBloc>(context).add(GetClientsWithMonth(
-                    month: selectedDateTime,
-                  ));
-                },
-                icon: Icon(Icons.calendar_month),
-                splashRadius: 20,
-              ),
-            ],
-          )
+          CustomMonthButton(
+              icon: Icons.calendar_month,
+              onPressed: onSelectMonth,
+              text: DateFormat('MMM, y').format(selectedMonth))
         ],
       ),
     );

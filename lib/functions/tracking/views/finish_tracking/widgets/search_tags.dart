@@ -23,7 +23,7 @@ class _SearchTagsState extends State<SearchTags> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    searchResult = widget.tags;
+    searchResult = widget.tags.where((element) => element.active).toList();
   }
 
   String searchParameter = '';
@@ -40,7 +40,8 @@ class _SearchTagsState extends State<SearchTags> {
             searchParameter = v;
             searchResult = widget.tags
                 .where((element) =>
-                    element.tag.toLowerCase().contains(v.toLowerCase()))
+                    element.tag.toLowerCase().contains(v.toLowerCase()) &&
+                    element.active)
                 .toList();
 
             setState(() {});
@@ -70,7 +71,8 @@ class _SearchTagsState extends State<SearchTags> {
                 onTap: () {
                   selectedTag = null;
                   searchParameter = '';
-                  searchResult = widget.tags;
+                  searchResult =
+                      widget.tags.where((element) => element.active).toList();
                   setState(() {});
                 },
                 text: selectedTag!.tag,

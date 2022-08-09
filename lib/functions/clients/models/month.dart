@@ -24,7 +24,6 @@ class Month {
     if (value == null || value.isEmpty) {
       return null;
     }
-    print(value);
 
     Duration duration = Duration(seconds: value['duration'] ?? 0);
 

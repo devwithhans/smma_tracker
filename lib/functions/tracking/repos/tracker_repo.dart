@@ -43,13 +43,7 @@ class TrackerRepo {
     DateTime? stop,
   }) async {
     AppUser user = authCubit.state.appUser!;
-    if (newTag != null) {
-      if (authCubit.state.company!.tags
-          .where((element) => element.id == newTag.id)
-          .isEmpty) {
-        addTag(newTag);
-      }
-    }
+
     try {
       Map<String, dynamic> updateObject = {
         'duration': duration != null ? duration.inSeconds : null,

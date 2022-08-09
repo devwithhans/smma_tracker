@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:agency_time/functions/app/models/stats.dart';
 import 'package:agency_time/functions/app/repos/settings_repo.dart';
+import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
+import 'package:agency_time/functions/authentication/models/company.dart';
 import 'package:agency_time/utils/functions/data_explanation.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,50 +13,55 @@ part 'stats_state.dart';
 
 class StatsBloc extends Bloc<StatsEvent, StatsState> {
   SettingsRepo settingsRepo;
+  Company company;
   late StreamSubscription _monthsStream;
 
-  StatsBloc(this.settingsRepo) : super(StatsState()) {
+  StatsBloc(this.settingsRepo, this.company) : super(StatsState()) {
+    settingsRepo.checkIfMonthsUpToDate();
     _monthsStream = settingsRepo.companyMonths().listen(((event) {
-      emit(state.copyWith(status: Status.loading));
+      emit(state.copyWith(status: StatsStatus.loading));
       for (var monthRaw in event.docs) {
         add(AddMonth(monthRaw));
       }
       add(GetStats());
-      emit(state.copyWith(status: Status.initial));
     }));
 
     on<AddMonth>(_addMonth);
     on<GetStats>(_getStats);
   }
 
-  void _getStats(GetStats event, Emitter emit) async {
-    DateTime selectedMonthDate = event.month ?? DateTime.now();
-    CompanyMonth? statMonth = state.months.last;
+  void _getStats(GetStats event, Emitter emit) {
+    emit(state.copyWith(status: StatsStatus.loading));
 
-    if (statMonth.month!.month != selectedMonthDate.month) {
-      print('noSTATMONTH');
-    }
+    List<CompanyMonth>? statMonthList =
+        state.months.where((element) => element.month == event.month).toList();
+
+    CompanyMonth statMonth =
+        statMonthList.isNotEmpty ? statMonthList.first : state.months.last;
 
     CompanyMonth compareMonth = _getMonthFormList(
             DateTime(statMonth.month!.year, statMonth.month!.month - 1)) ??
         CompanyMonth(month: DateTime.now(), updatedAt: DateTime.now(), mrr: 0);
 
     double mrrChange = getChangeProcentage(statMonth.mrr, compareMonth.mrr);
-    double hourlyRateChange =
-        getChangeProcentage(statMonth.hourlyRate, compareMonth.hourlyRate);
-
+    double clientsHourlyRateChange = getChangeProcentage(
+        statMonth.clientsHourlyRate, compareMonth.clientsHourlyRate);
+    double totalHourlyRateChange = getChangeProcentage(
+        statMonth.totalHourlyRate, compareMonth.totalHourlyRate);
     Duration totalDurationChange =
         statMonth.totalDuration - compareMonth.totalDuration;
-
     Duration internalDurationChange =
         statMonth.internalDuration - compareMonth.internalDuration;
     Duration clientsDuratioChange =
         statMonth.clientsDuration - compareMonth.clientsDuration;
+
     emit(
       state.copyWith(
+        status: StatsStatus.initial,
         mrrChange: mrrChange,
         selectedMonth: statMonth,
-        hourlyRateChange: hourlyRateChange,
+        clientsHourlyRateChange: clientsHourlyRateChange,
+        totalHourlyRateChange: totalHourlyRateChange,
         internalDurationChange: internalDurationChange,
         clientsDurationChange: clientsDuratioChange,
         totalDurationChange: totalDurationChange,
@@ -65,9 +72,11 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   void _addMonth(AddMonth event, Emitter emit) {
     List<CompanyMonth> CompanyMonths = [];
     CompanyMonths.addAll(state.months);
-    CompanyMonth? newMonth =
-        CompanyMonth.convertMonth(event.monthDoc.data(), event.monthDoc.id);
-
+    CompanyMonth? newMonth = CompanyMonth.convertMonth(
+      event.monthDoc.data(),
+      event.monthDoc.id,
+      company,
+    );
     CompanyMonths = _addNewMonthToList(newMonth: newMonth);
 
     emit(state.copyWith(months: CompanyMonths));

@@ -26,11 +26,18 @@ class AuthCubit extends Cubit<AuthState> {
               userDocument.data() as Map<String, dynamic>, user.uid);
           Company company = await getCompany(appUser);
           await Future.delayed(Duration(seconds: 2));
-          emit(state.copyWith(
-            authStatus: AuthStatus.signedIn,
-            appUser: appUser,
-            company: company,
-          ));
+          if (company.roles[appUser.id] == null) {
+            emit(state.copyWith(
+              authStatus: AuthStatus.noCompany,
+              appUser: appUser,
+            ));
+          } else {
+            emit(state.copyWith(
+                authStatus: AuthStatus.signedIn,
+                appUser: appUser,
+                company: company,
+                role: company.roles[appUser.id]));
+          }
         } on FirebaseException catch (error) {
           emit(state.copyWith(authStatus: AuthStatus.noCompany));
           print(error.code);
@@ -49,11 +56,21 @@ class AuthCubit extends Cubit<AuthState> {
               .doc(user.companyId)
               .get();
       Company company = Company.convert(companyRaw.data()!, companyRaw.id);
+      List<Member> members = [];
 
-      print(company.countryCode);
+      List rolesKeys = company.roles.keys.toList();
 
-      return Company.convert(companyRaw.data()!, companyRaw.id);
+      for (var key in rolesKeys) {
+        DocumentSnapshot<Map<String, dynamic>> member =
+            await FirebaseFirestore.instance.collection('users').doc(key).get();
+        members.add(Member.convert(member.data()!, key));
+      }
+
+      company = company.copyWith(members: members);
+
+      return company;
     } on FirebaseFunctionsException catch (error) {
+      print(error);
       rethrow;
     }
   }

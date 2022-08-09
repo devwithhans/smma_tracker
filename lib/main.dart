@@ -30,42 +30,43 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => AuthCubit(),
-        child: MultiRepositoryProvider(
-          providers: [
-            RepositoryProvider(
-                create: (context) => TrackerRepo(context.read<AuthCubit>())),
-            RepositoryProvider(
-                create: (context) => SettingsRepo(context.read<AuthCubit>())),
-            RepositoryProvider(
-                create: (context) => ClientsRepo(context.read<AuthCubit>())),
-          ],
-          child: GestureDetector(
-              onTap: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-              },
-              child: OverlaySupport.global(
-                child: MaterialApp(
-                  navigatorKey: navigatorKey,
-                  title: 'SMMA Tracker',
-                  theme: ThemeData(
-                    fontFamily: 'Poppins',
-                    backgroundColor: Colors.white,
-                    primarySwatch: Colors.blue,
-                    appBarTheme: const AppBarTheme(
-                      systemOverlayStyle: SystemUiOverlayStyle.dark,
-                      backgroundColor: Colors.transparent,
-                      elevation: 0,
-                      iconTheme: IconThemeData(color: Colors.black),
-                    ),
+      create: (context) => AuthCubit(),
+      child: MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider(
+              create: (context) => TrackerRepo(context.read<AuthCubit>())),
+          RepositoryProvider(
+              create: (context) => SettingsRepo(context.read<AuthCubit>())),
+          RepositoryProvider(
+              create: (context) => ClientsRepo(context.read<AuthCubit>())),
+        ],
+        child: GestureDetector(
+            onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: OverlaySupport.global(
+              child: MaterialApp(
+                navigatorKey: navigatorKey,
+                title: 'SMMA Tracker',
+                theme: ThemeData(
+                  fontFamily: 'Poppins',
+                  backgroundColor: Colors.white,
+                  primarySwatch: Colors.blue,
+                  appBarTheme: const AppBarTheme(
+                    systemOverlayStyle: SystemUiOverlayStyle.dark,
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                    iconTheme: IconThemeData(color: Colors.black),
                   ),
-                  routes: {
-                    '/': (context) => Wrapper(),
-                    AddClientView.id: (context) => AddClientView(),
-                    // ClientView.id: (context) => ClientView(),
-                  },
                 ),
-              )),
-        ));
+                routes: {
+                  '/': (context) => const Wrapper(),
+                  AddClientView.id: (context) => AddClientView(),
+                  // ClientView.id: (context) => ClientView(),
+                },
+              ),
+            )),
+      ),
+    );
   }
 }

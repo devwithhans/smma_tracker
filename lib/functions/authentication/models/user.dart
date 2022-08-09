@@ -22,3 +22,25 @@ class AppUser {
         email: value['email']);
   }
 }
+
+class Member {
+  String id;
+  String firstName;
+  String lastName;
+  String email;
+
+  Member({
+    required this.id,
+    required this.firstName,
+    required this.lastName,
+    required this.email,
+  });
+
+  static Member convert(Map<String, dynamic> value, String uid) {
+    return Member(
+        id: uid,
+        firstName: value['firstName'],
+        lastName: value['lastName'],
+        email: value['email']);
+  }
+}

@@ -1,3 +1,4 @@
+import 'package:agency_time/functions/app/blocs/stats_bloc/stats_bloc.dart';
 import 'package:agency_time/functions/clients/blocs/clients_bloc/clients_bloc.dart';
 import 'package:agency_time/functions/clients/views/add_clients_view.dart';
 import 'package:agency_time/functions/clients/views/client_list_view/components/client_result_list.dart';
@@ -9,6 +10,7 @@ import 'package:agency_time/utils/widgets/custom_searchfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 class InternalClientsView extends StatefulWidget {
   const InternalClientsView({Key? key}) : super(key: key);
@@ -31,15 +33,30 @@ class _InternalClientsViewState extends State<InternalClientsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Header(
-                title: 'Internal projects',
+                selectedMonth: state.month!,
+                onSelectMonth: () async {
+                  DateTime? selection = await showMonthPicker(
+                    firstDate:
+                        context.read<StatsBloc>().state.months.first.month!,
+                    lastDate:
+                        context.read<StatsBloc>().state.months.last.month!,
+                    context: context,
+                    initialDate: state.month ?? DateTime.now(),
+                  );
+                  if (selection != null) {
+                    context.read<StatsBloc>().add(GetStats(month: selection));
+                    context
+                        .read<ClientsBloc>()
+                        .add(GetClientsWithMonth(month: selection));
+                  }
+                },
+                title: 'Clients',
                 state: state,
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AddClientView(
-                        internal: true,
-                      ),
+                      builder: (context) => AddClientView(),
                     ),
                   );
                 },

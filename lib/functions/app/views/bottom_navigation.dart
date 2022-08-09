@@ -50,7 +50,8 @@ class BottomNav extends StatelessWidget {
         BlocProvider(
             create: (context) => SettingsBloc(context.read<SettingsRepo>())),
         BlocProvider(
-            create: (context) => StatsBloc(context.read<SettingsRepo>())),
+            create: (context) => StatsBloc(context.read<SettingsRepo>(),
+                context.read<AuthCubit>().state.company!)),
       ],
       child: BlocBuilder<NavigationCubit, NavigationState>(
         builder: (context, state) {

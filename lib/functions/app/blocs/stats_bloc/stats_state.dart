@@ -1,24 +1,27 @@
 part of 'stats_bloc.dart';
 
-enum Status { loading, succes, failed, initial }
+enum StatsStatus { loading, succes, failed, initial }
 
 class StatsState extends Equatable {
   const StatsState({
     this.months = const [],
     this.selectedMonth = const CompanyMonth(),
+    this.compareMonth = const CompanyMonth(),
     this.totalDurationChange = const Duration(),
-    this.status = Status.initial,
+    this.status = StatsStatus.initial,
     this.clientsDurationChange = const Duration(),
     this.internalDurationChange = const Duration(),
     this.mrrChange = 0,
-    this.hourlyRateChange = 0,
+    this.clientsHourlyRateChange = 0,
+    this.totalHourlyRateChange = 0,
   });
-  final Status status;
+  final StatsStatus status;
   final List<CompanyMonth> months;
 
   final double mrrChange;
 
-  final double hourlyRateChange;
+  final double clientsHourlyRateChange;
+  final double totalHourlyRateChange;
 
   final Duration clientsDurationChange;
 
@@ -26,27 +29,34 @@ class StatsState extends Equatable {
   final Duration totalDurationChange;
 
   final CompanyMonth selectedMonth;
+  final CompanyMonth compareMonth;
 
   StatsState copyWith({
-    Status? status,
+    StatsStatus? status,
     List<CompanyMonth>? months,
     double? mrrChange,
-    double? hourlyRateChange,
+    double? clientsHourlyRateChange,
+    double? totalHourlyRateChange,
     Duration? clientsDurationChange,
     Duration? internalDurationChange,
     Duration? totalDurationChange,
     CompanyMonth? selectedMonth,
+    CompanyMonth? compareMonth,
   }) {
     return StatsState(
       months: months ?? this.months,
       selectedMonth: selectedMonth ?? this.selectedMonth,
+      compareMonth: compareMonth ?? this.compareMonth,
       mrrChange: mrrChange ?? this.mrrChange,
       clientsDurationChange:
           clientsDurationChange ?? this.clientsDurationChange,
       totalDurationChange: totalDurationChange ?? this.totalDurationChange,
       internalDurationChange:
           internalDurationChange ?? this.internalDurationChange,
-      hourlyRateChange: hourlyRateChange ?? this.hourlyRateChange,
+      clientsHourlyRateChange:
+          clientsHourlyRateChange ?? this.clientsHourlyRateChange,
+      totalHourlyRateChange:
+          totalHourlyRateChange ?? this.totalHourlyRateChange,
     );
   }
 
@@ -59,6 +69,8 @@ class StatsState extends Equatable {
         internalDurationChange,
         clientsDurationChange,
         totalDurationChange,
-        hourlyRateChange,
+        clientsHourlyRateChange,
+        totalHourlyRateChange,
+        totalDurationChange,
       ];
 }
