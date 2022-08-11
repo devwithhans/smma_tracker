@@ -1,12 +1,7 @@
-import 'package:agency_time/functions/app/blocs/stats_bloc/stats_bloc.dart';
-import 'package:agency_time/functions/app/models/stats.dart';
-import 'package:agency_time/functions/app/views/dashboard_view/dashboard_view.dart';
 import 'package:agency_time/functions/app/views/dashboard_view/dashboard_widgets/pie_chart.dart';
 import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
 import 'package:agency_time/functions/authentication/models/company.dart';
-import 'package:agency_time/functions/authentication/models/user.dart';
 import 'package:agency_time/functions/clients/blocs/clients_bloc/clients_bloc.dart';
-import 'package:agency_time/functions/tracking/models/tag.dart';
 
 import 'package:agency_time/utils/constants/colors.dart';
 
@@ -24,11 +19,13 @@ class TotalTrackings extends StatelessWidget {
     required this.loading,
     required this.moneyFormatter,
     required this.dashData,
+    this.userId,
   }) : super(key: key);
 
   final bool loading;
   final NumberFormat moneyFormatter;
   final DashData dashData;
+  final String? userId;
 
   @override
   Widget build(BuildContext context) {
@@ -127,6 +124,7 @@ class TotalTrackings extends StatelessWidget {
             return CustomPieChart(
               title: 'Time distribution:',
               chartData: overviewShowingSections(
+                userId: userId,
                 clientsDuration: dashData.clientDuration,
                 internalDuration: dashData.internalDuration,
                 internals: state.clients
@@ -146,16 +144,6 @@ class TotalTrackings extends StatelessWidget {
               tagsMap: dashData.tags,
             )),
         const SizedBox(
-          height: 20,
-        ),
-        const Text(
-          'Users:',
-          style: TextStyle(color: kColorGreyText, fontWeight: FontWeight.w600),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        const SizedBox(
           height: 100,
         ),
       ],
@@ -166,17 +154,19 @@ class TotalTrackings extends StatelessWidget {
 class DashData {
   const DashData({
     Key? key,
-    required this.clientDuration,
-    required this.clientDurationChange,
-    required this.clientsHourlyRate,
-    required this.clientHourlyRateChange,
-    required this.totalDuration,
-    required this.totalDurationChange,
-    required this.totalHourlyRate,
-    required this.totalHourlyRateChange,
-    required this.internalDuration,
-    required this.internalDurationChange,
-    required this.tags,
+    this.mrr,
+    this.lastMrr,
+    this.clientDuration = const Duration(),
+    this.clientDurationChange = const Duration(),
+    this.clientsHourlyRate = 0,
+    this.clientHourlyRateChange = 0,
+    this.totalDuration = const Duration(),
+    this.totalDurationChange = const Duration(),
+    this.totalHourlyRate = 0,
+    this.totalHourlyRateChange = 0,
+    this.internalDuration = const Duration(),
+    this.internalDurationChange = const Duration(),
+    this.tags = const {},
   });
 
   final Duration clientDuration;
@@ -192,6 +182,8 @@ class DashData {
   final double totalHourlyRateChange;
 
   final Map tags;
+  final double? mrr;
+  final double? lastMrr;
 
   final Duration internalDuration;
   final Duration internalDurationChange;

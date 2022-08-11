@@ -101,12 +101,12 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   void _onReset(TimerReset event, Emitter<TimerState> emit) async {
-    // _tickerSubscription!.pause();¨
+    // _tickerSubscription!.pause();
     Navigator.pop(navigatorKey.currentContext!);
 
     TimerRunning timerRunningSnapshot = state as TimerRunning;
-    DateTime stop = timerRunningSnapshot.start.add(event.duration);
     emit(timerRunningSnapshot.copyWith(timerStatus: TimerStatus.loading));
+    DateTime stop = timerRunningSnapshot.start.add(event.duration);
     await trackerRepository.updateTracker(
       stop: stop,
       trackingDocId: timerRunningSnapshot.documentId!,
@@ -114,8 +114,6 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
       newTag: event.newTag,
     );
     add(CancelTracking());
-    // _tickerSubscription?.cancel();
-    // emit(TimerInitial());
   }
 
   void _onTicked(TimerTicked event, Emitter<TimerState> emit) {

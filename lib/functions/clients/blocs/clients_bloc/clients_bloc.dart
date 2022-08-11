@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:agency_time/functions/authentication/models/company.dart';
 import 'package:agency_time/functions/clients/models/client.dart';
 import 'package:agency_time/functions/clients/models/month.dart';
 import 'package:agency_time/functions/clients/repos/client_repo.dart';
@@ -12,8 +13,12 @@ part 'clients_state.dart';
 class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
   late StreamSubscription _clientsStream;
   final ClientsRepo clientsRepo;
+  final Company company;
 
-  ClientsBloc({required this.clientsRepo}) : super(ClientsState()) {
+  ClientsBloc({
+    required this.clientsRepo,
+    required this.company,
+  }) : super(ClientsState()) {
     //We listen for changes in the clients, and adds the changes to the state
     _clientsStream = clientsRepo
         .clientsSubscription()
@@ -40,13 +45,12 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
         []; // The list of updated clients to be emitted
 
     for (var client in state.clients) {
-      DateTime selectedDate = event.month ??
-          DateTime
-              .now(); // We start by setting the date of selected month. If we havent added any it will be current month
+      DateTime selectedDate = event.month ?? state.month ?? DateTime.now();
+      ; // We start by setting the date of selected month. If we havent added any it will be current month
 
       // We filter the array to check if we got the month
       List selectedMonthList = client.savedMonths
-          .where((element) => element.month.month == selectedDate.month)
+          .where((element) => element.date.month == selectedDate.month)
           .toList();
 
       // If the array is empty it means we have no matching Month saved in the client doc
@@ -54,7 +58,7 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
         // We set the client to active month false.
 
         Month newMonth = Month(
-            month: DateTime.now(),
+            date: DateTime.now(),
             updatedAt: DateTime.now(),
             mrr: client.savedMonths.first.mrr,
             hourlyRateTarget: client.savedMonths.first.hourlyRateTarget);
@@ -70,11 +74,11 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
 
         // We check if we have a specific compare date, otherwise we set it to previus month relativ to selected month.
         DateTime compareDate = event.compareMonth ??
-            DateTime(selectedMonth.month.year, selectedMonth.month.month - 1);
+            DateTime(selectedMonth.date.year, selectedMonth.date.month - 1);
 
         // We filter a list to check if we got the compareMonth
         List<Month> compareMonthList = client.savedMonths
-            .where((element) => element.month.month == compareDate.month)
+            .where((element) => element.date.month == compareDate.month)
             .toList();
 
         Month? compareMonth =
@@ -98,7 +102,7 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
     Map<String, dynamic> monthsMap = clientMap['months'] ?? {};
     List<Month> savedMonths = [];
     monthsMap.forEach((key, value) {
-      Month? month = Month.convertMonth(value, key);
+      Month? month = Month.convertMonth(value, key, company);
       if (month != null) {
         savedMonths.add(month);
       }
@@ -139,7 +143,7 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
     String compareMonthId = '${compareMonth.year}-${compareMonth.month}';
 
     List<Month?> reuseSavedMonths = savedMonths
-        .where((element) => element.month.month == month.month)
+        .where((element) => element.date.month == month.month)
         .toList();
 
     if (savedMonths.isNotEmpty) {
@@ -151,9 +155,9 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
     Map<String, dynamic>? compareMonthData =
         await clientsRepo.getClientMonth(compareMonthId, clientId);
 
-    Month? monthModel = Month.convertMonth(monthData, monthId);
+    Month? monthModel = Month.convertMonth(monthData, monthId, company);
     Month? compareMonthModel =
-        Month.convertMonth(compareMonthData, compareMonthId);
+        Month.convertMonth(compareMonthData, compareMonthId, company);
 
     return [monthModel, compareMonthModel];
   }

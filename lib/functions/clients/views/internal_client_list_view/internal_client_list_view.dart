@@ -6,6 +6,7 @@ import 'package:agency_time/functions/clients/views/client_list_view/components/
 import 'package:agency_time/functions/clients/views/client_list_view/components/no_clients.dart';
 import 'package:agency_time/functions/clients/models/client.dart';
 import 'package:agency_time/functions/clients/views/client_list_view/sorting_logic.dart';
+import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/utils/widgets/custom_searchfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -33,13 +34,12 @@ class _InternalClientsViewState extends State<InternalClientsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Header(
-                selectedMonth: state.month!,
+                selectedMonth: state.month ?? DateTime.now(),
                 onSelectMonth: () async {
                   DateTime? selection = await showMonthPicker(
                     firstDate:
-                        context.read<StatsBloc>().state.months.first.month!,
-                    lastDate:
-                        context.read<StatsBloc>().state.months.last.month!,
+                        context.read<StatsBloc>().state.months.first.date!,
+                    lastDate: context.read<StatsBloc>().state.months.last.date!,
                     context: context,
                     initialDate: state.month ?? DateTime.now(),
                   );
@@ -50,13 +50,15 @@ class _InternalClientsViewState extends State<InternalClientsView> {
                         .add(GetClientsWithMonth(month: selection));
                   }
                 },
-                title: 'Clients',
+                title: 'Internals',
                 state: state,
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AddClientView(),
+                      builder: (context) => AddClientView(
+                        internal: true,
+                      ),
                     ),
                   );
                 },
@@ -83,9 +85,63 @@ class _InternalClientsViewState extends State<InternalClientsView> {
                     bool currentMonth = state.month == null ||
                         state.month!.month == DateTime.now().month;
                     if (clients.isEmpty) {
-                      return NoClients(
-                        currentMonth: currentMonth,
-                        state: state,
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            currentMonth
+                                ? 'You dont have any internals '
+                                : 'You had no internals in ${DateFormat('MMMM').format(state.month!)}',
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 20,
+                          ),
+                          currentMonth
+                              ? CustomElevatedButton(
+                                  text: 'Add Internal',
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => AddClientView(
+                                                  internal: true,
+                                                )));
+                                  },
+                                )
+                              : CustomElevatedButton(
+                                  text: 'Change month',
+                                  onPressed: () async {
+                                    DateTime? selection = await showMonthPicker(
+                                      firstDate: context
+                                          .read<StatsBloc>()
+                                          .state
+                                          .months
+                                          .first
+                                          .date!,
+                                      lastDate: context
+                                          .read<StatsBloc>()
+                                          .state
+                                          .months
+                                          .last
+                                          .date!,
+                                      context: context,
+                                      initialDate:
+                                          state.month ?? DateTime.now(),
+                                    );
+                                    if (selection != null) {
+                                      context
+                                          .read<StatsBloc>()
+                                          .add(GetStats(month: selection));
+                                      context.read<ClientsBloc>().add(
+                                          GetClientsWithMonth(
+                                              month: selection));
+                                    }
+                                  },
+                                )
+                        ],
                       );
                     }
                     return ClientResultList(clients: clients, search: search);

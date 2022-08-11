@@ -2,6 +2,7 @@ import 'package:agency_time/functions/app/blocs/navigation_cubit/navigation_cubi
 import 'package:agency_time/functions/app/blocs/settings_bloc/settings_bloc.dart';
 import 'package:agency_time/functions/app/blocs/stats_bloc/stats_bloc.dart';
 import 'package:agency_time/functions/app/views/dashboard_view/dashboard_view.dart';
+import 'package:agency_time/functions/app/views/settings_view/settings_view.dart';
 import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
 import 'package:agency_time/functions/clients/blocs/clients_bloc/clients_bloc.dart';
 import 'package:agency_time/functions/clients/views/client_list_view/clients_view.dart';
@@ -21,7 +22,7 @@ List<Widget> widgets = [
   const DashboardView(),
   const ClientsView(),
   const InternalClientsView(),
-  const Center(child: Text('4')),
+  const SettingsView()
 ];
 
 class BottomNav extends StatelessWidget {
@@ -43,8 +44,9 @@ class BottomNav extends StatelessWidget {
                 trackerRepository: context.read<TrackerRepo>())),
         //Bloc used to get all clients, and their data
         BlocProvider(
-            create: (context) =>
-                ClientsBloc(clientsRepo: context.read<ClientsRepo>())),
+            create: (context) => ClientsBloc(
+                clientsRepo: context.read<ClientsRepo>(),
+                company: context.read<AuthCubit>().state.company!)),
 
         //Bloc managing the user settings such as witch period of data should be shown, what kind and so on.
         BlocProvider(

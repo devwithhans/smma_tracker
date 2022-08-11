@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
 double getHourlyRate(double mrr, Duration totalDuration) {
-  return mrr / totalDuration.inHours;
+  return mrr / (totalDuration.inSeconds / 3600);
 }
 
 double getChangeProcentage(thisMonth, lastMonth) {

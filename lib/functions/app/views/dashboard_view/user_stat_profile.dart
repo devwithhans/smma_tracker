@@ -1,5 +1,5 @@
 import 'package:agency_time/functions/app/blocs/stats_bloc/stats_bloc.dart';
-import 'package:agency_time/functions/app/models/stats.dart';
+import 'package:agency_time/functions/app/models/company_month.dart';
 import 'package:agency_time/functions/app/views/dashboard_view/dashboard_view.dart';
 import 'package:agency_time/functions/app/views/dashboard_view/total_view.dart';
 import 'package:agency_time/functions/clients/views/client_view/widgets/custom_app_bar.dart';
@@ -34,10 +34,12 @@ class UserStatProfile extends StatelessWidget {
                   TotalTrackings(
                     loading: false,
                     moneyFormatter: moneyFormatter,
+                    userId: employee.member.id,
                     dashData: getEmployeeDashData(
+                      mrr: state.selectedMonth.mrr,
                       userId: employee.member.id,
                       employee: employee,
-                      state: state,
+                      nonFilterEmployee: state.selectedMonth.employees,
                     ),
                   ),
                 ],

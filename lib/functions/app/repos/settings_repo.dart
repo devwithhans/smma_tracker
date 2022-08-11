@@ -1,4 +1,4 @@
-import 'package:agency_time/functions/app/models/stats.dart';
+import 'package:agency_time/functions/app/models/company_month.dart';
 import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
 import 'package:agency_time/functions/authentication/models/company.dart';
 import 'package:agency_time/functions/authentication/models/user.dart';
@@ -17,7 +17,7 @@ class SettingsRepo {
   Future<void> deleteTag(Tag tag) async {
     AppUser user = authCubit.state.appUser!;
     try {
-      FirebaseFirestore.instance.useFirestoreEmulator('localHost', 8080);
+      // FirebaseFirestore.instance.useFirestoreEmulator('localHost', 8080);
 
       FirebaseFirestore.instance
           .collection('companies')
@@ -38,7 +38,7 @@ class SettingsRepo {
     AppUser user = authCubit.state.appUser!;
 
     try {
-      FirebaseFirestore.instance.useFirestoreEmulator('localHost', 8080);
+      // FirebaseFirestore.instance.useFirestoreEmulator('localHost', 8080);
 
       FirebaseFirestore.instance
           .collection('companies')
@@ -58,7 +58,7 @@ class SettingsRepo {
     AppUser user = authCubit.state.appUser!;
 
     try {
-      FirebaseFirestore.instance.useFirestoreEmulator('localHost', 8080);
+      // FirebaseFirestore.instance.useFirestoreEmulator('localHost', 8080);
 
       FirebaseFirestore.instance
           .collection('companies')
@@ -73,7 +73,6 @@ class SettingsRepo {
     String companyId = authCubit.state.company!.id;
     FirebaseFunctions firebaseFunctions = FirebaseFunctions.instance;
 
-    firebaseFunctions.useFunctionsEmulator('localhost', 5001);
     try {
       HttpsCallable callable = firebaseFunctions.httpsCallable('startNewMonth',
           options: HttpsCallableOptions());

@@ -1,5 +1,5 @@
 import 'package:agency_time/functions/app/blocs/stats_bloc/stats_bloc.dart';
-import 'package:agency_time/functions/app/models/stats.dart';
+import 'package:agency_time/functions/app/models/company_month.dart';
 import 'package:agency_time/functions/app/views/dashboard_view/dashboard_widgets/custom_app_bar.dart';
 import 'package:agency_time/functions/app/views/dashboard_view/total_view.dart';
 import 'package:agency_time/functions/app/views/dashboard_view/user_stats.dart';
@@ -33,6 +33,8 @@ class _DashboardViewState extends State<DashboardView> {
         NumberFormat.currency(locale: 'da', name: 'kr.', decimalDigits: 0);
 
     AppUser appUser = context.read<AuthCubit>().state.appUser!;
+    String role = context.read<AuthCubit>().state.role!;
+    print(role);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -47,7 +49,8 @@ class _DashboardViewState extends State<DashboardView> {
                 loading: loading,
                 moneyFormatter: moneyFormatter,
                 dashData: getEmployeeDashData(
-                  state: state,
+                  mrr: selectedMonth.mrr,
+                  nonFilterEmployee: state.selectedMonth.employees,
                   userId: appUser.id,
                 ),
               ),
@@ -81,11 +84,10 @@ class _DashboardViewState extends State<DashboardView> {
                     selectedMonth: selectedDateTime,
                     onSelectMonth: () async {
                       DateTime? selection = await showMonthPicker(
-                        firstDate: state.months.first.month,
-                        lastDate: state.months.last.month,
+                        firstDate: state.months.first.date ?? DateTime.now(),
+                        lastDate: state.months.last.date ?? DateTime.now(),
                         context: context,
-                        initialDate:
-                            state.selectedMonth.month ?? DateTime.now(),
+                        initialDate: state.selectedMonth.date ?? DateTime.now(),
                       );
                       if (selection != null) {
                         selectedDateTime = selection;
@@ -110,15 +112,18 @@ class _DashboardViewState extends State<DashboardView> {
                           subText: state.mrrChange,
                         ),
                         const SizedBox(height: 10),
-                        CustomToggl(
-                          buttons: views.keys.toList(),
-                          selected:
-                              selected.isNotEmpty ? selected : views.keys.first,
-                          onPressed: (e) {
-                            selected = e;
-                            setState(() {});
-                          },
-                        ),
+                        role == 'owner'
+                            ? CustomToggl(
+                                buttons: views.keys.toList(),
+                                selected: selected.isNotEmpty
+                                    ? selected
+                                    : views.keys.first,
+                                onPressed: (e) {
+                                  selected = e;
+                                  setState(() {});
+                                },
+                              )
+                            : SizedBox(),
                         const SizedBox(height: 10),
                         views[selected.isNotEmpty
                                 ? selected
@@ -133,15 +138,17 @@ class _DashboardViewState extends State<DashboardView> {
   }
 }
 
-getEmployeeDashData({
+DashData getEmployeeDashData({
   required String userId,
-  required StatsState state,
+  required List<Employee> nonFilterEmployee,
+  double? mrr,
+  double? lastMrr,
   Employee? employee,
 }) {
   Employee selectedMonthEmployee;
 
   if (employee == null) {
-    List<Employee> selectedMonthEmployeeList = state.selectedMonth.employees
+    List<Employee> selectedMonthEmployeeList = nonFilterEmployee
         .where(
           (element) => element.member.id == userId,
         )
@@ -163,7 +170,7 @@ getEmployeeDashData({
     selectedMonthEmployee = employee;
   }
 
-  List<Employee> compareMonthEmployeeList = state.compareMonth.employees
+  List<Employee> compareMonthEmployeeList = nonFilterEmployee
       .where(
         (element) => element.member.id == userId,
       )
@@ -188,23 +195,29 @@ getEmployeeDashData({
       compareMonthEmployee.clientsHourlyRate);
 
   Duration totalDurationChange =
-      selectedMonthEmployee.totalDuration - compareMonthEmployee.totalDuration;
+      compareMonthEmployee.totalDuration - selectedMonthEmployee.totalDuration;
+
+  double totalHourlyRate =
+      getHourlyRate(mrr ?? 0, selectedMonthEmployee.totalDuration);
 
   double totalHourlyRateChange = getChangeProcentage(
-      selectedMonthEmployee.totalHourlyRate,
-      compareMonthEmployee.totalHourlyRate);
+    totalHourlyRate,
+    compareMonthEmployee.totalHourlyRate,
+  );
 
   Duration internalDurationChange = selectedMonthEmployee.internalDuration -
       compareMonthEmployee.internalDuration;
 
   return DashData(
+    mrr: mrr,
+    lastMrr: lastMrr,
     clientDuration: selectedMonthEmployee.clientsDuration,
     clientDurationChange: clientDurationChange,
     clientsHourlyRate: selectedMonthEmployee.clientsHourlyRate,
     clientHourlyRateChange: clientHourlyRateChange,
     totalDuration: selectedMonthEmployee.totalDuration,
     totalDurationChange: totalDurationChange,
-    totalHourlyRate: selectedMonthEmployee.totalHourlyRate,
+    totalHourlyRate: totalHourlyRate,
     totalHourlyRateChange: totalHourlyRateChange,
     internalDuration: selectedMonthEmployee.internalDuration,
     internalDurationChange: internalDurationChange,
@@ -235,8 +248,7 @@ class CustomToggl extends StatelessWidget {
                             color: selected != e
                                 ? kColorGrey
                                 : Colors.transparent)),
-                    fillColor:
-                        selected == e ? Colors.black : Colors.transparent,
+                    fillColor: selected == e ? Colors.black : Colors.white,
                     textStyle: TextStyle(
                       color: selected == e ? Colors.white : Colors.black,
                     ),

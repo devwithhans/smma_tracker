@@ -1,11 +1,17 @@
+import 'package:agency_time/functions/app/views/dashboard_view/dashboard_view.dart';
+import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
+import 'package:agency_time/functions/authentication/models/company.dart';
+import 'package:agency_time/functions/authentication/models/user.dart';
 import 'package:agency_time/functions/clients/views/client_view/edit_client_view.dart';
 import 'package:agency_time/functions/clients/views/client_view/widgets/client_stats.dart';
 import 'package:agency_time/functions/clients/views/client_view/widgets/custom_app_bar.dart';
 import 'package:agency_time/functions/clients/views/client_view/widgets/tracking_card.dart';
 import 'package:agency_time/functions/tracking/blocs/trackings_cubit/trackings_cubit.dart';
+import 'package:agency_time/functions/tracking/blocs/update_trackig_cubit/update_tracking_cubit.dart';
 import 'package:agency_time/functions/tracking/models/tracking.dart';
 import 'package:agency_time/functions/clients/repos/client_repo.dart';
 import 'package:agency_time/functions/clients/models/client.dart';
+import 'package:agency_time/functions/tracking/repos/tracker_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,8 +23,12 @@ class ClientView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppUser user = BlocProvider.of<AuthCubit>(context).state.appUser!;
+    Company company = BlocProvider.of<AuthCubit>(context).state.company!;
+
     return Scaffold(
       body: SafeArea(
+        bottom: false,
         child: Column(
           children: [
             CustomAppBar(
@@ -56,7 +66,14 @@ class ClientView extends StatelessWidget {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: trackings
-                              .map((e) => trackingCard(tracking: e))
+                              .map((e) => BlocProvider(
+                                    create: (context) => UpdateTrackingCubit(
+                                        context.read<TrackerRepo>()),
+                                    child: trackingCard(
+                                      tracking: e,
+                                      client: client,
+                                    ),
+                                  ))
                               .toList(),
                         );
                       },

@@ -13,12 +13,20 @@ class Wrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: ((context, state) {
+        // return ErrorScreen(
+        //   appError: AppErrors.noConnection,
+        // );
         if (state.authStatus == AuthStatus.signedIn) {
           return const BottomNav();
           // const BottomNav();
         }
         if (state.authStatus == AuthStatus.signedOut) {
           return WelcomeView();
+        }
+        if (state.authStatus == AuthStatus.noCompany) {
+          return Center(
+            child: Text('We could not assign any company'),
+          );
         }
         return Scaffold(
           body: Center(

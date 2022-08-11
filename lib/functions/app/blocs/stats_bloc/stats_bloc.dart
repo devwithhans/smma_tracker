@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:agency_time/functions/app/models/stats.dart';
+import 'package:agency_time/functions/app/models/company_month.dart';
 import 'package:agency_time/functions/app/repos/settings_repo.dart';
 import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
 import 'package:agency_time/functions/authentication/models/company.dart';
@@ -32,16 +32,17 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
 
   void _getStats(GetStats event, Emitter emit) {
     emit(state.copyWith(status: StatsStatus.loading));
-
+    DateTime selectedMonth =
+        event.month ?? state.selectedMonth.date ?? DateTime.now();
     List<CompanyMonth>? statMonthList =
-        state.months.where((element) => element.month == event.month).toList();
+        state.months.where((element) => element.date == selectedMonth).toList();
 
     CompanyMonth statMonth =
         statMonthList.isNotEmpty ? statMonthList.first : state.months.last;
 
     CompanyMonth compareMonth = _getMonthFormList(
-            DateTime(statMonth.month!.year, statMonth.month!.month - 1)) ??
-        CompanyMonth(month: DateTime.now(), updatedAt: DateTime.now(), mrr: 0);
+            DateTime(statMonth.date!.year, statMonth.date!.month - 1)) ??
+        CompanyMonth(date: DateTime.now(), updatedAt: DateTime.now(), mrr: 0);
 
     double mrrChange = getChangeProcentage(statMonth.mrr, compareMonth.mrr);
     double clientsHourlyRateChange = getChangeProcentage(
@@ -85,7 +86,7 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   CompanyMonth? _getMonthFormList(DateTime date) {
     try {
       return state.months
-          .firstWhere((element) => element.month!.month == date.month);
+          .firstWhere((element) => element.date!.month == date.month);
     } catch (e) {
       return null;
     }
@@ -100,13 +101,12 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
     }
 
     if (newMonthList
-        .where((element) => element.month!.month == newMonth.month!.month)
+        .where((element) => element.date!.month == newMonth.date!.month)
         .isEmpty) {
       newMonthList.add(newMonth);
     } else {
       newMonthList[newMonthList.lastIndexWhere(
-              (element) => element.month!.month == newMonth.month!.month)] =
-          newMonth;
+          (element) => element.date!.month == newMonth.date!.month)] = newMonth;
     }
 
     return newMonthList;

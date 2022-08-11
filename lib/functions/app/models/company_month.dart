@@ -3,22 +3,20 @@ import 'package:agency_time/functions/authentication/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CompanyMonth {
-  final DateTime? month;
+  final DateTime? date;
   final Duration internalDuration;
   final Duration clientsDuration;
   final Duration totalDuration;
-  final double mrr;
   final double clientsHourlyRate;
   final double totalHourlyRate;
-  final double hourlyRateTarget;
   final List<Employee> employees;
   final Map tags;
+  final double mrr;
   final DateTime? updatedAt;
 
   const CompanyMonth({
-    this.month,
+    this.date,
     this.mrr = 0,
-    this.hourlyRateTarget = 0,
     this.clientsHourlyRate = 0,
     this.totalHourlyRate = 0,
     this.internalDuration = const Duration(),
@@ -44,28 +42,31 @@ class CompanyMonth {
 
     double newMrr = value['mrr'] != null ? value['mrr'].toDouble() : 0;
     List<Employee> employees = [];
-    Map? employeesData = value['employees'];
+    Map employeesData = value['employees'] ?? {};
     company.members.forEach((element) {
-      if (employeesData != null) {
-        Map? employeeData = employeesData[element.id];
-        if (employeeData != null) {
-          Duration internalDuration = employeeData['internalDuration'] != null
-              ? Duration(seconds: employeeData['internalDuration'])
-              : const Duration();
-          Duration clientsDuration = employeeData['clientsDuration'] != null
-              ? Duration(seconds: employeeData['clientsDuration'])
-              : const Duration();
-          Duration totalDuration = clientsDuration + internalDuration;
+      print(element.firstName);
+      Map? employeeData = employeesData[element.id];
+      if (employeeData != null) {
+        Duration internalDuration = employeeData['internalDuration'] != null
+            ? Duration(seconds: employeeData['internalDuration'])
+            : const Duration();
+        Duration clientsDuration = employeeData['clientsDuration'] != null
+            ? Duration(seconds: employeeData['clientsDuration'])
+            : const Duration();
+        Duration totalDuration = clientsDuration + internalDuration;
 
-          employees.add(Employee(
-              member: element,
-              totalDuration: totalDuration,
-              clientsDuration: clientsDuration,
-              totalHourlyRate: newMrr / (totalDuration.inSeconds / 3600),
-              clientsHourlyRate: newMrr / (clientsDuration.inSeconds / 3600),
-              internalDuration: internalDuration,
-              tags: employeeData['tags'] ?? {}));
-        }
+        double totalHourlyRate = newMrr / (totalDuration.inSeconds / 3600);
+        double clientsHourlyRate = newMrr / (clientsDuration.inSeconds / 3600);
+
+        employees.add(Employee(
+            member: element,
+            totalDuration: totalDuration,
+            clientsDuration: clientsDuration,
+            totalHourlyRate: totalHourlyRate.isFinite ? totalHourlyRate : 0,
+            clientsHourlyRate:
+                clientsHourlyRate.isFinite ? clientsHourlyRate : 0,
+            internalDuration: internalDuration,
+            tags: employeeData['tags'] ?? {}));
       } else {
         employees.add(
           Employee(
@@ -112,7 +113,7 @@ class CompanyMonth {
     Timestamp updatedAtStamp = value['updatedAt'];
 
     return CompanyMonth(
-      month: DateTime(int.parse(monthId.split('-').first),
+      date: DateTime(int.parse(monthId.split('-').first),
           int.parse(monthId.split('-').last)),
       internalDuration: internalDuration,
       totalDuration: totalDuration,
@@ -121,7 +122,6 @@ class CompanyMonth {
       employees: employees,
       clientsHourlyRate: newMrr / (clientsDuration.inSeconds / 3600),
       totalHourlyRate: newMrr / (totalDuration.inSeconds / 3600),
-      hourlyRateTarget: value['hourlyRateTarget'] ?? 0,
       tags: value['tags'] ?? {},
       updatedAt: DateTime.fromMicrosecondsSinceEpoch(
           updatedAtStamp.microsecondsSinceEpoch),

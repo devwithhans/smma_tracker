@@ -7,9 +7,11 @@ class SearchTags extends StatefulWidget {
   const SearchTags({
     required this.tags,
     required this.onChange,
+    this.selectedTag,
     Key? key,
   }) : super(key: key);
   final List<Tag> tags;
+  final Tag? selectedTag;
   final void Function(Tag?) onChange;
   @override
   State<SearchTags> createState() => _SearchTagsState();
@@ -23,6 +25,7 @@ class _SearchTagsState extends State<SearchTags> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    selectedTag = widget.selectedTag;
     searchResult = widget.tags.where((element) => element.active).toList();
   }
 

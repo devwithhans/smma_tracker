@@ -1,3 +1,4 @@
+import 'package:agency_time/functions/app/models/company_month.dart';
 import 'package:agency_time/functions/clients/blocs/clients_bloc/clients_bloc.dart';
 import 'package:agency_time/functions/clients/views/client_list_view/clients_view.dart';
 import 'package:agency_time/functions/clients/views/client_list_view/sorting_logic.dart';
@@ -21,7 +22,6 @@ class ClientResultList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int Function(Client, Client)? filterFuction = filters['Latest']![true];
-
     List<Client> searchResult = [];
     clients.sort(filterFuction);
     searchResult = clients
@@ -42,7 +42,6 @@ class ClientResultList extends StatelessWidget {
                 duration: Duration(),
                 client: ClientLite.fromClient(searchResult[index])));
           },
-          duration: searchResult[index].selectedMonth.duration,
         );
       }),
     );

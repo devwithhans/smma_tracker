@@ -1,6 +1,9 @@
 import 'package:agency_time/functions/app/blocs/settings_bloc/settings_bloc.dart';
+import 'package:agency_time/functions/app/models/company_month.dart';
+import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
 import 'package:agency_time/functions/clients/views/client_view/client_view.dart';
 import 'package:agency_time/functions/tracking/blocs/timer_bloc/timer_bloc.dart';
+import 'package:agency_time/functions/tracking/blocs/update_trackig_cubit/update_tracking_cubit.dart';
 import 'package:agency_time/utils/functions/data_explanation.dart';
 import 'package:agency_time/functions/clients/models/client.dart';
 import 'package:agency_time/utils/constants/colors.dart';
@@ -15,18 +18,31 @@ class ClientCard extends StatelessWidget {
   ClientCard({
     Key? key,
     required this.client,
-    required this.duration,
     this.isTracking = false,
     this.onDoubleTap,
+    this.personalTrackings = true,
   }) : super(key: key);
 
   final Client client;
-  Duration duration;
+  final bool personalTrackings;
   bool isTracking;
   final void Function()? onDoubleTap;
   @override
   Widget build(BuildContext context) {
-    ;
+    String userId = context.read<AuthCubit>().state.appUser!.id;
+    List<Employee> employeeDataList = client.selectedMonth.employees
+        .where((element) => element.member.id == userId)
+        .toList();
+
+    Employee? employeeData =
+        employeeDataList.isNotEmpty ? employeeDataList.first : null;
+
+    Duration duration = personalTrackings
+        ? employeeData != null
+            ? employeeData.totalDuration
+            : Duration()
+        : client.selectedMonth.duration;
+
     final moneyFormatter = NumberFormat.simpleCurrency(
         locale: context.read<SettingsBloc>().state.countryCode);
 
@@ -45,9 +61,10 @@ class ClientCard extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ClientView(
-                      client: client,
-                    )));
+              builder: (context) => ClientView(
+                client: client,
+              ),
+            ));
       },
       child: BlocBuilder<TimerBloc, TimerState>(
         builder: (context, state) {
@@ -55,8 +72,9 @@ class ClientCard extends StatelessWidget {
           if (state is TimerRunning && state.client.id == client.id) {
             intDuration += state.duration;
             isTracking = true;
+          } else {
+            isTracking = false;
           }
-
           return Container(
             height: 90,
             padding: EdgeInsets.all(20),

@@ -2,8 +2,8 @@ import 'package:agency_time/functions/app/views/settings_view/settings_sub_views
 import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
 import 'package:agency_time/functions/authentication/models/company.dart';
 import 'package:agency_time/functions/authentication/models/user.dart';
-import 'package:agency_time/functions/clients/views/client_view/widgets/custom_app_bar.dart';
 import 'package:agency_time/utils/widgets/custom_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,11 +19,7 @@ class SettingsView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomAppBar(
-              title: 'Settings',
-            ),
             SizedBox(height: 20),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(
@@ -31,7 +27,7 @@ class SettingsView extends StatelessWidget {
                 children: [
                   Text(
                     user.firstName,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                   ),
                   Text(
                     company.companyName,
@@ -77,7 +73,9 @@ class SettingsView extends StatelessWidget {
                     height: 5,
                   ),
                   CustomIconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      FirebaseAuth.instance.signOut();
+                    },
                     text: 'Logout',
                     icon: Icons.logout,
                   ),

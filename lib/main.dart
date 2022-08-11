@@ -5,6 +5,7 @@ import 'package:agency_time/functions/clients/repos/client_repo.dart';
 import 'package:agency_time/functions/app/repos/settings_repo.dart';
 import 'package:agency_time/functions/tracking/repos/tracker_repo.dart';
 import 'package:agency_time/functions/authentication/views/wrapper.dart';
+import 'package:agency_time/utils/error_handling/error_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -16,10 +17,16 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  FirebaseFirestore.instance.settings = const Settings(
-      host: 'localhost:8080', sslEnabled: false, persistenceEnabled: false);
+  // FirebaseFirestore.instance.settings = const Settings(
+  //     host: 'localhost:8080', sslEnabled: false, persistenceEnabled: false);
+  // FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
 
-  runApp(const MyApp());
+  FirebaseFirestore.instance.settings.persistenceEnabled;
+
+  BlocOverrides.runZoned(
+    () => runApp(const MyApp()),
+    blocObserver: ErrorHandler(),
+  );
 }
 
 final navigatorKey = GlobalKey<NavigatorState>();

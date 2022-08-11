@@ -6,6 +6,8 @@ import 'package:agency_time/functions/tracking/models/tag.dart';
 import 'package:agency_time/functions/authentication/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class TrackerRepo {
   AuthCubit authCubit;
@@ -55,7 +57,6 @@ class TrackerRepo {
           'stop': stop,
         });
       }
-
       final result = await FirebaseFirestore.instance
           .collection('companies')
           .doc(user.companyId)
@@ -136,7 +137,7 @@ class TrackerRepo {
     AppUser user = authCubit.state.appUser!;
 
     try {
-      FirebaseFirestore.instance.useFirestoreEmulator('localHost', 8080);
+      // FirebaseFirestore.instance.useFirestoreEmulator('localHost', 8080);
 
       FirebaseFirestore.instance
           .collection('companies')

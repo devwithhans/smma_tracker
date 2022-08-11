@@ -1,4 +1,6 @@
+import 'package:agency_time/functions/app/models/company_month.dart';
 import 'package:agency_time/functions/clients/models/client.dart';
+import 'package:agency_time/functions/clients/models/month.dart';
 import 'package:agency_time/functions/tracking/models/tag.dart';
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -74,7 +76,15 @@ class _CustomPieChartState extends State<CustomPieChart> {
                                 SizedBox(
                                   width: 10,
                                 ),
-                                Text(e.title),
+                                Expanded(
+                                  child: SizedBox(
+                                    child: Text(
+                                      e.title,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.clip,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           )
@@ -96,6 +106,7 @@ class _CustomPieChartState extends State<CustomPieChart> {
 
 List<PieChartSectionData> overviewShowingSections(
     {required List<Client> internals,
+    String? userId,
     required Duration clientsDuration,
     required Duration internalDuration}) {
   int index = 0;
@@ -115,7 +126,7 @@ List<PieChartSectionData> overviewShowingSections(
         badgePositionPercentageOffset: 3,
         value: clientsDuration.inSeconds.toDouble(),
         title:
-            'Clients (${clientsProcentage.isFinite ? clientsProcentage.toInt() : 0}%)',
+            '(${clientsProcentage.isFinite ? clientsProcentage.toInt() : 0}%) Clients',
         // badgeWidget: Text('$procentage%'),
         color: kChartColors[0],
       ),
@@ -124,20 +135,34 @@ List<PieChartSectionData> overviewShowingSections(
 
   internals.forEach(
     (element) {
-      double internalProcentage = ((element.selectedMonth.duration.inSeconds /
-              totalDuration.inSeconds) *
-          100);
-      index++;
-      result.add(PieChartSectionData(
-        showTitle: false,
-        radius: 10,
-        badgePositionPercentageOffset: 3,
-        value: element.selectedMonth.duration.inSeconds.toDouble(),
-        title:
-            '${element.name} (${internalProcentage.isFinite ? internalProcentage.toInt() : 0}%)',
-        // badgeWidget: Text('$procentage%'),
-        color: kChartColors[index],
-      ));
+      Duration duration = Duration();
+      if (userId != null) {
+        List<Employee> employeeTestList = element.selectedMonth.employees
+            .where((element) => element.member.id == userId)
+            .toList();
+        if (employeeTestList.isNotEmpty) {
+          duration = employeeTestList.first.totalDuration;
+        }
+      } else {
+        duration = element.selectedMonth.duration;
+      }
+      if (duration > Duration()) {
+        double internalProcentage = ((element.selectedMonth.duration.inSeconds /
+                totalDuration.inSeconds) *
+            100);
+        index++;
+        result.add(PieChartSectionData(
+          showTitle: false,
+          radius: 10,
+          badgePositionPercentageOffset: 3,
+          value: element.selectedMonth.duration.inSeconds.toDouble(),
+          title:
+              '(${internalProcentage.isFinite ? internalProcentage.toStringAsFixed(1) : 0}%) ${element.name} ',
+
+          // badgeWidget: Text('$procentage%'),
+          color: kChartColors[index],
+        ));
+      }
     },
   );
 
@@ -152,7 +177,7 @@ List<PieChartSectionData> tagsShowingSections(
   tags.forEach(
     (element) {
       int? elementValue = tagsMap[element.id.toString()];
-      if (elementValue != null) {
+      if (elementValue != null && elementValue != 0) {
         totalValue += elementValue;
         tagsWithData.add(
           element.copyWith(
@@ -169,13 +194,13 @@ List<PieChartSectionData> tagsShowingSections(
 
   result = tagsWithData.map((e) {
     index++;
-    int procentage = ((e.value! / totalValue) * 100).toInt();
+    double procentage = ((e.value! / totalValue) * 100);
     return PieChartSectionData(
       showTitle: false,
       radius: 10,
       badgePositionPercentageOffset: 3,
       value: e.value!.toDouble(),
-      title: '${e.tag} ($procentage%)',
+      title: '(${procentage.toStringAsFixed(1)}%) ${e.tag}',
       // badgeWidget: Text('$procentage%'),
       color: kChartColors[index],
     );

@@ -37,9 +37,8 @@ class _ClientsViewState extends State<ClientsView> {
                 onSelectMonth: () async {
                   DateTime? selection = await showMonthPicker(
                     firstDate:
-                        context.read<StatsBloc>().state.months.first.month!,
-                    lastDate:
-                        context.read<StatsBloc>().state.months.last.month!,
+                        context.read<StatsBloc>().state.months.first.date!,
+                    lastDate: context.read<StatsBloc>().state.months.last.date!,
                     context: context,
                     initialDate: state.month ?? DateTime.now(),
                   );
@@ -89,6 +88,7 @@ class _ClientsViewState extends State<ClientsView> {
                         .where((element) =>
                             element.internal != true && element.activeMonth)
                         .toList();
+                    clients.sort(filterFuction);
                     bool currentMonth = state.month == null ||
                         state.month!.month == DateTime.now().month;
                     if (clients.isEmpty) {

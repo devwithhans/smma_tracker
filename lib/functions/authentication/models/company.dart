@@ -48,7 +48,6 @@ class Company {
           tag: value['tag'],
           active: value['active'] ?? true));
     });
-    print(value['members']);
     return Company(
       id: id,
       tags: tags,

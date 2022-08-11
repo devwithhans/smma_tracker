@@ -23,6 +23,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
   void _getSettings() async {
     String? countryCode = _settingsRepo.getCountryCodeFromCompanyDoc();
-    emit(state.copyWith(countryCode: countryCode ?? 'en'));
+    emit(state.copyWith(countryCode: countryCode ?? 'da'));
   }
 }

@@ -1,5 +1,5 @@
 import 'package:agency_time/functions/app/blocs/stats_bloc/stats_bloc.dart';
-import 'package:agency_time/functions/app/models/stats.dart';
+import 'package:agency_time/functions/app/models/company_month.dart';
 import 'package:agency_time/functions/app/views/dashboard_view/user_stat_profile.dart';
 import 'package:agency_time/functions/clients/blocs/clients_bloc/clients_bloc.dart';
 import 'package:agency_time/utils/constants/colors.dart';

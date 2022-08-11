@@ -15,6 +15,7 @@ class FinishTrackingDialog extends StatefulWidget {
   const FinishTrackingDialog({
     Key? key,
     required this.tags,
+    this.tag,
     required this.client,
     required this.onDelete,
     required this.onSave,
@@ -23,6 +24,7 @@ class FinishTrackingDialog extends StatefulWidget {
 
   final Duration duration;
   final List<Tag> tags;
+  final Tag? tag;
   final ClientLite client;
   final void Function(Tag? selected, Duration duration) onSave;
   final void Function() onDelete;
@@ -43,6 +45,7 @@ class _FinishTrackingDialogState extends State<FinishTrackingDialog> {
   @override
   void initState() {
     super.initState();
+    selectedTag = widget.tag;
     tags = widget.tags;
     _duration = widget.duration;
   }
@@ -94,34 +97,40 @@ class _FinishTrackingDialogState extends State<FinishTrackingDialog> {
               height: 0,
             ),
             Expanded(
-                child: ListView(
-              padding: EdgeInsets.all(20),
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Original: ${printDuration(_duration)}',
-                    ),
-                    DurationFormField(
-                      initialDuration: _newDuration ?? _duration,
-                      onChanged: (v) {
-                        _newDuration = v;
-                      },
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                widget.client.internal
-                    ? SizedBox()
-                    : SearchTags(
-                        onChange: (v) {
-                          selectedTag = v;
+                child: RefreshIndicator(
+              onRefresh: () async {
+                const v = 'v';
+              },
+              child: ListView(
+                padding: EdgeInsets.all(20),
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Original: ${printDuration(_duration)}',
+                      ),
+                      DurationFormField(
+                        initialDuration: _newDuration ?? _duration,
+                        onChanged: (v) {
+                          _newDuration = v;
                         },
-                        tags: tags,
-                      )
-              ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  widget.client.internal
+                      ? SizedBox()
+                      : SearchTags(
+                          selectedTag: selectedTag,
+                          onChange: (v) {
+                            selectedTag = v;
+                          },
+                          tags: tags,
+                        )
+                ],
+              ),
             )),
             Divider(
               height: 0,

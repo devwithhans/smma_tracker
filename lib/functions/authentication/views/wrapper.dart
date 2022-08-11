@@ -4,6 +4,7 @@ import 'package:agency_time/functions/authentication/views/welcome_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 import '../blocs/auth_cubit/auth_cubit.dart';
 

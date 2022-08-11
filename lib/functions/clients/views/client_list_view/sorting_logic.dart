@@ -13,10 +13,6 @@ Map<String, Map<bool, int Function(Client, Client)?>> filters = {
     true: inversSortOnMrr,
     false: sortOnMrr,
   },
-  'Change': {
-    true: sortOnChange,
-    false: inversSortOnChange,
-  },
   'Hourly Rate': {
     true: sortOnHourlyRate,
     false: inversSortOnHourlyRate,
