@@ -46,6 +46,10 @@ class Month {
 
         employees.add(Employee(
             member: element,
+            lastActivity: employeeData['updatedAt'] != null
+                ? DateTime.fromMicrosecondsSinceEpoch(
+                    employeeData['updatedAt'].microsecondsSinceEpoch)
+                : null,
             totalDuration: totalDuration,
             clientsDuration: Duration(),
             totalHourlyRate: 0,

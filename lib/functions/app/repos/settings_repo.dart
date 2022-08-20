@@ -71,7 +71,8 @@ class SettingsRepo {
 
   Future<void> createNewMonth() async {
     String companyId = authCubit.state.company!.id;
-    FirebaseFunctions firebaseFunctions = FirebaseFunctions.instance;
+    FirebaseFunctions firebaseFunctions =
+        FirebaseFunctions.instanceFor(region: 'europe-west1');
 
     try {
       HttpsCallable callable = firebaseFunctions.httpsCallable('startNewMonth',
@@ -88,7 +89,7 @@ class SettingsRepo {
     AppUser user = authCubit.state.appUser!;
     DateTime month = DateTime.now();
     String monthId = '${month.year}-${month.month}';
-
+    print('here');
     if (month.isAfter(DateTime.now())) {
       throw Exception('You cannot choose a future month');
     }

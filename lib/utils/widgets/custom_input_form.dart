@@ -57,7 +57,7 @@ class CustomInputForm extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(fontSize: 15),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                   ),
                   SizedBox(height: 10),
                 ],

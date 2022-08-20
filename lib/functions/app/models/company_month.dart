@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CompanyMonth {
   final DateTime? date;
+  final String? id;
   final Duration internalDuration;
   final Duration clientsDuration;
   final Duration totalDuration;
@@ -15,6 +16,7 @@ class CompanyMonth {
   final DateTime? updatedAt;
 
   const CompanyMonth({
+    this.id,
     this.date,
     this.mrr = 0,
     this.clientsHourlyRate = 0,
@@ -44,7 +46,6 @@ class CompanyMonth {
     List<Employee> employees = [];
     Map employeesData = value['employees'] ?? {};
     company.members.forEach((element) {
-      print(element.firstName);
       Map? employeeData = employeesData[element.id];
       if (employeeData != null) {
         Duration internalDuration = employeeData['internalDuration'] != null
@@ -60,6 +61,10 @@ class CompanyMonth {
 
         employees.add(Employee(
             member: element,
+            lastActivity: employeeData['updatedAt'] != null
+                ? DateTime.fromMicrosecondsSinceEpoch(
+                    employeeData['updatedAt'].microsecondsSinceEpoch)
+                : null,
             totalDuration: totalDuration,
             clientsDuration: clientsDuration,
             totalHourlyRate: totalHourlyRate.isFinite ? totalHourlyRate : 0,
@@ -82,37 +87,10 @@ class CompanyMonth {
       }
     });
 
-    // List<Employee> employees = [];
-    // if (value['employees'] != null) {
-    //   value['employees'].forEach((key, value) {
-    //     Duration internalDuration = value['internalDuration'] != null
-    //         ? Duration(seconds: value['internalDuration'])
-    //         : const Duration();
-    //     Duration clientsDuration = value['clientsDuration'] != null
-    //         ? Duration(seconds: value['clientsDuration'])
-    //         : const Duration();
-    //     Duration totalDuration = clientsDuration + internalDuration;
-    //     Member member = Member(id: key, firstName: '', lastName: '', email: '');
-    //     List<Member> memberList =
-    //         company.members.where((element) => element.id == key).toList();
-    //     if (memberList.isNotEmpty) {
-    //       member = memberList.first;
-    //     }
-    //     employees.add(Employee(
-    //       member: member,
-    //       totalDuration: totalDuration,
-    //       clientsDuration: clientsDuration,
-    //       totalHourlyRate: newMrr / (totalDuration.inSeconds / 3600),
-    //       clientsHourlyRate: newMrr / (clientsDuration.inSeconds / 3600),
-    //       internalDuration: internalDuration,
-    //       tags: value['tags'] ?? {},
-    //     ));
-    //   });
-    // }
-
     Timestamp updatedAtStamp = value['updatedAt'];
 
     return CompanyMonth(
+      id: monthId,
       date: DateTime(int.parse(monthId.split('-').first),
           int.parse(monthId.split('-').last)),
       internalDuration: internalDuration,
@@ -131,14 +109,16 @@ class CompanyMonth {
 
 class Employee {
   final Member member;
-  final Duration internalDuration;
-  final Duration clientsDuration;
-  final Duration totalDuration;
-  final double clientsHourlyRate;
-  final double totalHourlyRate;
+  Duration internalDuration;
+  Duration clientsDuration;
+  Duration totalDuration;
+  double clientsHourlyRate;
+  double totalHourlyRate;
+  DateTime? lastActivity;
   final Map tags;
   Employee({
     required this.member,
+    this.lastActivity,
     required this.clientsDuration,
     required this.totalDuration,
     required this.clientsHourlyRate,

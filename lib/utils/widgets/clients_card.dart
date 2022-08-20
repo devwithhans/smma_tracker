@@ -1,6 +1,7 @@
 import 'package:agency_time/functions/app/blocs/settings_bloc/settings_bloc.dart';
 import 'package:agency_time/functions/app/models/company_month.dart';
 import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
+import 'package:agency_time/functions/authentication/models/company.dart';
 import 'package:agency_time/functions/clients/views/client_view/client_view.dart';
 import 'package:agency_time/functions/tracking/blocs/timer_bloc/timer_bloc.dart';
 import 'package:agency_time/functions/tracking/blocs/update_trackig_cubit/update_tracking_cubit.dart';
@@ -29,7 +30,10 @@ class ClientCard extends StatelessWidget {
   final void Function()? onDoubleTap;
   @override
   Widget build(BuildContext context) {
+    bool isLoading;
+
     String userId = context.read<AuthCubit>().state.appUser!.id;
+    Company company = context.read<AuthCubit>().state.company!;
     List<Employee> employeeDataList = client.selectedMonth.employees
         .where((element) => element.member.id == userId)
         .toList();
@@ -43,8 +47,8 @@ class ClientCard extends StatelessWidget {
             : Duration()
         : client.selectedMonth.duration;
 
-    final moneyFormatter = NumberFormat.simpleCurrency(
-        locale: context.read<SettingsBloc>().state.countryCode);
+    final moneyFormatter =
+        NumberFormat.simpleCurrency(locale: company.countryCode);
 
     bool noCompareMonth = client.compareMonth == null;
 
@@ -71,12 +75,20 @@ class ClientCard extends StatelessWidget {
           int intDuration = duration.inSeconds;
           if (state is TimerRunning && state.client.id == client.id) {
             intDuration += state.duration;
+            isLoading = state.loading;
             isTracking = true;
           } else {
+            isLoading = false;
             isTracking = false;
           }
+          if (isLoading) {
+            return Container(
+              height: 90,
+              color: Colors.black,
+            );
+          }
           return Container(
-            height: 90,
+            height: 100,
             padding: EdgeInsets.all(20),
             margin: EdgeInsets.only(bottom: 10),
             width: double.infinity,
@@ -99,6 +111,8 @@ class ClientCard extends StatelessWidget {
                       children: [
                         Text(
                           client.name,
+                          overflow: TextOverflow.clip,
+                          maxLines: 1,
                           style: const TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 16),
                         ),

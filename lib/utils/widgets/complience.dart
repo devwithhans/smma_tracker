@@ -7,11 +7,15 @@ class Compliance extends StatefulWidget {
   final String text;
   final String errorText;
   final bool showError;
+  final String? buttonText;
+  final Function()? onTextButton;
 
   const Compliance({
     Key? key,
     required this.validator,
     this.errorText = '',
+    this.buttonText,
+    this.onTextButton,
     this.initialValue = false,
     required this.onChange,
     this.text = '',
@@ -92,6 +96,15 @@ class _ComplianceState extends State<Compliance> {
                     style: const TextStyle(
                         fontSize: 15, fontWeight: FontWeight.w500),
                   ),
+                  widget.buttonText != null
+                      ? TextButton(
+                          onPressed: widget.onTextButton,
+                          child: Text(
+                            widget.buttonText ?? '',
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w500),
+                          ))
+                      : SizedBox(),
                 ],
               ),
               Visibility(

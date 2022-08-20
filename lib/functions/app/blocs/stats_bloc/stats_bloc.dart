@@ -27,6 +27,7 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
     }));
 
     on<AddMonth>(_addMonth);
+
     on<GetStats>(_getStats);
   }
 
@@ -42,7 +43,11 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
 
     CompanyMonth compareMonth = _getMonthFormList(
             DateTime(statMonth.date!.year, statMonth.date!.month - 1)) ??
-        CompanyMonth(date: DateTime.now(), updatedAt: DateTime.now(), mrr: 0);
+        CompanyMonth(
+          date: DateTime.now(),
+          updatedAt: DateTime.now(),
+          mrr: 0,
+        );
 
     double mrrChange = getChangeProcentage(statMonth.mrr, compareMonth.mrr);
     double clientsHourlyRateChange = getChangeProcentage(

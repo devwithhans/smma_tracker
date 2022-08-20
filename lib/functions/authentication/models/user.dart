@@ -16,7 +16,7 @@ class AppUser {
   static AppUser convert(Map<String, dynamic> value, String uid) {
     return AppUser(
         id: uid,
-        companyId: value['companyId'],
+        companyId: value['companyId'] ?? 'non',
         firstName: value['firstName'],
         lastName: value['lastName'],
         email: value['email']);

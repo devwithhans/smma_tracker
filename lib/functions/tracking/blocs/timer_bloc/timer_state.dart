@@ -17,8 +17,9 @@ class TimerRunning extends TimerState {
   final String? documentId;
   final DateTime start;
   final TimerStatus timerStatus;
-
+  final bool loading;
   TimerRunning({
+    this.loading = false,
     this.timerStatus = TimerStatus.running,
     required this.client,
     this.duration = 0,
@@ -27,6 +28,7 @@ class TimerRunning extends TimerState {
   });
 
   TimerRunning copyWith({
+    bool? loading,
     TimerStatus? timerStatus,
     ClientLite? client,
     int? duration,
@@ -34,6 +36,7 @@ class TimerRunning extends TimerState {
     DateTime? start,
   }) {
     return TimerRunning(
+      loading: loading ?? this.loading,
       timerStatus: timerStatus ?? this.timerStatus,
       client: client ?? this.client,
       start: start ?? this.start,
@@ -43,5 +46,5 @@ class TimerRunning extends TimerState {
   }
 
   @override
-  List get props => [duration, client, start, documentId, timerStatus];
+  List get props => [duration, client, start, documentId, timerStatus, loading];
 }

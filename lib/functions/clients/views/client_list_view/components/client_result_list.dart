@@ -1,6 +1,3 @@
-import 'package:agency_time/functions/app/models/company_month.dart';
-import 'package:agency_time/functions/clients/blocs/clients_bloc/clients_bloc.dart';
-import 'package:agency_time/functions/clients/views/client_list_view/clients_view.dart';
 import 'package:agency_time/functions/clients/views/client_list_view/sorting_logic.dart';
 import 'package:agency_time/functions/tracking/blocs/timer_bloc/timer_bloc.dart';
 import 'package:agency_time/functions/clients/models/client.dart';

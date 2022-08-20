@@ -1,5 +1,6 @@
 import 'package:agency_time/functions/authentication/models/user.dart';
 import 'package:agency_time/functions/tracking/models/tag.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Company {
   String id;
@@ -7,7 +8,7 @@ class Company {
   String companyName;
   List<Member> members;
   Map roles;
-  String? countryCode;
+  String countryCode;
 
   Company({
     required this.tags,
@@ -15,7 +16,7 @@ class Company {
     required this.members,
     required this.companyName,
     required this.id,
-    this.countryCode,
+    this.countryCode = 'en',
   });
 
   Company copyWith({
@@ -27,6 +28,7 @@ class Company {
     String? countryCode,
   }) {
     return Company(
+      countryCode: countryCode ?? this.countryCode,
       tags: tags ?? this.tags,
       members: members ?? this.members,
       roles: roles ?? this.roles,
@@ -45,7 +47,7 @@ class Company {
       tags.add(Tag(
           id: int.parse(key),
           description: value['description'] ?? '',
-          tag: value['tag'],
+          tag: value['tag'] ?? {},
           active: value['active'] ?? true));
     });
     return Company(

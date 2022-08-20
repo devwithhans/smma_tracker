@@ -1,4 +1,3 @@
-import 'package:agency_time/functions/app/views/dashboard_view/dashboard_view.dart';
 import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
 import 'package:agency_time/functions/authentication/models/company.dart';
 import 'package:agency_time/functions/authentication/models/user.dart';
@@ -29,57 +28,70 @@ class ClientView extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         bottom: false,
-        child: Column(
+        child: Stack(
           children: [
-            CustomAppBar(
-                title: client.name,
-                icon: IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EditClientView(
-                                  client: client,
-                                )));
-                  },
-                )),
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-                children: [
-                  const SizedBox(height: 20),
-                  ClientStats(client: client),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Latest trackings:',
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
-                  ),
-                  const SizedBox(height: 10),
-                  BlocProvider(
-                    create: (context) =>
-                        TrackingsCubit(context.read<ClientsRepo>())
-                          ..fetchTrackings(client.id),
-                    child: BlocBuilder<TrackingsCubit, TrackingsState>(
-                      builder: (context, state) {
-                        List<Tracking> trackings = state.trackings ?? [];
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: trackings
-                              .map((e) => BlocProvider(
-                                    create: (context) => UpdateTrackingCubit(
-                                        context.read<TrackerRepo>()),
-                                    child: trackingCard(
-                                      tracking: e,
+            Column(
+              children: [
+                CustomAppBar(
+                    title: client.name,
+                    icon: IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditClientView(
                                       client: client,
-                                    ),
-                                  ))
-                              .toList(),
-                        );
+                                    )));
                       },
-                    ),
-                  )
-                ],
+                    )),
+                Expanded(
+                  child: ListView(
+                    padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+                    children: [
+                      const SizedBox(height: 20),
+                      ClientStats(client: client),
+                      const SizedBox(height: 20),
+                      const Text(
+                        'Latest trackings:',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 20),
+                      ),
+                      const SizedBox(height: 10),
+                      BlocProvider(
+                        create: (context) =>
+                            TrackingsCubit(context.read<ClientsRepo>())
+                              ..fetchTrackings(client.id),
+                        child: BlocBuilder<TrackingsCubit, TrackingsState>(
+                          builder: (context, state) {
+                            List<Tracking> trackings = state.trackings ?? [];
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: trackings
+                                  .map((e) => BlocProvider(
+                                        create: (context) =>
+                                            UpdateTrackingCubit(
+                                                context.read<TrackerRepo>()),
+                                        child: trackingCard(
+                                          tracking: e,
+                                          client: client,
+                                        ),
+                                      ))
+                                  .toList(),
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.play_arrow_rounded),
               ),
             ),
           ],

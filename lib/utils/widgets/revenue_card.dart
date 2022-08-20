@@ -10,6 +10,7 @@ class StatCard extends StatelessWidget {
       {Key? key,
       required this.title,
       required this.value,
+      this.expanded = false,
       required this.subText,
       this.loading = false,
       this.type = StatCardType.black})
@@ -20,31 +21,34 @@ class StatCard extends StatelessWidget {
   final String value;
   final dynamic subText;
   final bool loading;
+  final bool expanded;
 
   @override
   Widget build(BuildContext context) {
     if (loading) {
       return Shimmer.fromColors(
-          baseColor: Colors.grey[300]!,
-          highlightColor: Colors.grey[100]!,
-          child: Container(
-              height: 150,
-              decoration: BoxDecoration(
-                  border: type == StatCardType.white
-                      ? Border.all(color: kColorGrey)
-                      : null,
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.black)));
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Container(
+          height: 150,
+          decoration: BoxDecoration(
+            border: type == StatCardType.white
+                ? Border.all(color: kColorGrey)
+                : null,
+            borderRadius: BorderRadius.circular(15),
+            color: Colors.black,
+          ),
+        ),
+      );
     }
-
     return Container(
-      height: 150,
+      height: expanded ? null : 150,
       decoration: BoxDecoration(
           border:
               type == StatCardType.white ? Border.all(color: kColorGrey) : null,
           borderRadius: BorderRadius.circular(15),
           color: type == StatCardType.black
-              ? Color(
+              ? const Color(
                   0xff2C2C2C,
                 )
               : Colors.transparent),
@@ -61,7 +65,7 @@ class StatCard extends StatelessWidget {
                       ? Colors.white70
                       : kColorGreyText),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
               value,
               style: TextStyle(

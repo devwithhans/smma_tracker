@@ -1,6 +1,8 @@
+import 'package:agency_time/functions/app/functions/get_employee_dash_data.dart';
+import 'package:agency_time/functions/app/models/dashdata.dart';
 import 'package:agency_time/functions/app/views/dashboard_view/dashboard_view.dart';
 import 'package:agency_time/functions/app/views/dashboard_view/dashboard_widgets/pie_chart.dart';
-import 'package:agency_time/functions/app/views/dashboard_view/total_view.dart';
+import 'package:agency_time/functions/app/views/dashboard_view/dashboard_widgets/dashboard_data_display.dart';
 import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
 import 'package:agency_time/functions/authentication/models/company.dart';
 import 'package:agency_time/functions/clients/models/month.dart';
@@ -8,6 +10,7 @@ import 'package:agency_time/utils/functions/data_explanation.dart';
 import 'package:agency_time/functions/clients/models/client.dart';
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:agency_time/utils/functions/print_duration.dart';
+import 'package:agency_time/utils/widgets/custom_toggl_button.dart';
 import 'package:agency_time/utils/widgets/procentage_card.dart';
 import 'package:agency_time/utils/widgets/revenue_card.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +43,10 @@ class _ClientStatsState extends State<ClientStats> {
           ? widget.client.compareMonth!.mrr
           : 0,
       userId: authState.appUser!.id,
-      nonFilterEmployee: widget.client.selectedMonth.employees,
+      thisMonthEmployees: widget.client.selectedMonth.employees,
+      lastMonthEmployees: widget.client.compareMonth != null
+          ? widget.client.compareMonth!.employees
+          : null,
     );
     Month selectedMonth = widget.client.selectedMonth;
     Month compareMonth = widget.client.compareMonth ??

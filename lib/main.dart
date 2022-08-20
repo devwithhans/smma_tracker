@@ -1,5 +1,10 @@
+import 'dart:html';
+
 import 'package:agency_time/firebase_options.dart';
 import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
+import 'package:agency_time/functions/authentication/web_view/web_new_company/web_new_company.dart';
+import 'package:agency_time/functions/authentication/web_view/web_registration.dart';
+import 'package:agency_time/functions/authentication/web_view/web_welcome.dart';
 import 'package:agency_time/functions/clients/views/add_clients_view.dart';
 import 'package:agency_time/functions/clients/repos/client_repo.dart';
 import 'package:agency_time/functions/app/repos/settings_repo.dart';
@@ -7,21 +12,28 @@ import 'package:agency_time/functions/tracking/repos/tracker_repo.dart';
 import 'package:agency_time/functions/authentication/views/wrapper.dart';
 import 'package:agency_time/utils/error_handling/error_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // FirebaseFirestore.instance.settings = const Settings(
-  //     host: 'localhost:8080', sslEnabled: false, persistenceEnabled: false);
-  // FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+  setUrlStrategy(PathUrlStrategy());
 
-  FirebaseFirestore.instance.settings.persistenceEnabled;
+  // FirebaseFirestore.instance.settings.persistenceEnabled;
+
+  FirebaseFirestore.instance.settings = const Settings(
+    host: 'localhost:8080',
+    sslEnabled: false,
+    persistenceEnabled: false,
+  );
+  FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
 
   BlocOverrides.runZoned(
     () => runApp(const MyApp()),
@@ -69,6 +81,9 @@ class MyApp extends StatelessWidget {
                 routes: {
                   '/': (context) => const Wrapper(),
                   AddClientView.id: (context) => AddClientView(),
+                  WebRegistration.pageName: (context) => WebRegistration(),
+                  WebWelcome.pageName: (context) => WebWelcome(),
+                  WebNewCompany.pageName: (context) => WebNewCompany(),
                   // ClientView.id: (context) => ClientView(),
                 },
               ),

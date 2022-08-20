@@ -27,7 +27,6 @@ class WelcomeView extends StatelessWidget {
                       ),
                     );
                   }
-
                   return Form(
                     key: _formKey,
                     child: Column(

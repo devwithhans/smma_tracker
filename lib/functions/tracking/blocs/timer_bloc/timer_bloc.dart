@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:agency_time/functions/clients/blocs/clients_bloc/clients_bloc.dart';
 import 'package:agency_time/functions/tracking/blocs/timer_bloc/ticker.dart';
 import 'package:agency_time/functions/tracking/models/tag.dart';
 import 'package:agency_time/main.dart';
@@ -16,12 +17,15 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   final Ticker _ticker;
   StreamSubscription<int>? _tickerSubscription;
   StreamSubscription? _trackingStream;
+  ClientsBloc clientsBloc;
 
   TrackerRepo trackerRepository;
   String companyId;
 
   TimerBloc(this.companyId,
-      {required Ticker ticker, required this.trackerRepository})
+      {required Ticker ticker,
+      required this.trackerRepository,
+      required this.clientsBloc})
       : _ticker = ticker,
         super(TimerInitial()) {
     _checkCurrentTrackings();
@@ -106,13 +110,17 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
 
     TimerRunning timerRunningSnapshot = state as TimerRunning;
     emit(timerRunningSnapshot.copyWith(timerStatus: TimerStatus.loading));
-    DateTime stop = timerRunningSnapshot.start.add(event.duration);
+    Duration stopDuration = event.duration;
+    DateTime stop = timerRunningSnapshot.start.add(stopDuration);
+    clientsBloc.add(OfflineMonthUpdate(
+        duration: stopDuration, clientId: timerRunningSnapshot.client.id));
     await trackerRepository.updateTracker(
       stop: stop,
       trackingDocId: timerRunningSnapshot.documentId!,
       duration: event.duration,
       newTag: event.newTag,
     );
+
     add(CancelTracking());
   }
 

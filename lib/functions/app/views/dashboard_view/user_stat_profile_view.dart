@@ -1,7 +1,8 @@
 import 'package:agency_time/functions/app/blocs/stats_bloc/stats_bloc.dart';
+import 'package:agency_time/functions/app/functions/get_employee_dash_data.dart';
 import 'package:agency_time/functions/app/models/company_month.dart';
 import 'package:agency_time/functions/app/views/dashboard_view/dashboard_view.dart';
-import 'package:agency_time/functions/app/views/dashboard_view/total_view.dart';
+import 'package:agency_time/functions/app/views/dashboard_view/dashboard_widgets/dashboard_data_display.dart';
 import 'package:agency_time/functions/clients/views/client_view/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +32,7 @@ class UserStatProfile extends StatelessWidget {
               child: ListView(
                 padding: EdgeInsets.all(20),
                 children: [
-                  TotalTrackings(
+                  DashboardDataView(
                     loading: false,
                     moneyFormatter: moneyFormatter,
                     userId: employee.member.id,
@@ -39,7 +40,8 @@ class UserStatProfile extends StatelessWidget {
                       mrr: state.selectedMonth.mrr,
                       userId: employee.member.id,
                       employee: employee,
-                      nonFilterEmployee: state.selectedMonth.employees,
+                      thisMonthEmployees: state.selectedMonth.employees,
+                      lastMonthEmployees: state.compareMonth.employees,
                     ),
                   ),
                 ],

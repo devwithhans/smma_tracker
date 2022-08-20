@@ -1,13 +1,15 @@
 import 'package:agency_time/functions/app/blocs/stats_bloc/stats_bloc.dart';
+import 'package:agency_time/functions/app/functions/get_employee_dash_data.dart';
 import 'package:agency_time/functions/app/models/company_month.dart';
+import 'package:agency_time/functions/app/models/dashdata.dart';
 import 'package:agency_time/functions/app/views/dashboard_view/dashboard_widgets/custom_app_bar.dart';
-import 'package:agency_time/functions/app/views/dashboard_view/total_view.dart';
-import 'package:agency_time/functions/app/views/dashboard_view/user_stats.dart';
+import 'package:agency_time/functions/app/views/dashboard_view/dashboard_widgets/dashboard_data_display.dart';
+import 'package:agency_time/functions/app/views/dashboard_view/dashboard_widgets/user_stats.dart';
 import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
+import 'package:agency_time/functions/authentication/models/company.dart';
 import 'package:agency_time/functions/authentication/models/user.dart';
 import 'package:agency_time/functions/clients/blocs/clients_bloc/clients_bloc.dart';
-import 'package:agency_time/utils/constants/colors.dart';
-import 'package:agency_time/utils/functions/data_explanation.dart';
+import 'package:agency_time/utils/widgets/custom_toggl_button.dart';
 import 'package:agency_time/utils/widgets/revenue_card.dart';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
@@ -29,12 +31,11 @@ class _DashboardViewState extends State<DashboardView> {
   DateTime selectedDateTime = DateTime.now();
   @override
   Widget build(BuildContext context) {
-    final moneyFormatter =
-        NumberFormat.currency(locale: 'da', name: 'kr.', decimalDigits: 0);
-
     AppUser appUser = context.read<AuthCubit>().state.appUser!;
+    Company company = context.read<AuthCubit>().state.company!;
     String role = context.read<AuthCubit>().state.role!;
-    print(role);
+    final moneyFormatter = NumberFormat.simpleCurrency(
+        locale: company.countryCode, decimalDigits: 0);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -45,16 +46,17 @@ class _DashboardViewState extends State<DashboardView> {
             CompanyMonth selectedMonth = state.selectedMonth;
             if (state.status == StatsStatus.loading) return SizedBox();
             Map<String, Widget> views = {
-              'My data': TotalTrackings(
+              'Myself': DashboardDataView(
                 loading: loading,
                 moneyFormatter: moneyFormatter,
                 dashData: getEmployeeDashData(
                   mrr: selectedMonth.mrr,
-                  nonFilterEmployee: state.selectedMonth.employees,
+                  thisMonthEmployees: state.selectedMonth.employees,
+                  lastMonthEmployees: state.compareMonth.employees,
                   userId: appUser.id,
                 ),
               ),
-              'Total data': TotalTrackings(
+              'Total': DashboardDataView(
                 loading: loading,
                 moneyFormatter: moneyFormatter,
                 dashData: DashData(
@@ -71,10 +73,7 @@ class _DashboardViewState extends State<DashboardView> {
                   internalDurationChange: state.internalDurationChange,
                 ),
               ),
-              'Users data': UsersData(
-                statState: state,
-                employees: state.selectedMonth.employees,
-              )
+              'Users': UsersData()
             };
 
             return Column(
@@ -135,130 +134,5 @@ class _DashboardViewState extends State<DashboardView> {
         ),
       ),
     );
-  }
-}
-
-DashData getEmployeeDashData({
-  required String userId,
-  required List<Employee> nonFilterEmployee,
-  double? mrr,
-  double? lastMrr,
-  Employee? employee,
-}) {
-  Employee selectedMonthEmployee;
-
-  if (employee == null) {
-    List<Employee> selectedMonthEmployeeList = nonFilterEmployee
-        .where(
-          (element) => element.member.id == userId,
-        )
-        .toList();
-    if (selectedMonthEmployeeList.isEmpty) {
-      selectedMonthEmployee = Employee(
-        member: Member(email: '', id: '', firstName: '', lastName: ''),
-        clientsDuration: Duration(),
-        totalDuration: Duration(),
-        clientsHourlyRate: 0,
-        internalDuration: Duration(),
-        totalHourlyRate: 0,
-        tags: {},
-      );
-    } else {
-      selectedMonthEmployee = selectedMonthEmployeeList.first;
-    }
-  } else {
-    selectedMonthEmployee = employee;
-  }
-
-  List<Employee> compareMonthEmployeeList = nonFilterEmployee
-      .where(
-        (element) => element.member.id == userId,
-      )
-      .toList();
-  Employee compareMonthEmployee = compareMonthEmployeeList.isNotEmpty
-      ? compareMonthEmployeeList.first
-      : Employee(
-          member: selectedMonthEmployee.member,
-          clientsDuration: Duration(),
-          internalDuration: Duration(),
-          totalHourlyRate: 0,
-          clientsHourlyRate: 0,
-          totalDuration: Duration(),
-          tags: {},
-        );
-
-  Duration clientDurationChange = selectedMonthEmployee.clientsDuration -
-      compareMonthEmployee.clientsDuration;
-
-  double clientHourlyRateChange = getChangeProcentage(
-      selectedMonthEmployee.clientsHourlyRate,
-      compareMonthEmployee.clientsHourlyRate);
-
-  Duration totalDurationChange =
-      compareMonthEmployee.totalDuration - selectedMonthEmployee.totalDuration;
-
-  double totalHourlyRate =
-      getHourlyRate(mrr ?? 0, selectedMonthEmployee.totalDuration);
-
-  double totalHourlyRateChange = getChangeProcentage(
-    totalHourlyRate,
-    compareMonthEmployee.totalHourlyRate,
-  );
-
-  Duration internalDurationChange = selectedMonthEmployee.internalDuration -
-      compareMonthEmployee.internalDuration;
-
-  return DashData(
-    mrr: mrr,
-    lastMrr: lastMrr,
-    clientDuration: selectedMonthEmployee.clientsDuration,
-    clientDurationChange: clientDurationChange,
-    clientsHourlyRate: selectedMonthEmployee.clientsHourlyRate,
-    clientHourlyRateChange: clientHourlyRateChange,
-    totalDuration: selectedMonthEmployee.totalDuration,
-    totalDurationChange: totalDurationChange,
-    totalHourlyRate: totalHourlyRate,
-    totalHourlyRateChange: totalHourlyRateChange,
-    internalDuration: selectedMonthEmployee.internalDuration,
-    internalDurationChange: internalDurationChange,
-    tags: selectedMonthEmployee.tags,
-  );
-}
-
-class CustomToggl extends StatelessWidget {
-  const CustomToggl({
-    required this.buttons,
-    required this.selected,
-    required this.onPressed,
-    Key? key,
-  }) : super(key: key);
-  final List<String> buttons;
-  final String selected;
-  final void Function(String selected) onPressed;
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-        children: buttons
-            .map(
-              (e) => Expanded(
-                child: RawMaterialButton(
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                            color: selected != e
-                                ? kColorGrey
-                                : Colors.transparent)),
-                    fillColor: selected == e ? Colors.black : Colors.white,
-                    textStyle: TextStyle(
-                      color: selected == e ? Colors.white : Colors.black,
-                    ),
-                    child: Text(e),
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    onPressed: () {
-                      onPressed(e);
-                    }),
-              ),
-            )
-            .toList());
   }
 }

@@ -1,10 +1,12 @@
-import 'package:agency_time/functions/app/views/bottom_navigation.dart';
+import 'package:agency_time/functions/app/web_view/web_navigation/web_navigation.dart';
 import 'package:agency_time/functions/authentication/views/welcome_view.dart';
-
+import 'package:agency_time/functions/authentication/web_view/web_new_company/web_new_company.dart';
+import 'package:agency_time/functions/authentication/web_view/web_no_company.dart';
+import 'package:agency_time/functions/authentication/web_view/web_registration.dart';
+import 'package:agency_time/functions/authentication/web_view/web_welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:overlay_support/overlay_support.dart';
 
 import '../blocs/auth_cubit/auth_cubit.dart';
 
@@ -16,10 +18,13 @@ class Wrapper extends StatelessWidget {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: ((context, state) {
         if (state.authStatus == AuthStatus.signedIn) {
-          return const BottomNav();
+          return const WebNavigation();
         }
         if (state.authStatus == AuthStatus.signedOut) {
-          return WelcomeView();
+          return WebRegistration();
+        }
+        if (state.authStatus == AuthStatus.noCompany) {
+          return WebNewCompany();
         }
         return Scaffold(
           body: Center(

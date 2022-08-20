@@ -177,7 +177,6 @@ class _FinishTrackingDialogState extends State<FinishTrackingDialog> {
                                       .add(selectedTag!);
                                 }
                               }
-
                               widget.onSave(
                                   selectedTag, _newDuration ?? _duration);
                             }

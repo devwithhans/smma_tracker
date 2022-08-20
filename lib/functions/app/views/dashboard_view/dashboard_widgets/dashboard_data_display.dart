@@ -1,3 +1,4 @@
+import 'package:agency_time/functions/app/models/dashdata.dart';
 import 'package:agency_time/functions/app/views/dashboard_view/dashboard_widgets/pie_chart.dart';
 import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
 import 'package:agency_time/functions/authentication/models/company.dart';
@@ -13,8 +14,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 
-class TotalTrackings extends StatelessWidget {
-  const TotalTrackings({
+class DashboardDataView extends StatelessWidget {
+  const DashboardDataView({
     Key? key,
     required this.loading,
     required this.moneyFormatter,
@@ -149,42 +150,4 @@ class TotalTrackings extends StatelessWidget {
       ],
     );
   }
-}
-
-class DashData {
-  const DashData({
-    Key? key,
-    this.mrr,
-    this.lastMrr,
-    this.clientDuration = const Duration(),
-    this.clientDurationChange = const Duration(),
-    this.clientsHourlyRate = 0,
-    this.clientHourlyRateChange = 0,
-    this.totalDuration = const Duration(),
-    this.totalDurationChange = const Duration(),
-    this.totalHourlyRate = 0,
-    this.totalHourlyRateChange = 0,
-    this.internalDuration = const Duration(),
-    this.internalDurationChange = const Duration(),
-    this.tags = const {},
-  });
-
-  final Duration clientDuration;
-  final Duration clientDurationChange;
-
-  final double clientsHourlyRate;
-  final double clientHourlyRateChange;
-
-  final Duration totalDuration;
-  final Duration totalDurationChange;
-
-  final double totalHourlyRate;
-  final double totalHourlyRateChange;
-
-  final Map tags;
-  final double? mrr;
-  final double? lastMrr;
-
-  final Duration internalDuration;
-  final Duration internalDurationChange;
 }

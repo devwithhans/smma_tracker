@@ -31,12 +31,51 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
 
     on<AddClient>(_addClient);
     on<GetClientsWithMonth>(_setClientMonth);
+    on<OfflineMonthUpdate>(_offlineMonthUpdate);
 
     @override
     Future<void> close() {
       _clientsStream.cancel();
       return super.close();
     }
+  }
+
+  _offlineMonthUpdate(OfflineMonthUpdate event, Emitter emit) {
+    /// WHAT TO UPDATE:
+    /// - Update the client total
+    /// - Update the client employee
+
+    String userId = clientsRepo.authCubit.state.appUser!.id;
+
+    // Get all clients:
+    List<Client> newClientList = [];
+    newClientList.addAll(state.clients);
+
+    // We recieve the client who's data we need to update
+    List<Client> clientToUpdateList =
+        newClientList.where((element) => element.id == event.clientId).toList();
+    // We return if it does not exists
+    if (clientToUpdateList.isEmpty) {
+      return;
+    }
+
+    // We revieve just the client from the single-item array
+    Client client = clientToUpdateList.last;
+
+    //
+    Month selectedMonth = client.selectedMonth;
+
+    selectedMonth.employees
+        .firstWhere((element) => element.member.id == userId)
+        .totalDuration += event.duration;
+
+    selectedMonth.duration += event.duration;
+
+    newClientList
+        .firstWhere((element) => element.id == event.clientId)
+        .selectedMonth = selectedMonth;
+    emit(state.copyWith(clients: newClientList, status: Status.loading));
+    emit(state.copyWith(status: Status.initial));
   }
 
   // Selecting the months

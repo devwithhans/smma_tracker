@@ -17,3 +17,10 @@ class AddClient extends ClientsEvent {
 
   const AddClient({required this.client});
 }
+
+class OfflineMonthUpdate extends ClientsEvent {
+  final Duration duration;
+  final String clientId;
+
+  const OfflineMonthUpdate({required this.duration, required this.clientId});
+}
