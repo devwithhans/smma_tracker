@@ -28,14 +28,14 @@ class AddClientView extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            'Add new ${internal ? 'task' : 'client'}',
+            'Add new ${internal ? 'internal' : 'client'}',
             style: TextStyle(color: Colors.black),
           ),
         ),
         body: BlocBuilder<NewClientCubit, NewClientState>(
           builder: (context, state) {
             if (state.status == Status.loading) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(color: Colors.black),
               );
             }
@@ -60,8 +60,9 @@ class AddClientView extends StatelessWidget {
                                         return 'Please enter a title';
                                       }
                                     },
-                                    title: 'Task name',
-                                    hintText: 'Name the task you wanna track',
+                                    title: 'Internal title',
+                                    hintText:
+                                        'Name the internal job you wanna track',
                                   ),
                                   SizedBox(height: 30),
                                   CustomInputForm(
@@ -70,7 +71,7 @@ class AddClientView extends StatelessWidget {
                                       description = v;
                                     },
                                     title: 'Description (optional)',
-                                    hintText: 'Explain the task',
+                                    hintText: 'Description',
                                   ),
                                 ],
                               )
@@ -109,7 +110,7 @@ class AddClientView extends StatelessWidget {
                                           symbol: ''),
                                     ],
                                     keyboardType: TextInputType.number,
-                                    title: 'Monthly recurring revenue',
+                                    title: 'MRR',
                                     hintText: 'Eg. 15.000 kr.',
                                   ),
                                   SizedBox(height: 30),

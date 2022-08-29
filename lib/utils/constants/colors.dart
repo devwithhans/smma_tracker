@@ -9,9 +9,29 @@ const Color kColorBlack = Color(0xff2C2C2C);
 
 const List<Color> kChartColors = [
   Color(0xff0058FF),
-  Color(0xff21D59B),
-  Color(0xffFFC700),
   Color(0xffF99600),
   Color(0xff29CB97),
+  Color(0xff88EAF4),
+  Color.fromARGB(243, 143, 143, 143),
+  Color(0xff523E9D),
+  Color(0xffED7A83),
   Color(0xff0058FF),
+  Color(0xffF99600),
+  Color(0xff29CB97),
+  Color(0xff88EAF4),
+  Color.fromARGB(243, 143, 143, 143),
+  Color(0xff523E9D),
+  Color(0xffED7A83),
+  Color(0xff0058FF),
+  Color(0xffF99600),
+  Color(0xff29CB97),
+  Color(0xff88EAF4),
+  Color.fromARGB(243, 143, 143, 143),
+  Color(0xff523E9D),
+  Color(0xffED7A83),
+];
+
+List<Color> kGradientColors = [
+  const Color(0xff23b6e6),
+  const Color(0xff02d39a),
 ];

@@ -1,21 +1,27 @@
+import 'dart:math';
+
+import 'package:agency_time/functions/authentication/repos/signin_repo.dart';
+import 'package:agency_time/main.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
-
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(LoginInitial());
 
+  SignInRepo signInRepo = SignInRepo();
+
   void loginUser(String password, String email) async {
     emit(LoginLoading());
     try {
-      final credential = await FirebaseAuth.instance
+      await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       emit(LoginInitial());
+      Navigator.pop(navigatorKey.currentContext!);
     } on FirebaseAuthException catch (e) {
       print(e.code);
       if (e.code == 'user-not-found') {
@@ -34,22 +40,15 @@ class LoginCubit extends Cubit<LoginState> {
     emit(LoginLoading());
 
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+      await signInRepo.registerUser(
+        email: email,
+        name: name,
+        newletter: newletter,
+        password: password,
+      );
 
-      if (userCredential.user != null) {
-        FirebaseFirestore.instance
-            .collection('users')
-            .doc(userCredential.user!.uid)
-            .set({
-          'firstName': splitNames(name).first,
-          'lastName': splitNames(name).last,
-          'email': email,
-          'newletter': newletter
-        });
-      }
-
-      FirebaseAuth.instance.signInWithCredential(userCredential.credential!);
+      // await FirebaseAuth.instance
+      //     .signInWithCredential(userCredential.credential!);
 
       emit(LoginInitial());
     } on FirebaseAuthException catch (e) {
@@ -62,8 +61,4 @@ class LoginCubit extends Cubit<LoginState> {
   }
 }
 
-List<String> splitNames(String fullName) {
-  String firstName = fullName.split(' ').first;
-  String lastName = fullName.replaceFirst('$firstName ', '');
-  return [firstName, lastName];
-}
+//helper functions:

@@ -1,9 +1,8 @@
-import 'package:agency_time/functions/app/blocs/stats_bloc/stats_bloc.dart';
+import 'package:agency_time/functions/statistics/blocs/stats_bloc/stats_bloc.dart';
 import 'package:agency_time/functions/clients/blocs/clients_bloc/clients_bloc.dart';
 import 'package:agency_time/functions/clients/views/add_clients_view.dart';
 import 'package:agency_time/functions/clients/views/client_list_view/components/client_result_list.dart';
 import 'package:agency_time/functions/clients/views/client_list_view/components/client_view_header.dart';
-import 'package:agency_time/functions/clients/views/client_list_view/components/no_clients.dart';
 import 'package:agency_time/functions/clients/models/client.dart';
 import 'package:agency_time/functions/clients/views/client_list_view/sorting_logic.dart';
 import 'package:agency_time/utils/widgets/custom_button.dart';
@@ -50,7 +49,7 @@ class _InternalClientsViewState extends State<InternalClientsView> {
                         .add(GetClientsWithMonth(month: selection));
                   }
                 },
-                title: 'Internals',
+                title: 'internalClients',
                 state: state,
                 onPressed: () {
                   Navigator.push(
@@ -78,9 +77,7 @@ class _InternalClientsViewState extends State<InternalClientsView> {
               Expanded(
                 child: Builder(
                   builder: (context) {
-                    List<Client> clients = state.clients
-                        .where((element) => element.internal == true)
-                        .toList();
+                    List<Client> clients = state.internalClients;
 
                     bool currentMonth = state.month == null ||
                         state.month!.month == DateTime.now().month;
@@ -91,8 +88,8 @@ class _InternalClientsViewState extends State<InternalClientsView> {
                         children: [
                           Text(
                             currentMonth
-                                ? 'You dont have any internals '
-                                : 'You had no internals in ${DateFormat('MMMM').format(state.month!)}',
+                                ? 'You dont have any internalClients '
+                                : 'You had no internalClients in ${DateFormat('MMMM').format(state.month!)}',
                             textAlign: TextAlign.center,
                           ),
                           SizedBox(

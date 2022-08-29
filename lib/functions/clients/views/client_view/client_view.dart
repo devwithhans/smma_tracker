@@ -87,13 +87,6 @@ class ClientView extends StatelessWidget {
                 ),
               ],
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.play_arrow_rounded),
-              ),
-            ),
           ],
         ),
       ),

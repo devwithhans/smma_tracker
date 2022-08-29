@@ -1,20 +1,22 @@
-import 'package:agency_time/functions/app/functions/get_employee_dash_data.dart';
-import 'package:agency_time/functions/app/models/dashdata.dart';
-import 'package:agency_time/functions/app/views/dashboard_view/dashboard_view.dart';
-import 'package:agency_time/functions/app/views/dashboard_view/dashboard_widgets/pie_chart.dart';
-import 'package:agency_time/functions/app/views/dashboard_view/dashboard_widgets/dashboard_data_display.dart';
+import 'package:agency_time/functions/statistics/functions/get_employee_dash_data.dart';
+import 'package:agency_time/functions/statistics/models/dashdata.dart';
+import 'package:agency_time/functions/statistics/views/dashboard_view/dashboard_view.dart';
+import 'package:agency_time/functions/statistics/views/dashboard_view/dashboard_widgets/pie_chart.dart';
+import 'package:agency_time/functions/statistics/views/dashboard_view/dashboard_widgets/dashboard_data_display.dart';
 import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
 import 'package:agency_time/functions/authentication/models/company.dart';
 import 'package:agency_time/functions/clients/models/month.dart';
+import 'package:agency_time/utils/functions/currency_formatter.dart';
 import 'package:agency_time/utils/functions/data_explanation.dart';
 import 'package:agency_time/functions/clients/models/client.dart';
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:agency_time/utils/functions/print_duration.dart';
 import 'package:agency_time/utils/widgets/custom_toggl_button.dart';
 import 'package:agency_time/utils/widgets/procentage_card.dart';
-import 'package:agency_time/utils/widgets/revenue_card.dart';
+import 'package:agency_time/utils/widgets/stats_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class ClientStats extends StatefulWidget {
   const ClientStats({
@@ -36,6 +38,8 @@ class _ClientStatsState extends State<ClientStats> {
     AuthState authState = BlocProvider.of<AuthCubit>(context).state;
     String role = authState.role ?? 'user';
     Company company = BlocProvider.of<AuthCubit>(context).state.company!;
+    final moneyFormatter =
+        CustomCurrencyFormatter.getFormatter(countryCode: company.countryCode);
 
     DashData privateDashData = getEmployeeDashData(
       mrr: widget.client.selectedMonth.mrr,
@@ -61,18 +65,23 @@ class _ClientStatsState extends State<ClientStats> {
             selectedMonth.hourlyRate, compareMonth.hourlyRate));
 
     Map<String, Widget> views = {
-      'My Data': StatSection(dashData: privateDashData, company: company),
-      'Total Data': StatSection(dashData: totalDashData, company: company),
+      'My Data': StatSection(
+        dashData: privateDashData,
+        company: company,
+        client: widget.client,
+      ),
+      'Total Data': StatSection(
+          dashData: totalDashData, company: company, client: widget.client),
     };
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         StatCard(
-          title: 'Monthly revenue',
-          value: moneyFormatter.format(privateDashData.mrr),
+          title: 'MRR',
+          value: moneyFormatter.format(privateDashData.selectedMrr),
           subText: getChangeProcentage(
-              privateDashData.mrr, privateDashData.lastMrr ?? 0),
+              privateDashData.selectedMrr, privateDashData.compareMrr ?? 0),
         ),
         SizedBox(height: 15),
         role == 'owner'
@@ -96,13 +105,17 @@ class StatSection extends StatelessWidget {
     Key? key,
     required this.dashData,
     required this.company,
+    required this.client,
   }) : super(key: key);
 
   final DashData dashData;
   final Company company;
+  final Client client;
 
   @override
   Widget build(BuildContext context) {
+    final moneyFormatter =
+        CustomCurrencyFormatter.getFormatter(countryCode: company.countryCode);
     return Column(
       children: [
         SizedBox(height: 15),
@@ -129,10 +142,23 @@ class StatSection extends StatelessWidget {
           ],
         ),
         SizedBox(height: 15),
-        CustomPieChart(
-            chartData:
-                tagsShowingSections(tagsMap: dashData.tags, tags: company.tags),
-            title: 'Time distribution on tags:'),
+        Row(
+          children: [
+            Expanded(
+              child: CustomPieChart(
+                  chartData: tagsShowingSections(
+                      tagsMap: dashData.tags, tags: company.tags),
+                  title: 'Time distribution on tags:'),
+            ),
+            SizedBox(width: 20),
+            Expanded(
+              child: CustomPieChart(
+                  chartData: employeesShowingSections(
+                      employees: client.selectedMonth.employees),
+                  title: 'Employees:'),
+            )
+          ],
+        ),
         SizedBox(height: 10),
       ],
     );

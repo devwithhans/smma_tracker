@@ -1,4 +1,5 @@
 //Order by Most traded currencies: https://en.wikipedia.org/wiki/Template:Most_traded_currencies
+
 List<Map<String, dynamic>> currencies = [
   {
     "code": "USD",

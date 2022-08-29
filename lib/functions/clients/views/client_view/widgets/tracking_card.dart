@@ -47,7 +47,6 @@ class trackingCard extends StatelessWidget {
                       duration,
                       tag!.id,
                     );
-
                     Navigator.pop(context);
                   },
                   duration: tracking.duration,

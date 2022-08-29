@@ -56,9 +56,9 @@ int inversSortOnHourlyRate(Client a, Client b) {
 }
 
 int inversSortOnMrr(a, b) {
-  if (a.selectedMonth!.mrr > b.selectedMonth!.mrr) {
+  if (a.selectedMonth!.selectedMrr > b.selectedMonth!.selectedMrr) {
     return -1;
-  } else if (a.selectedMonth!.mrr < b.selectedMonth!.mrr) {
+  } else if (a.selectedMonth!.selectedMrr < b.selectedMonth!.selectedMrr) {
     return 1;
   } else {
     return 0;
@@ -66,9 +66,9 @@ int inversSortOnMrr(a, b) {
 }
 
 int sortOnMrr(a, b) {
-  if (a.selectedMonth!.mrr < b.selectedMonth!.mrr) {
+  if (a.selectedMonth!.selectedMrr < b.selectedMonth!.selectedMrr) {
     return -1;
-  } else if (a.selectedMonth!.mrr > b.selectedMonth!.mrr) {
+  } else if (a.selectedMonth!.selectedMrr > b.selectedMonth!.selectedMrr) {
     return 1;
   } else {
     return 0;

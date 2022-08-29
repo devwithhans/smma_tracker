@@ -1,8 +1,6 @@
 import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
-import 'package:agency_time/functions/authentication/blocs/connect_company_cubit/connect_company_cubit.dart';
-import 'package:agency_time/functions/authentication/blocs/login_cubit/login_cubit.dart';
 import 'package:agency_time/functions/authentication/models/invite.dart';
-import 'package:agency_time/functions/authentication/web_view/web_new_company/web_new_company.dart';
+import 'package:agency_time/functions/payments/web_views/web_new_company/web_new_company.dart';
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -16,16 +14,12 @@ class WebNoCompany extends StatelessWidget {
     AuthState authState = context.read<AuthCubit>().state;
     bool hasInvite = authState.invite != null;
     return Scaffold(
-        body: BlocProvider(
-      create: (context) => ConnectCompanyCubit(),
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Center(
-          child: Container(
-            constraints: BoxConstraints(maxHeight: 1000, maxWidth: 600),
-            child:
-                hasInvite ? HasInvite(invite: authState.invite!) : NoInvite(),
-          ),
+        body: Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Center(
+        child: Container(
+          constraints: BoxConstraints(maxHeight: 1000, maxWidth: 600),
+          child: hasInvite ? HasInvite(invite: authState.invite!) : NoInvite(),
         ),
       ),
     ));
@@ -100,7 +94,7 @@ class HasInvite extends StatelessWidget {
         BigBorderButton(
           mainText: 'Join the ${invite.companyName} team',
           onPressed: () {
-            context.read<ConnectCompanyCubit>().acceptInvite(invite.id);
+            context.read<AuthCubit>().acceptInvite(invite.id);
           },
         ),
         SizedBox(height: 10),

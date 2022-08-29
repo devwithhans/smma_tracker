@@ -202,6 +202,7 @@ class _FinishTrackingDialogState extends State<FinishTrackingDialog> {
                     backgroundColor: kColorRed,
                     textColor: kColorRed,
                   ),
+                  SizedBox(height: 30)
                 ],
               ),
             )

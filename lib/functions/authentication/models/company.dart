@@ -1,6 +1,5 @@
 import 'package:agency_time/functions/authentication/models/user.dart';
 import 'package:agency_time/functions/tracking/models/tag.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Company {
   String id;
@@ -9,6 +8,7 @@ class Company {
   List<Member> members;
   Map roles;
   String countryCode;
+  Subscription? subscription;
 
   Company({
     required this.tags,
@@ -16,7 +16,8 @@ class Company {
     required this.members,
     required this.companyName,
     required this.id,
-    this.countryCode = 'en',
+    this.subscription,
+    this.countryCode = 'USD',
   });
 
   Company copyWith({
@@ -26,9 +27,11 @@ class Company {
     List<Member>? members,
     Map? roles,
     String? countryCode,
+    Subscription? subscription,
   }) {
     return Company(
       countryCode: countryCode ?? this.countryCode,
+      subscription: subscription ?? this.subscription,
       tags: tags ?? this.tags,
       members: members ?? this.members,
       roles: roles ?? this.roles,
@@ -54,9 +57,23 @@ class Company {
       id: id,
       tags: tags,
       roles: value['members'],
+      subscription: value['subscription'] != null
+          ? Subscription(
+              active: value['subscription']['status'] == 'active',
+              id: value['subscription']['subscriptionId'] ?? '',
+              seats: value['subscription']['seats'])
+          : null,
       members: [],
       countryCode: value['countryCode'],
       companyName: value['companyName'],
     );
   }
+}
+
+class Subscription {
+  bool active;
+  String id;
+  int seats;
+
+  Subscription({required this.active, required this.id, required this.seats});
 }

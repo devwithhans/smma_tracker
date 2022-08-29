@@ -1,4 +1,4 @@
-import 'package:agency_time/functions/app/models/company_month.dart';
+import 'package:agency_time/functions/statistics/models/company_month.dart';
 import 'package:agency_time/functions/authentication/models/company.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

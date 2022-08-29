@@ -56,7 +56,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
           'You can only track one client at once',
           textAlign: TextAlign.center,
         ),
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
         background: Colors.red,
       );
       return;
@@ -125,6 +125,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   void _onTicked(TimerTicked event, Emitter<TimerState> emit) {
+    print('tick');
     TimerRunning timerRunningSnapshot = state as TimerRunning;
     emit(event.duration > 0
         ? timerRunningSnapshot.copyWith(duration: event.duration)

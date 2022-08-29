@@ -1,10 +1,8 @@
-import 'package:agency_time/functions/app/blocs/settings_bloc/settings_bloc.dart';
-import 'package:agency_time/functions/app/models/company_month.dart';
+import 'package:agency_time/functions/statistics/models/company_month.dart';
 import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
 import 'package:agency_time/functions/authentication/models/company.dart';
 import 'package:agency_time/functions/clients/views/client_view/client_view.dart';
 import 'package:agency_time/functions/tracking/blocs/timer_bloc/timer_bloc.dart';
-import 'package:agency_time/functions/tracking/blocs/update_trackig_cubit/update_tracking_cubit.dart';
 import 'package:agency_time/utils/functions/data_explanation.dart';
 import 'package:agency_time/functions/clients/models/client.dart';
 import 'package:agency_time/utils/constants/colors.dart';
@@ -48,7 +46,7 @@ class ClientCard extends StatelessWidget {
         : client.selectedMonth.duration;
 
     final moneyFormatter =
-        NumberFormat.simpleCurrency(locale: company.countryCode);
+        NumberFormat.simpleCurrency(name: company.countryCode);
 
     bool noCompareMonth = client.compareMonth == null;
 

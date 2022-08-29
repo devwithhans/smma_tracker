@@ -3,6 +3,7 @@ import 'package:agency_time/functions/authentication/models/company.dart';
 import 'package:agency_time/functions/clients/models/client.dart';
 import 'package:agency_time/functions/clients/models/month.dart';
 import 'package:agency_time/functions/clients/repos/client_repo.dart';
+import 'package:agency_time/utils/functions/data_explanation.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -18,7 +19,7 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
   ClientsBloc({
     required this.clientsRepo,
     required this.company,
-  }) : super(ClientsState()) {
+  }) : super(const ClientsState()) {
     //We listen for changes in the clients, and adds the changes to the state
     _clientsStream = clientsRepo
         .clientsSubscription()
@@ -26,7 +27,7 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
       for (var clientRaw in event.docs) {
         add(AddClient(client: clientRaw));
       }
-      add(GetClientsWithMonth());
+      add(const GetClientsWithMonth());
     });
 
     on<AddClient>(_addClient);
@@ -85,7 +86,7 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
 
     for (var client in state.clients) {
       DateTime selectedDate = event.month ?? state.month ?? DateTime.now();
-      ; // We start by setting the date of selected month. If we havent added any it will be current month
+      // We start by setting the date of selected month. If we havent added any it will be current month
 
       // We filter the array to check if we got the month
       List selectedMonthList = client.savedMonths
@@ -146,6 +147,8 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
         savedMonths.add(month);
       }
     });
+    Month selectedMonth = savedMonths[0];
+    Month? compareMonth = savedMonths.length < 2 ? null : savedMonths[1];
 
     Client client = Client(
       internal: clientMap['internal'] ?? false,
@@ -155,15 +158,38 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
       updatedAt: clientMap['updatedAt'],
       compareMonth: savedMonths.length < 2 ? null : savedMonths[1],
       selectedMonth: savedMonths[0],
+      hourlyRateChange: getChangeProcentage(selectedMonth.hourlyRate,
+          compareMonth != null ? compareMonth.hourlyRate : 0),
+      durationChange: compareMonth == null
+          ? selectedMonth.duration
+          : selectedMonth.duration - compareMonth.duration,
     );
 
     // We modify the list, updates if the client exists and adds if it does not exist
     List<Client> modifiedClientList = _addNewClientToList(newClient: client);
 
-    // Finally we emit the changes, so we can update the UI
+    List<Client> internals = [];
+    try {
+      List<Client> filtered = modifiedClientList
+          .where((element) => element.internal == true)
+          .toList();
+      internals.addAll(filtered);
+    } catch (e) {}
+    List<Client> clients = [];
+    try {
+      List<Client> filtered = modifiedClientList
+          .where((element) => element.internal == false)
+          .toList();
+      clients.addAll(filtered);
+    } catch (e) {}
+
+    // Finally we emit the changes, so we can update the UI'
 
     emit(
-      state.copyWith(clients: modifiedClientList),
+      state.copyWith(
+          clients: clients,
+          internalClients: internals,
+          allClients: modifiedClientList),
     );
   }
 
@@ -204,7 +230,7 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
   // Checking if the client already exists in the array, and if so it updates it, otherwise it adds it to the old array.
   List<Client> _addNewClientToList({required Client newClient}) {
     List<Client> newClientList = [];
-    newClientList.addAll(state.clients);
+    newClientList.addAll(state.allClients);
     if (newClientList
         .where((element) => element.name == newClient.name)
         .isEmpty) {

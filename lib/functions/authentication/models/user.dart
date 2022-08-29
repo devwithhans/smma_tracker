@@ -4,6 +4,7 @@ class AppUser {
   String firstName;
   String lastName;
   String email;
+  String stripeId;
 
   AppUser({
     required this.id,
@@ -11,11 +12,13 @@ class AppUser {
     required this.firstName,
     required this.lastName,
     required this.email,
+    required this.stripeId,
   });
 
   static AppUser convert(Map<String, dynamic> value, String uid) {
     return AppUser(
         id: uid,
+        stripeId: value['stripeId'] ?? '',
         companyId: value['companyId'] ?? 'non',
         firstName: value['firstName'],
         lastName: value['lastName'],

@@ -21,18 +21,11 @@ class TestingWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // CustomButton(
-            //     text: 'Test button 1',
-            //     onPressed: () {
-            //       startTracker(
-            //         userId: auth.appUser!.id,
-            //         userName: auth.appUser!.firstName,
-            //         companyId: auth.appUser!.companyId,
-            //         start: DateTime.now().toString(),
-            //         clientId: 'SHIIII',
-            //         clientName: 'userName',
-            //       );
-            //     })
+            CustomElevatedButton(
+                text: 'Test button 1',
+                onPressed: () async {
+                  await testFunction();
+                })
           ],
         ),
       ),
@@ -40,28 +33,16 @@ class TestingWidget extends StatelessWidget {
   }
 }
 
-Future<void> stopTracker({
-  required String clientId,
-  required String clientName,
-  required String companyId,
-  required DateTime start,
-  required String userId,
-  required String userName,
-}) async {
+Future<void> testFunction() async {
   HttpsCallable callable =
       FirebaseFunctions.instance.httpsCallable('stopTracker');
 
   try {
-    final resp = await callable.call({
-      'clientId': clientId,
-      'clientName': clientName,
-      'companyId': companyId,
-      'start': start,
-      'userId': userId,
-      'userName': userName,
-    });
-  } on FirebaseFunctionsException catch (error) {
-    print(error.code);
-    print(error.message);
+    HttpsCallable callable = FirebaseFunctions.instance
+        .httpsCallable('attachCreditCard', options: HttpsCallableOptions());
+    final resp = await callable.call();
+    print(resp);
+  } on FirebaseFunctionsException catch (e) {
+    print(e);
   }
 }

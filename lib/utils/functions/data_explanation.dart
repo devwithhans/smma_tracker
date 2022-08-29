@@ -10,9 +10,9 @@ double getChangeProcentage(thisMonth, lastMonth) {
   return change.isInfinite ? 100 : change;
 }
 
-final moneyFormatter = NumberFormat.currency(locale: 'da', name: 'kr.');
+String toK(double value, String name) {
+  final moneyFormatter = NumberFormat.currency(name: name);
 
-String toK(double value) {
   if (value > 1000) {
     return '${(value / 1000).toStringAsPrecision(2)}k';
   } else {

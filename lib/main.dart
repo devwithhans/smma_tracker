@@ -1,18 +1,17 @@
-import 'dart:html';
-
 import 'package:agency_time/firebase_options.dart';
 import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
-import 'package:agency_time/functions/authentication/web_view/web_new_company/web_new_company.dart';
 import 'package:agency_time/functions/authentication/web_view/web_registration.dart';
 import 'package:agency_time/functions/authentication/web_view/web_welcome.dart';
 import 'package:agency_time/functions/clients/views/add_clients_view.dart';
 import 'package:agency_time/functions/clients/repos/client_repo.dart';
-import 'package:agency_time/functions/app/repos/settings_repo.dart';
+import 'package:agency_time/functions/statistics/repos/settings_repo.dart';
+import 'package:agency_time/functions/payments/web_views/web_new_company/web_new_company.dart';
 import 'package:agency_time/functions/tracking/repos/tracker_repo.dart';
 import 'package:agency_time/functions/authentication/views/wrapper.dart';
 import 'package:agency_time/utils/error_handling/error_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,10 +22,9 @@ import 'package:overlay_support/overlay_support.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
 
   setUrlStrategy(PathUrlStrategy());
-
-  // FirebaseFirestore.instance.settings.persistenceEnabled;
 
   FirebaseFirestore.instance.settings = const Settings(
     host: 'localhost:8080',
@@ -36,7 +34,7 @@ Future<void> main() async {
   FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
 
   BlocOverrides.runZoned(
-    () => runApp(const MyApp()),
+    () => runApp(RestartWidget(child: const MyApp())),
     blocObserver: ErrorHandler(),
   );
 }
@@ -83,12 +81,43 @@ class MyApp extends StatelessWidget {
                   AddClientView.id: (context) => AddClientView(),
                   WebRegistration.pageName: (context) => WebRegistration(),
                   WebWelcome.pageName: (context) => WebWelcome(),
-                  WebNewCompany.pageName: (context) => WebNewCompany(),
+                  WebNewCompany.pageName: (context) => const WebNewCompany(),
                   // ClientView.id: (context) => ClientView(),
                 },
               ),
             )),
       ),
+    );
+  }
+}
+
+class RestartWidget extends StatefulWidget {
+  const RestartWidget({required this.child, Key? key}) : super(key: key);
+
+  final Widget child;
+
+  static void restartApp(BuildContext context) {
+    context.findAncestorStateOfType<_RestartWidgetState>()!.restartApp();
+  }
+
+  @override
+  _RestartWidgetState createState() => _RestartWidgetState();
+}
+
+class _RestartWidgetState extends State<RestartWidget> {
+  Key key = UniqueKey();
+
+  void restartApp() {
+    setState(() {
+      key = UniqueKey();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return KeyedSubtree(
+      key: key,
+      child: widget.child,
     );
   }
 }

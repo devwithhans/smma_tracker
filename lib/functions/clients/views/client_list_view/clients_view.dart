@@ -1,4 +1,4 @@
-import 'package:agency_time/functions/app/blocs/stats_bloc/stats_bloc.dart';
+import 'package:agency_time/functions/statistics/blocs/stats_bloc/stats_bloc.dart';
 import 'package:agency_time/functions/clients/blocs/clients_bloc/clients_bloc.dart';
 import 'package:agency_time/functions/clients/views/add_clients_view.dart';
 import 'package:agency_time/functions/clients/views/client_list_view/components/client_result_list.dart';

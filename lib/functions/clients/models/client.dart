@@ -1,4 +1,5 @@
 import 'package:agency_time/functions/clients/models/month.dart';
+import 'package:flutter/material.dart';
 
 class Client {
   bool activeMonth;
@@ -7,10 +8,16 @@ class Client {
   String name;
   Month selectedMonth;
   Month? compareMonth;
+
+  Duration durationChange;
+  double hourlyRateChange;
+
   List<Month> savedMonths;
   DateTime? updatedAt;
 
   Client copyWith({
+    Duration? durationChange,
+    double? hourlyRateChange,
     bool? activeMonth,
     bool? internal,
     String? name,
@@ -21,6 +28,8 @@ class Client {
     List<Month>? savedMonths,
   }) {
     return Client(
+      durationChange: durationChange ?? this.durationChange,
+      hourlyRateChange: hourlyRateChange ?? this.hourlyRateChange,
       internal: internal ?? this.internal,
       activeMonth: activeMonth ?? this.activeMonth,
       savedMonths: savedMonths ?? this.savedMonths,
@@ -35,6 +44,8 @@ class Client {
   Client({
     this.internal = false,
     this.activeMonth = true,
+    required this.durationChange,
+    required this.hourlyRateChange,
     required this.savedMonths,
     required this.selectedMonth,
     this.compareMonth,
