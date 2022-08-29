@@ -69,6 +69,7 @@ flutter:
 
   assets:
     - assets/whitelogo.png
+    - assets/whitelogo.svg
     - assets/startimage.jpg
     - assets/indicator.svg
     - assets/lottie.json

@@ -1,16 +1,18 @@
 import 'package:agency_time/functions/authentication/blocs/login_cubit/login_cubit.dart';
-import 'package:agency_time/functions/authentication/web_view/web_registration.dart';
+import 'package:agency_time/utils/constants/text_styles.dart';
+import 'package:agency_time/utils/constants/validators.dart';
 import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/utils/widgets/custom_input_form.dart';
 import 'package:agency_time/utils/widgets/loading_screen.dart';
 import 'package:agency_time/utils/widgets/responsive_widgets/splitscreen.dart';
+import 'package:agency_time/views/enter_app_view/web/widgets/web_hero_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class WebWelcome extends StatelessWidget {
-  static String pageName = 'welcome';
+class WebLoginView extends StatelessWidget {
+  static String pageName = 'login';
 
-  WebWelcome({Key? key}) : super(key: key);
+  WebLoginView({Key? key}) : super(key: key);
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -24,33 +26,18 @@ class WebWelcome extends StatelessWidget {
         body: BlocBuilder<LoginCubit, LoginState>(
           builder: (context, state) {
             if (state is LoginLoading) {
-              return LoadingScreen();
+              return const LoadingScreen();
             }
             return ResponsiveSplitScreen(
               left: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Log In',
-                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600),
+                  const EnterAppHeadline(
+                    pushScreen: EnterAppPushScreen.register,
+                    title: 'Login',
+                    subTitle: 'Login to your account or',
                   ),
-                  const SizedBox(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        'Log in to your account or',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(
-                                context, WebRegistration.pageName);
-                          },
-                          child: Text('create a new account'))
-                    ],
-                  ),
-                  const SizedBox(height: 20),
                   Form(
                     key: _formKey,
                     child: Column(
@@ -62,23 +49,12 @@ class WebWelcome extends StatelessWidget {
                           onChanged: (v) {
                             email = v;
                           },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Indtast venligst en email';
-                            }
-                            bool emailValid = RegExp(
-                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                .hasMatch(value);
-                            if (!emailValid) {
-                              return 'Indtast venligst en gyldig mail';
-                            }
-                            return null;
-                          },
+                          validator: AppValidator.email,
                           keyboardType: TextInputType.emailAddress,
                           maxLines: 1,
                           hintText: 'Enter email',
                         ),
-                        SizedBox(height: 30),
+                        const SizedBox(height: 30),
                         CustomInputForm(
                           title: 'Password',
                           onChanged: (v) {
@@ -89,7 +65,7 @@ class WebWelcome extends StatelessWidget {
                           maxLines: 1,
                           hintText: 'Enter password',
                         ),
-                        SizedBox(height: 40),
+                        const SizedBox(height: 40),
                         CustomElevatedButton(
                           text: 'Log Ind',
                           onPressed: () {
@@ -100,14 +76,14 @@ class WebWelcome extends StatelessWidget {
                             }
                           },
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         state is LoginFailed
                             ? Text(
                                 state.errorMessage,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.red),
+                                style: AppTextStyle.smallRed,
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                       ],
                     ),
                   ),

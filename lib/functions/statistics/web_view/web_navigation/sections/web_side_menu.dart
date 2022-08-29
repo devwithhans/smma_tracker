@@ -4,6 +4,7 @@ import 'package:agency_time/functions/statistics/web_view/web_navigation/web_scr
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 
 class WebSideMenu extends StatefulWidget {
   const WebSideMenu({
@@ -35,9 +36,9 @@ class _WebSideMenuState extends State<WebSideMenu> {
             children: [
               Row(
                 children: [
-                  Image.asset(
-                    'assets/whitelogo.png',
-                    scale: 3,
+                  SvgPicture.asset(
+                    'assets/whitelogo.svg',
+                    width: 180,
                   ),
                 ],
               ),

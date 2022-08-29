@@ -232,9 +232,9 @@ class _OverviewDataState extends State<OverviewData> {
             ),
             Visibility(
               visible: widget.pieChartList != null,
-              child: StaggeredGridTile.count(
+              child: StaggeredGridTile.fit(
                 crossAxisCellCount: widePart(1),
-                mainAxisCellCount: breaked ? 1.2 : 7,
+                // mainAxisCellCount: breaked ? 2.1 : 7,
                 child: Builder(builder: (context) {
                   if (widePart(0.4) == 10) {
                     return Column(

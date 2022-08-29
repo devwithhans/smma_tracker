@@ -1,6 +1,6 @@
-import 'package:agency_time/functions/authentication/web_view/web_registration.dart';
-import 'package:agency_time/functions/payments/web_views/web_new_company/web_new_company.dart';
+import 'package:agency_time/functions/authentication/web_view/web_no_company.dart';
 import 'package:agency_time/functions/statistics/web_view/web_navigation/web_navigation.dart';
+import 'package:agency_time/views/enter_app_view/web/web_register_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -17,18 +17,15 @@ class Wrapper extends StatelessWidget {
         if (state.authStatus == AuthStatus.signedIn) {
           if (state.company!.subscription == null &&
               state.company!.roles[state.appUser!.id] == 'owner') {
-            return const WebNewCompany(
-              initialStep: 1,
-            );
+            return const WebNoCompany();
           }
-
           return const WebNavigation();
         }
         if (state.authStatus == AuthStatus.signedOut) {
-          return WebRegistration();
+          return WebRegisterView();
         }
         if (state.authStatus == AuthStatus.noCompany) {
-          return const WebNewCompany();
+          return const WebNoCompany();
         }
         return Scaffold(
           body: Center(

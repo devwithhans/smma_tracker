@@ -1,17 +1,18 @@
 import 'package:agency_time/functions/authentication/blocs/login_cubit/login_cubit.dart';
-import 'package:agency_time/functions/authentication/web_view/web_welcome.dart';
+import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/widgets/complience.dart';
 import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/utils/widgets/custom_input_form.dart';
 import 'package:agency_time/utils/widgets/loading_screen.dart';
 import 'package:agency_time/utils/widgets/responsive_widgets/splitscreen.dart';
+import 'package:agency_time/views/enter_app_view/web/web_login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class WebRegistration extends StatelessWidget {
+class WebRegisterView extends StatelessWidget {
   static const String pageName = 'register';
 
-  WebRegistration({Key? key}) : super(key: key);
+  WebRegisterView({Key? key}) : super(key: key);
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -28,8 +29,9 @@ class WebRegistration extends StatelessWidget {
         body: BlocBuilder<LoginCubit, LoginState>(
           builder: (context, state) {
             if (state is LoginLoading) {
-              return LoadingScreen();
+              return const LoadingScreen();
             }
+
             return ResponsiveSplitScreen(
                 left: Container(
               constraints: BoxConstraints(maxWidth: 500),
@@ -39,20 +41,20 @@ class WebRegistration extends StatelessWidget {
                 children: [
                   Text(
                     'Register now',
-                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600),
+                    style: AppTextStyle.largeBold,
                   ),
                   const SizedBox(height: 5),
                   Row(
                     children: [
                       Text(
                         'Register your account or',
-                        style: TextStyle(fontSize: 16),
+                        style: AppTextStyle.medium,
                       ),
                       TextButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, WebWelcome.pageName);
+                            Navigator.pushNamed(context, WebLoginView.pageName);
                           },
-                          child: Text('login to an existing'))
+                          child: const Text('login to an existing'))
                     ],
                   ),
                   const SizedBox(height: 20),

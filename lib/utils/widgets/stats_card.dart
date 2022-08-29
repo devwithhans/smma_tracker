@@ -28,7 +28,9 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double largeTextSize = responsive ? screenWidth * 0.017 : 45;
+    double smallTextSize = responsive ? screenWidth * 0.011 : 12;
     if (loading) {
       return Shimmer.fromColors(
         baseColor: Colors.grey[300]!,
@@ -65,7 +67,11 @@ class StatCard extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                  fontSize: responsive ? width * 0.011 : 12,
+                  fontSize: smallTextSize > 16
+                      ? 16
+                      : smallTextSize < 16
+                          ? 16
+                          : smallTextSize,
                   color: type == StatCardType.black
                       ? Colors.white70
                       : kColorGreyText),
@@ -74,8 +80,8 @@ class StatCard extends StatelessWidget {
             Text(
               value,
               style: TextStyle(
-                  fontSize: responsive ? width * 0.017 : 45,
-                  height: responsive ? width * 0.00055 : 1,
+                  fontSize: largeTextSize,
+                  height: responsive ? screenWidth * 0.00055 : 1,
                   fontWeight: FontWeight.w500,
                   color:
                       type == StatCardType.black ? Colors.white : Colors.black),

@@ -31,7 +31,7 @@ class _CustomPieChartState extends State<CustomPieChart> {
     //   return SizedBox();
     // }
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
       decoration: BoxDecoration(
         border: Border.all(color: kColorGrey),
         borderRadius: BorderRadius.circular(15),
@@ -51,6 +51,7 @@ class _CustomPieChartState extends State<CustomPieChart> {
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
                   ),
                 ),
+                SizedBox(height: 10),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Row(
