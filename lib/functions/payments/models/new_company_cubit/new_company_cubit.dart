@@ -8,18 +8,7 @@ import 'package:flutter/material.dart';
 part 'new_company_state.dart';
 
 class ManageCompanyCubit extends Cubit<ManageCompanyState> {
-  ManageCompanyCubit({this.initialStep = 1})
-      : super(ManageCompanyState(step: initialStep));
-
-  final int initialStep;
-
-  void plusStep() {
-    emit(state.copyWith(step: state.step + 1));
-  }
-
-  void minusStep() {
-    emit(state.copyWith(step: state.step - 1));
-  }
+  ManageCompanyCubit() : super(const ManageCompanyState());
 
   Future<void> createCompany(String userId) async {
     emit(state.copyWith(newCompanyStatus: NewCompanyStatus.loading));
@@ -36,8 +25,7 @@ class ManageCompanyCubit extends Cubit<ManageCompanyState> {
       });
 
       RestartWidget.restartApp(navigatorKey.currentContext!);
-      emit(state.copyWith(
-          newCompanyStatus: NewCompanyStatus.initial, step: state.step + 1));
+      emit(state.copyWith(newCompanyStatus: NewCompanyStatus.initial));
     } on FirebaseException catch (error) {
       // addError(AppError.noConnection(user));
       emit(state.copyWith(newCompanyStatus: NewCompanyStatus.failed));

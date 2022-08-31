@@ -1,6 +1,6 @@
 import 'package:agency_time/utils/constants/text_styles.dart';
-import 'package:agency_time/views/enter_app_view/web/web_login_view.dart';
-import 'package:agency_time/views/enter_app_view/web/web_register_view.dart';
+import 'package:agency_time/views/enter_app_view/web/web_login_user_view.dart';
+import 'package:agency_time/views/enter_app_view/web/web_register_user_view.dart';
 import 'package:flutter/material.dart';
 
 enum EnterAppPushScreen { login, register }
@@ -42,7 +42,7 @@ class EnterAppHeadline extends StatelessWidget {
       children: [
         Text(
           title,
-          style: AppTextStyle.largeBold,
+          style: AppTextStyle.boldLarge,
         ),
         const SizedBox(height: 5),
         Row(

@@ -15,15 +15,20 @@ class StripeRepo {
 
   Future<Product> getProduct() async {
     Map response = await stripeApi(
-        'https://api.stripe.com/v1/products/prod_M88SchKfAQKngE');
+      'https://api.stripe.com/v1/products/prod_M88SchKfAQKngE',
+    );
 
     Product product = Product(
-        defaultPriceId: response['default_price'],
-        description: response['description'] ?? '');
+      defaultPriceId: response['default_price'],
+      description: response['description'] ?? '',
+    );
 
     Map priceResponse = await stripeApi(
         'https://api.stripe.com/v1/prices/${product.defaultPriceId}');
-    product = product.copyWith(price: priceResponse['unit_amount'] / 100);
+    product = product.copyWith(
+      price: priceResponse['unit_amount'] / 100,
+      currency: priceResponse['currency'],
+    );
 
     return product;
   }
@@ -48,7 +53,6 @@ class StripeRepo {
         'success_url': "http://localhost:58212/",
         'cancel_url': "https://example.com/cancel",
       });
-      String url = '';
       DocumentSnapshot<Map<String, dynamic>> result = await FirebaseFirestore
           .instance
           .collection('users')
@@ -58,9 +62,11 @@ class StripeRepo {
           .snapshots()
           .firstWhere(
               (event) => event.data() != null && event.data()!['url'] != null)
-          .timeout(Duration(seconds: 60));
+          .timeout(const Duration(seconds: 60));
       js.context.callMethod('open', [result.data()!['url']]);
+      return;
     } on FirebaseFunctionsException catch (e) {
+      rethrow;
       print(e);
     }
   }
@@ -82,14 +88,17 @@ class Product {
   double price;
   String defaultPriceId;
   String description;
+  String currency;
 
   Product copyWith({
     double? price,
     String? defaultPriceId,
     String? description,
+    String? currency,
   }) {
     return Product(
       defaultPriceId: defaultPriceId ?? this.defaultPriceId,
+      currency: currency ?? this.currency,
       price: price ?? this.price,
       description: description ?? this.description,
     );
@@ -99,5 +108,6 @@ class Product {
     this.price = 0,
     required this.defaultPriceId,
     this.description = '',
+    this.currency = 'USD',
   });
 }

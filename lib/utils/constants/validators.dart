@@ -11,4 +11,11 @@ class AppValidator {
     }
     return null;
   }
+
+  static String? validateName(String? name) {
+    if (name == null || name.isEmpty) {
+      return 'place enter a valid name';
+    }
+    return null;
+  }
 }

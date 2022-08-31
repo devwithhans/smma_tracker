@@ -6,7 +6,6 @@ class ManageCompanyState extends Equatable {
   final String companyName;
   final String countyCode;
   final String vatNumber;
-  final int step;
   final NewCompanyStatus newCompanyStatus;
   final List<String> invites;
 
@@ -14,7 +13,6 @@ class ManageCompanyState extends Equatable {
     this.newCompanyStatus = NewCompanyStatus.initial,
     this.companyName = '',
     this.vatNumber = '',
-    this.step = 0,
     this.invites = const [],
     this.countyCode = 'en',
   });
@@ -28,7 +26,6 @@ class ManageCompanyState extends Equatable {
     int? step,
   }) {
     return ManageCompanyState(
-      step: step ?? this.step,
       invites: invites ?? this.invites,
       vatNumber: vatNumber ?? this.vatNumber,
       newCompanyStatus: newCompanyStatus ?? this.newCompanyStatus,
@@ -39,5 +36,5 @@ class ManageCompanyState extends Equatable {
 
   @override
   List<Object> get props =>
-      [step, companyName, countyCode, vatNumber, newCompanyStatus, invites];
+      [companyName, countyCode, vatNumber, newCompanyStatus, invites];
 }

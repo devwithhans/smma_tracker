@@ -38,7 +38,7 @@ class _CustomPieChartState extends State<CustomPieChart> {
       ),
       child: chartData.isEmpty
           ? Center(
-              child: Text('ikke nok data til at vise ${widget.title}'),
+              child: Text('No data to show ${widget.title}'),
             )
           : Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -59,19 +59,16 @@ class _CustomPieChartState extends State<CustomPieChart> {
                     children: <Widget>[
                       Container(
                         constraints: BoxConstraints(maxWidth: 140),
-                        child: Expanded(
-                          flex: 7,
-                          child: AspectRatio(
-                            aspectRatio: 1,
-                            child: PieChart(
-                              PieChartData(
-                                borderData: FlBorderData(
-                                  show: false,
-                                ),
-                                sectionsSpace: 0,
-                                // centerSpaceRadius: 100,
-                                sections: chartData,
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: PieChart(
+                            PieChartData(
+                              borderData: FlBorderData(
+                                show: false,
                               ),
+                              sectionsSpace: 0,
+                              // centerSpaceRadius: 100,
+                              sections: chartData,
                             ),
                           ),
                         ),
@@ -159,8 +156,7 @@ List<PieChartSectionData> overviewShowingSections({
         radius: 15,
 
         value: clientsProcentage,
-        title:
-            '${clientsProcentage.isFinite ? clientsProcentage.toInt() : 0}% Clients',
+        title: 'Clients',
         // badgeWidget: Text('$procentage%'),
         color: kChartColors[0],
       ),

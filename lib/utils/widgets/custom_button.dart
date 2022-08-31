@@ -5,6 +5,7 @@ class CustomElevatedButton extends StatelessWidget {
   const CustomElevatedButton(
       {Key? key,
       required this.text,
+      this.loading = false,
       required this.onPressed,
       this.backgroundColor = Colors.black,
       this.textColor = Colors.white})
@@ -14,6 +15,7 @@ class CustomElevatedButton extends StatelessWidget {
   final String text;
   final Color backgroundColor;
   final Color textColor;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +24,15 @@ class CustomElevatedButton extends StatelessWidget {
           minimumSize: MaterialStateProperty.all<Size>(Size(100, 55)),
           elevation: MaterialStateProperty.all<double>(0),
           backgroundColor: MaterialStateProperty.all<Color>(backgroundColor)),
-      onPressed: onPressed,
-      child: Text(
-        text,
-        style: TextStyle(color: textColor, fontSize: 18),
-      ),
+      onPressed: loading ? () {} : onPressed,
+      child: loading
+          ? const CircularProgressIndicator(
+              color: Colors.white,
+            )
+          : Text(
+              text,
+              style: TextStyle(color: textColor, fontSize: 18),
+            ),
     );
   }
 }

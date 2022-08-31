@@ -1,37 +1,38 @@
-import 'package:agency_time/functions/clients/views/internal_client_list_view/internal_client_list_view.dart';
+import 'package:agency_time/functions/authentication/models/company.dart';
 import 'package:agency_time/functions/clients/web_view/web_clients_view/web_clients_listview.dart';
 import 'package:agency_time/functions/clients/web_view/web_internals_view/web_internals_view.dart';
 import 'package:agency_time/functions/statistics/views/settings_view/settings_view.dart';
-import 'package:agency_time/functions/statistics/web_view/web_employees/web_employees.dart';
-import 'package:agency_time/functions/statistics/web_view/web_overview/web_company_overview.dart';
-import 'package:agency_time/functions/statistics/web_view/web_overview/web_user_overview.dart';
+import 'package:agency_time/views/data_visualisation_views/web/company_data_view.dart';
+import 'package:agency_time/views/data_visualisation_views/web/user_data_view.dart';
+import 'package:agency_time/views/lists_view/web/web_clients_view.dart';
+import 'package:agency_time/views/lists_view/web/web_employees_view.dart';
 import 'package:flutter/material.dart';
 
 List<MenuObject> webScreens = [
-  MenuObject(
-    icon: Icons.bar_chart_rounded,
-    page: const CompanyOverview(),
-    title: 'Company stats',
-  ),
-  MenuObject(
-    icon: Icons.person,
-    page: const UserOverview(),
-    title: 'My stats',
-  ),
   MenuObject(
     icon: Icons.store,
     page: const WebClientsView(),
     title: 'Clients',
   ),
   MenuObject(
-    icon: Icons.house_rounded,
-    page: const WebInternalsView(),
-    title: 'Internals',
+    icon: Icons.group,
+    page: const WebEmployeesView(),
+    title: 'Employees',
   ),
   MenuObject(
-    icon: Icons.group,
-    page: const WebEmployees(),
-    title: 'Employees',
+    icon: Icons.bar_chart_rounded,
+    page: const CompanyDataView(),
+    title: 'Company stats',
+  ),
+  MenuObject(
+    icon: Icons.person,
+    page: const UserDataView(),
+    title: 'My stats',
+  ),
+  MenuObject(
+    icon: Icons.house_rounded,
+    page: const WebClientsView(),
+    title: 'Internals',
   ),
   MenuObject(
     icon: Icons.settings,

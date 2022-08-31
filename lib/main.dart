@@ -3,12 +3,12 @@ import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit
 import 'package:agency_time/functions/clients/views/add_clients_view.dart';
 import 'package:agency_time/functions/clients/repos/client_repo.dart';
 import 'package:agency_time/functions/statistics/repos/settings_repo.dart';
-import 'package:agency_time/functions/payments/web_views/web_new_company/web_new_company.dart';
 import 'package:agency_time/functions/tracking/repos/tracker_repo.dart';
 import 'package:agency_time/functions/authentication/views/wrapper.dart';
 import 'package:agency_time/utils/error_handling/error_handler.dart';
-import 'package:agency_time/views/enter_app_view/web/web_login_view.dart';
-import 'package:agency_time/views/enter_app_view/web/web_register_view.dart';
+import 'package:agency_time/views/enter_app_view/web/web_login_user_view.dart';
+import 'package:agency_time/views/enter_app_view/web/web_register_user_view.dart';
+import 'package:agency_time/views/register_company_view/web/web_register_company_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,16 +22,16 @@ import 'package:overlay_support/overlay_support.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
 
-  // setUrlStrategy(PathUrlStrategy());
+  setUrlStrategy(PathUrlStrategy());
 
-  // FirebaseFirestore.instance.settings = const Settings(
-  //   host: 'localhost:8080',
-  //   sslEnabled: false,
-  //   persistenceEnabled: false,
-  // );
-  // FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+  FirebaseFirestore.instance.settings = const Settings(
+    host: 'localhost:8080',
+    sslEnabled: false,
+    persistenceEnabled: false,
+  );
+  FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
 
   BlocOverrides.runZoned(
     () => runApp(RestartWidget(child: const MyApp())),

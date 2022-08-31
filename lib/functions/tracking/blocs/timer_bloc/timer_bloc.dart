@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:agency_time/functions/clients/blocs/clients_bloc/clients_bloc.dart';
-import 'package:agency_time/functions/tracking/blocs/timer_bloc/ticker.dart';
 import 'package:agency_time/functions/tracking/models/tag.dart';
+import 'package:agency_time/logic/timer/timer_bloc/ticker.dart';
 import 'package:agency_time/main.dart';
 import 'package:agency_time/functions/clients/models/client.dart';
 import 'package:agency_time/functions/tracking/repos/tracker_repo.dart';
@@ -10,8 +10,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-part 'timer_event.dart';
 part 'timer_state.dart';
+part 'timer_event.dart';
 
 class TimerBloc extends Bloc<TimerEvent, TimerState> {
   final Ticker _ticker;
@@ -107,7 +107,6 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   void _onReset(TimerReset event, Emitter<TimerState> emit) async {
     // _tickerSubscription!.pause();
     Navigator.pop(navigatorKey.currentContext!);
-
     TimerRunning timerRunningSnapshot = state as TimerRunning;
     emit(timerRunningSnapshot.copyWith(timerStatus: TimerStatus.loading));
     Duration stopDuration = event.duration;
@@ -120,7 +119,6 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
       duration: event.duration,
       newTag: event.newTag,
     );
-
     add(CancelTracking());
   }
 

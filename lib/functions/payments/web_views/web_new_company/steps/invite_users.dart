@@ -101,7 +101,6 @@ class _InviteUsersState extends State<InviteUsers> {
                 context
                     .read<ManageCompanyCubit>()
                     .updateValues(invites: teammates);
-                context.read<ManageCompanyCubit>().plusStep();
               })
         ],
       ),

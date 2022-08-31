@@ -1,25 +1,30 @@
+import 'dart:ui';
+import 'package:agency_time/functions/clients/blocs/clients_bloc/clients_bloc.dart';
 import 'package:agency_time/functions/statistics/blocs/navigation_cubit/navigation_cubit.dart';
 import 'package:agency_time/functions/statistics/blocs/settings_bloc/settings_bloc.dart';
 import 'package:agency_time/functions/statistics/blocs/stats_bloc/stats_bloc.dart';
 import 'package:agency_time/functions/statistics/web_view/web_navigation/sections/web_side_menu.dart';
 import 'package:agency_time/functions/statistics/web_view/web_navigation/web_screens.dart';
 import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
-import 'package:agency_time/functions/clients/blocs/clients_bloc/clients_bloc.dart';
-import 'package:agency_time/functions/tracking/blocs/timer_bloc/ticker.dart';
-import 'package:agency_time/functions/tracking/blocs/timer_bloc/timer_bloc.dart';
 import 'package:agency_time/functions/clients/repos/client_repo.dart';
 import 'package:agency_time/functions/statistics/repos/settings_repo.dart';
+import 'package:agency_time/functions/tracking/blocs/timer_bloc/timer_bloc.dart';
 import 'package:agency_time/functions/tracking/models/tag.dart';
 import 'package:agency_time/functions/tracking/repos/tracker_repo.dart';
 import 'package:agency_time/functions/tracking/views/finish_tracking/finish_tracking_view.dart';
+import 'package:agency_time/logic/timer/timer_bloc/ticker.dart';
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:agency_time/utils/functions/print_duration.dart';
+import 'package:agency_time/views/payment_view/web/web_checkout_overlap.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:side_sheet/side_sheet.dart';
 
 class WebNavigation extends StatelessWidget {
-  const WebNavigation({Key? key}) : super(key: key);
+  const WebNavigation({this.hasActiveSubscription = true, Key? key})
+      : super(key: key);
+
+  final bool hasActiveSubscription;
 
   @override
   Widget build(
@@ -56,14 +61,13 @@ class WebNavigation extends StatelessWidget {
                         flex: 8,
                         child: webScreens[state.currentIndex].page,
                       ),
-                      // WebClientsSideView(),
                     ],
                   ),
                   BlocBuilder<TimerBloc, TimerState>(
                     builder: (context, state) {
                       if (state is TimerRunning) {
                         if (state.timerStatus == TimerStatus.loading) {
-                          return Center(
+                          return const Center(
                             child: CircularProgressIndicator(),
                           );
                         }
@@ -71,7 +75,7 @@ class WebNavigation extends StatelessWidget {
                           right: 0,
                           bottom: 60,
                           child: Container(
-                            padding: EdgeInsets.all(20),
+                            padding: const EdgeInsets.all(20),
                             decoration: const BoxDecoration(
                                 color: kColorGreen,
                                 borderRadius: BorderRadius.only(
@@ -148,9 +152,12 @@ class WebNavigation extends StatelessWidget {
                           ),
                         );
                       }
-                      return SizedBox();
+                      return const SizedBox();
                     },
                   ),
+                  hasActiveSubscription
+                      ? const SizedBox()
+                      : const WebCheckoutOverlap(),
                 ],
               ),
             );
