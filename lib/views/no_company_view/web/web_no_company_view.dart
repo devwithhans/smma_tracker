@@ -1,10 +1,11 @@
-import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
-import 'package:agency_time/functions/authentication/models/invite.dart';
+import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
+import 'package:agency_time/models/invite.dart';
 import 'package:agency_time/utils/constants/spacings.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/widgets/buttons/xl_border_button.dart';
 import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/views/register_company_view/web/web_register_company_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,7 +14,7 @@ class WebNoCompany extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthState authState = context.read<AuthCubit>().state;
+    AuthorizationState authState = context.read<AuthorizationCubit>().state;
     bool hasInvite = authState.invite != null;
     return Scaffold(
       body: Padding(
@@ -63,7 +64,14 @@ class NoInvite extends StatelessWidget {
           mainText: 'I am part of a team',
           subText: 'Join an existing company',
           onPressed: () {},
-        )
+        ),
+        mediumY,
+        CustomTextButton(
+          text: 'Sign out',
+          onPressed: () {
+            FirebaseAuth.instance.signOut();
+          },
+        ),
       ],
     );
   }
@@ -97,7 +105,7 @@ class HasInvite extends StatelessWidget {
         BigBorderButton(
           mainText: 'Join the ${invite.companyName} team',
           onPressed: () {
-            context.read<AuthCubit>().acceptInvite(invite.id);
+            // context.read<AuthCubit>().acceptInvite(invite.id);
           },
         ),
         mediumY,
@@ -106,7 +114,14 @@ class HasInvite extends StatelessWidget {
           onPressed: () {
             Navigator.pushNamed(context, WebNewCompany.pageName);
           },
-        )
+        ),
+        mediumY,
+        CustomTextButton(
+          text: 'Sign out',
+          onPressed: () {
+            FirebaseAuth.instance.signOut();
+          },
+        ),
       ],
     );
   }

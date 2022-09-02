@@ -1,13 +1,12 @@
-import 'package:agency_time/functions/statistics/models/company_month.dart';
-import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
-import 'package:agency_time/functions/authentication/models/company.dart';
-import 'package:agency_time/functions/authentication/models/user.dart';
 import 'package:agency_time/functions/tracking/models/tag.dart';
+import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
+import 'package:agency_time/models/company.dart';
+import 'package:agency_time/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 
 class SettingsRepo {
-  AuthCubit authCubit;
+  AuthorizationCubit authCubit;
   SettingsRepo(this.authCubit);
   String? getCountryCodeFromCompanyDoc() {
     Company company = authCubit.state.company!;

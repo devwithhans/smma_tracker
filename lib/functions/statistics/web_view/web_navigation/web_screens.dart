@@ -1,6 +1,3 @@
-import 'package:agency_time/functions/authentication/models/company.dart';
-import 'package:agency_time/functions/clients/web_view/web_clients_view/web_clients_listview.dart';
-import 'package:agency_time/functions/clients/web_view/web_internals_view/web_internals_view.dart';
 import 'package:agency_time/functions/statistics/views/settings_view/settings_view.dart';
 import 'package:agency_time/views/data_visualisation_views/web/company_data_view.dart';
 import 'package:agency_time/views/data_visualisation_views/web/user_data_view.dart';

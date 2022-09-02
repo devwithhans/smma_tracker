@@ -1,3 +1,4 @@
+import 'package:agency_time/logic/authentication/login_cubit/login_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -6,23 +7,22 @@ class SignInRepo {
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<void> registerUser(
-      {required String password,
-      required String email,
-      required String name,
-      required bool newletter}) async {
+  Future<void> registerUser({required RegisterLoad registerLoad}) async {
     UserCredential userCredential = await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(email: email, password: password);
+        .createUserWithEmailAndPassword(
+            email: registerLoad.email, password: registerLoad.password);
 
     if (userCredential.user != null) {
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)
           .set({
-        'firstName': splitNames(name).first,
-        'lastName': splitNames(name).length > 1 ? splitNames(name).last : '',
-        'email': email,
-        'newletter': newletter
+        'firstName': splitNames(registerLoad.name).first,
+        'lastName': splitNames(registerLoad.name).length > 1
+            ? splitNames(registerLoad.name).last
+            : '',
+        'email': registerLoad.email,
+        'newletter': registerLoad.newletter
       });
     }
   }

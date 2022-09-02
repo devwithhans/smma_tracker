@@ -14,7 +14,6 @@ class ErrorHandler extends BlocObserver {
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) async {
     ErrorContent appError = error as ErrorContent;
-
     super.onError(bloc, error, stackTrace);
     if (error.user != null) {
       sendSlackMessage(SlackErrorMessage(

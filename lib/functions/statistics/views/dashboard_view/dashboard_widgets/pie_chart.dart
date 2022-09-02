@@ -1,6 +1,6 @@
 import 'package:agency_time/functions/statistics/models/company_month.dart';
-import 'package:agency_time/functions/clients/models/client.dart';
 import 'package:agency_time/functions/tracking/models/tag.dart';
+import 'package:agency_time/models/client.dart';
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -167,19 +167,20 @@ List<PieChartSectionData> overviewShowingSections({
     (element) {
       Duration duration = Duration();
       if (userId != null) {
-        List<Employee> employeeTestList = element.selectedMonth.employees
+        List<Employee> employeeTestList = element.selectedMonth!.employees
             .where((element) => element.member.id == userId)
             .toList();
         if (employeeTestList.isNotEmpty) {
           duration = employeeTestList.first.totalDuration;
         }
       } else {
-        duration = element.selectedMonth.duration;
+        duration = element.selectedMonth!.duration;
       }
       if (duration > Duration()) {
-        double internalProcentage = ((element.selectedMonth.duration.inSeconds /
-                totalDuration.inSeconds) *
-            100);
+        double internalProcentage =
+            ((element.selectedMonth!.duration.inSeconds /
+                    totalDuration.inSeconds) *
+                100);
         index++;
         result.add(PieChartSectionData(
           showTitle: false,

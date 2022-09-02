@@ -1,10 +1,9 @@
-import 'package:agency_time/functions/clients/models/client.dart';
 import 'package:agency_time/functions/clients/repos/client_repo.dart';
-import 'package:agency_time/functions/tracking/blocs/timer_bloc/timer_bloc.dart';
 import 'package:agency_time/functions/tracking/models/tag.dart';
-import 'package:agency_time/functions/tracking/repos/tracker_repo.dart';
 import 'package:agency_time/functions/tracking/views/finish_tracking/finish_tracking_view.dart';
-import 'package:agency_time/utils/constants/colors.dart';
+import 'package:agency_time/logic/timer/repositories/timer_repo.dart';
+import 'package:agency_time/logic/timer/timer_bloc/timer_bloc.dart';
+import 'package:agency_time/models/client.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/functions/print_duration.dart';
 import 'package:agency_time/utils/widgets/procentage_card.dart';
@@ -28,20 +27,20 @@ class ClientListResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TimerBloc, TimerState>(
+    return BlocBuilder<TimerBloc, StopWatchState>(
       builder: (context, state) {
         bool isTracking;
         bool isLoading;
-
         return Column(
             children: searchResult.map((Client client) {
-          if (state is TimerRunning && state.client.id == client.id) {
-            isLoading = state.loading;
+          if (state.client != null && state.client!.id == client.id) {
+            isLoading = state.timerStatus == TimerStatus.loading;
             isTracking = true;
           } else {
             isLoading = false;
             isTracking = false;
           }
+
           if (isLoading) {
             return Container(
               height: 90,
@@ -52,16 +51,16 @@ class ClientListResult extends StatelessWidget {
             onPressed: () {},
             items: [
               TwoLineText(
-                  subTitle: moneyFormatter.format(client.selectedMonth.mrr),
+                  subTitle: moneyFormatter.format(client.selectedMonth!.mrr),
                   title: client.name),
               TwoLineText(
-                title: printDuration(client.selectedMonth.duration),
+                title: printDuration(client.selectedMonth!.duration),
                 subTitle: client.durationChange.isNegative
                     ? '- ${printDuration(client.durationChange)} / last'
                     : '+ ${printDuration(client.durationChange)} / last',
               ),
               TwoLineText(
-                title: moneyFormatter.format(client.selectedMonth.hourlyRate),
+                title: moneyFormatter.format(client.selectedMonth!.hourlyRate),
                 subTitle: ProcentageChange(
                     procentage: client.hourlyRateChange.isFinite
                         ? client.hourlyRateChange
@@ -72,42 +71,38 @@ class ClientListResult extends StatelessWidget {
                 children: [
                   Text(
                     DateFormat('EEE, dd MMM HH:MM ')
-                        .format(client.selectedMonth.updatedAt),
+                        .format(client.selectedMonth!.updatedAt),
                     style: AppTextStyle.medium,
                   ),
                   PlayButton(
                     isTracking: isTracking,
                     onPressed: () {
-                      // if (isTracking && state is TimerRunning) {
-                      //   TimerRunning timerState = state;
-
-                      //   SideSheet.right(
-                      //     width: 500,
-                      //     body: FinishTrackingDialog(
-                      //       onDelete: () {
-                      //         context.read<TrackerRepo>().deleteTracking(
-                      //             trackingDocId: timerState.documentId!);
-                      //       },
-                      //       onSave: (Tag? newTag, Duration duration) {
-                      //         context.read<TimerBloc>().add(
-                      //               TimerReset(
-                      //                   duration: duration, newTag: newTag),
-                      //             );
-                      //       },
-                      //       client: timerState.client,
-                      //       duration: Duration(seconds: timerState.duration),
-                      //       tags: context.read<ClientsRepo>().getTags(),
-                      //     ),
-                      //     context: context,
-                      //   );
-                      // } else {
-                      //   context.read<TimerBloc>().add(
-                      //         TimerStarted(
-                      //           client: ClientLite.fromClient(client),
-                      //           duration: Duration(),
-                      //         ),
-                      //       );
-                      // }
+                      if (state.timerStatus == TimerStatus.running) {
+                        SideSheet.right(
+                          width: 500,
+                          body: FinishTrackingDialog(
+                            onDelete: () {
+                              context
+                                  .read<TimerRepository>()
+                                  .deleteTracking(state.trackingDocumentId!);
+                            },
+                            onSave: (Tag? newTag, Duration duration) {
+                              context.read<TimerBloc>().add(
+                                    StopTimer(
+                                        duration: duration, newTag: newTag),
+                                  );
+                            },
+                            client: state.client!,
+                            duration: Duration(seconds: state.duration),
+                            tags: context.read<ClientsRepo>().getTags(),
+                          ),
+                          context: context,
+                        );
+                      } else {
+                        context
+                            .read<TimerBloc>()
+                            .add(StartTimer(client: client));
+                      }
                     },
                   )
                 ],

@@ -5,14 +5,15 @@ import 'package:agency_time/functions/statistics/blocs/settings_bloc/settings_bl
 import 'package:agency_time/functions/statistics/blocs/stats_bloc/stats_bloc.dart';
 import 'package:agency_time/functions/statistics/web_view/web_navigation/sections/web_side_menu.dart';
 import 'package:agency_time/functions/statistics/web_view/web_navigation/web_screens.dart';
-import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
 import 'package:agency_time/functions/clients/repos/client_repo.dart';
 import 'package:agency_time/functions/statistics/repos/settings_repo.dart';
-import 'package:agency_time/functions/tracking/blocs/timer_bloc/timer_bloc.dart';
 import 'package:agency_time/functions/tracking/models/tag.dart';
-import 'package:agency_time/functions/tracking/repos/tracker_repo.dart';
 import 'package:agency_time/functions/tracking/views/finish_tracking/finish_tracking_view.dart';
-import 'package:agency_time/logic/timer/timer_bloc/ticker.dart';
+import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
+import 'package:agency_time/logic/timer/repositories/timer_repo.dart';
+import 'package:agency_time/logic/timer/repositories/ticker.dart';
+import 'package:agency_time/logic/timer/timer_bloc/timer_bloc.dart';
+import 'package:agency_time/models/client.dart';
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:agency_time/utils/functions/print_duration.dart';
 import 'package:agency_time/views/payment_view/web/web_checkout_overlap.dart';
@@ -33,21 +34,28 @@ class WebNavigation extends StatelessWidget {
     return BlocProvider(
       create: (context) => ClientsBloc(
           clientsRepo: context.read<ClientsRepo>(),
-          company: context.read<AuthCubit>().state.company!),
+          company: context.read<AuthorizationCubit>().state.company!),
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => NavigationCubit()),
+          // BlocProvider(
+          //     create: (context) => TimerBloc(
+          //         context.read<AuthCubit>().state.appUser!.companyId,
+          //         ticker: const Ticker(),
+          //         trackerRepository: context.read<TrackerRepo>(),
+          //         clientsBloc: context.read<ClientsBloc>())),
           BlocProvider(
-              create: (context) => TimerBloc(
-                  context.read<AuthCubit>().state.appUser!.companyId,
-                  ticker: const Ticker(),
-                  trackerRepository: context.read<TrackerRepo>(),
-                  clientsBloc: context.read<ClientsBloc>())),
+            create: (context) => TimerBloc(
+              stopWatchRepository: context.read<TimerRepository>(),
+              ticker: const Ticker(),
+              clientsBloc: context.read<ClientsBloc>(),
+            ),
+          ),
           BlocProvider(
               create: (context) => SettingsBloc(context.read<SettingsRepo>())),
           BlocProvider(
               create: (context) => StatsBloc(context.read<SettingsRepo>(),
-                  context.read<AuthCubit>().state.company!)),
+                  context.read<AuthorizationCubit>().state.company!)),
         ],
         child: BlocBuilder<NavigationCubit, NavigationState>(
           builder: (context, state) {
@@ -63,14 +71,10 @@ class WebNavigation extends StatelessWidget {
                       ),
                     ],
                   ),
-                  BlocBuilder<TimerBloc, TimerState>(
+                  BlocBuilder<TimerBloc, StopWatchState>(
                     builder: (context, state) {
-                      if (state is TimerRunning) {
-                        if (state.timerStatus == TimerStatus.loading) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
+                      if (state.client != null) {
+                        Client client = state.client!;
                         return Positioned(
                           right: 0,
                           bottom: 60,
@@ -89,7 +93,7 @@ class WebNavigation extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Tracking  ${state.client.name}',
+                                      'Tracking  ${client.name}',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w500),
@@ -112,21 +116,22 @@ class WebNavigation extends StatelessWidget {
                                         width: 500,
                                         body: FinishTrackingDialog(
                                           onDelete: () {
-                                            context
-                                                .read<TrackerRepo>()
-                                                .deleteTracking(
-                                                    trackingDocId:
-                                                        state.documentId!);
+                                            // context
+                                            //     .read<TrackerRepo>()
+                                            //     .deleteTracking(
+                                            //         trackingDocId: state
+                                            //             .trackingDocumentId!);
                                           },
                                           onSave:
                                               (Tag? newTag, Duration duration) {
                                             context.read<TimerBloc>().add(
-                                                  TimerReset(
-                                                      duration: duration,
-                                                      newTag: newTag),
+                                                  StopTimer(
+                                                    duration: duration,
+                                                    newTag: newTag,
+                                                  ),
                                                 );
                                           },
-                                          client: state.client,
+                                          client: client,
                                           duration:
                                               Duration(seconds: state.duration),
                                           tags: context

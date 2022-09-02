@@ -1,9 +1,9 @@
 import 'package:agency_time/functions/statistics/views/settings_view/settings_sub_views/edit_tags_view/edit_or_add_tag.dart';
-import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
-import 'package:agency_time/functions/authentication/models/company.dart';
-import 'package:agency_time/functions/authentication/models/user.dart';
+import 'package:agency_time/models/company.dart';
+import 'package:agency_time/models/user.dart';
 import 'package:agency_time/functions/clients/views/client_view/widgets/custom_app_bar.dart';
 import 'package:agency_time/functions/tracking/models/tag.dart';
+import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/utils/widgets/custom_searchfield.dart';
 import 'package:agency_time/utils/widgets/filter_scroll.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,7 +25,7 @@ class _EditTagsViewState extends State<EditTagsView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    searchResult = BlocProvider.of<AuthCubit>(context)
+    searchResult = BlocProvider.of<AuthorizationCubit>(context)
         .state
         .company!
         .tags
@@ -37,8 +37,9 @@ class _EditTagsViewState extends State<EditTagsView> {
 
   @override
   Widget build(BuildContext context) {
-    AppUser user = BlocProvider.of<AuthCubit>(context).state.appUser!;
-    Company company = BlocProvider.of<AuthCubit>(context).state.company!;
+    AppUser user = BlocProvider.of<AuthorizationCubit>(context).state.appUser!;
+    Company company =
+        BlocProvider.of<AuthorizationCubit>(context).state.company!;
     List<Tag> tags = company.tags.where(((element) => element.active)).toList();
     return Scaffold(
       body: SafeArea(
@@ -113,7 +114,7 @@ class _EditTagsViewState extends State<EditTagsView> {
         builder: ((context) => editTag(isNewTag: newTag, tags: tag)),
       ),
     );
-    searchResult = BlocProvider.of<AuthCubit>(context)
+    searchResult = BlocProvider.of<AuthorizationCubit>(context)
         .state
         .company!
         .tags

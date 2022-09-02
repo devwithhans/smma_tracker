@@ -1,6 +1,6 @@
-part of 'stopwatch_bloc.dart';
+part of 'timer_bloc.dart';
 
-enum TimerStatus { running, initial, pused }
+enum TimerStatus { running, initial, paused, loading }
 
 class StopWatchState extends Equatable {
   final Client? client;
@@ -9,7 +9,7 @@ class StopWatchState extends Equatable {
   final String? trackingDocumentId;
   final DateTime? start;
   StopWatchState({
-    this.timerStatus = TimerStatus.running,
+    this.timerStatus = TimerStatus.initial,
     this.client,
     this.duration = 0,
     this.trackingDocumentId,
@@ -21,17 +21,17 @@ class StopWatchState extends Equatable {
     TimerStatus? timerStatus,
     int? duration,
     String? trackingDocumentId,
-    DateTime? start,
+    DateTime? startTime,
   }) {
     return StopWatchState(
       client: client ?? this.client,
       timerStatus: timerStatus ?? this.timerStatus,
       duration: duration ?? this.duration,
       trackingDocumentId: trackingDocumentId ?? this.trackingDocumentId,
-      start: start ?? this.start,
+      start: startTime ?? this.start,
     );
   }
 
   @override
-  List get props => [];
+  List get props => [duration, timerStatus, client, trackingDocumentId, start];
 }

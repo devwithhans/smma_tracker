@@ -1,7 +1,8 @@
 import 'package:agency_time/functions/tracking/models/tracking.dart';
+import 'package:agency_time/logic/timer/repositories/timer_repo.dart';
+import 'package:agency_time/logic/timer/timer_bloc/timer_bloc.dart';
 import 'package:agency_time/main.dart';
 
-import 'package:agency_time/functions/tracking/repos/tracker_repo.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ import 'package:flutter/material.dart';
 part 'update_tracking_state.dart';
 
 class UpdateTrackingCubit extends Cubit<UpdateTrackingState> {
-  TrackerRepo _trackerRepository;
+  TimerRepository _trackerRepository;
 
   UpdateTrackingCubit(this._trackerRepository) : super(UpdateTrackingInitial());
 
@@ -34,7 +35,7 @@ class UpdateTrackingCubit extends Cubit<UpdateTrackingState> {
     String trackingId,
   ) async {
     emit(UpdateTrackingLoading());
-    await _trackerRepository.deleteTracking(trackingDocId: trackingId);
+    await _trackerRepository.deleteTracking(trackingId);
     emit(UpdateTrackingSucces());
     Navigator.popUntil(navigatorKey.currentContext!, (route) => route.isFirst);
   }

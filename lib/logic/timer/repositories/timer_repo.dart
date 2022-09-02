@@ -1,36 +1,35 @@
-import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
-import 'package:agency_time/functions/clients/models/client.dart';
-import 'package:agency_time/functions/tracking/blocs/timer_bloc/timer_bloc.dart';
 import 'package:agency_time/functions/tracking/models/tag.dart';
-
-import 'package:agency_time/functions/authentication/models/user.dart';
+import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
+import 'package:agency_time/logic/timer/timer_bloc/timer_bloc.dart';
+import 'package:agency_time/models/client.dart';
+import 'package:agency_time/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class TrackerRepo {
-  AuthCubit authCubit;
-  TrackerRepo(this.authCubit);
+class TimerRepository {
+  AuthorizationCubit authCubit;
 
-  Future<String?> beginTracking(
-      {required ClientLite client, required DateTime start}) async {
+  TimerRepository(this.authCubit);
+
+  Future<String?> createTrackingDocumentAndGetId(
+      {required Client client, required DateTime start}) async {
     AppUser user = authCubit.state.appUser!;
-
     try {
       final result = await FirebaseFirestore.instance
           .collection('companies')
           .doc(user.companyId)
           .collection('trackings')
-          .add({
-        'start': start,
-        'clientId': client.id,
-        'internal': client.internal,
-        'userId': user.id,
-        'userName': user.firstName,
-        'clientName': client.name,
-        'finished': false,
-      });
+          .add(
+        {
+          'start': start,
+          'clientId': client.id,
+          'internal': client.internal,
+          'userId': user.id,
+          'userName': user.firstName,
+          'clientName': client.name,
+          'finished': false,
+        },
+      );
       return result.id;
     } catch (e) {
       print(e);
@@ -67,30 +66,21 @@ class TrackerRepo {
       return "SUCCES";
     } on FirebaseFunctionsException catch (error) {
       print(error);
-      print(error.code);
-      print(error.message);
     }
   }
 
-  Future<String?> deleteTracking({
-    required String trackingDocId,
-  }) async {
+  Future<void> deleteTracking(String trackingDocId) async {
     AppUser user = authCubit.state.appUser!;
-    try {
-      await FirebaseFirestore.instance
-          .collection('companies')
-          .doc(user.companyId)
-          .collection('trackings')
-          .doc(trackingDocId)
-          .delete();
-    } on FirebaseFunctionsException catch (error) {
-      print(error);
-      print(error.code);
-      print(error.message);
-    }
+
+    await FirebaseFirestore.instance
+        .collection('companies')
+        .doc(user.companyId)
+        .collection('trackings')
+        .doc(trackingDocId)
+        .delete();
   }
 
-  Stream<DocumentSnapshot<Map<String, dynamic>>> trackerSubscription(
+  Stream<DocumentSnapshot<Map<String, dynamic>>> trackerDocumentSubscription(
       String documentId) {
     AppUser user = authCubit.state.appUser!;
 
@@ -102,7 +92,7 @@ class TrackerRepo {
         .snapshots();
   }
 
-  Future<TimerEvent?> checkForRunningTimer() async {
+  Future<StartExistingTimer?> checkForRunningTimer() async {
     AppUser user = authCubit.state.appUser!;
 
     CollectionReference trackings = FirebaseFirestore.instance
@@ -119,37 +109,16 @@ class TrackerRepo {
       QueryDocumentSnapshot<Object?> singleResult = result.docs.first;
       DateTime startTime = singleResult['start'].toDate();
       int seconds = DateTime.now().difference(startTime).inSeconds;
-      return TimerStarted(
+      return StartExistingTimer(
         duration: Duration(seconds: seconds),
-        documentId: singleResult.id,
-        start: startTime,
-        client: ClientLite(
-          id: singleResult['clientId'],
+        trackingDocumentId: singleResult.id,
+        startDate: startTime,
+        client: Client(
           name: singleResult['clientName'],
-          internal: singleResult['internal'],
+          id: singleResult['clientId'],
         ),
       );
     }
     return null;
-  }
-
-  Future<void> addTag(Tag tag) async {
-    AppUser user = authCubit.state.appUser!;
-
-    try {
-      // FirebaseFirestore.instance.useFirestoreEmulator('localHost', 8080);
-
-      FirebaseFirestore.instance
-          .collection('companies')
-          .doc(user.companyId)
-          .update({
-        'tags.${tag.id}': {
-          'tag': tag.tag,
-          'description': tag.description,
-        }
-      });
-    } on FirebaseFunctionsException catch (error) {
-      rethrow;
-    }
   }
 }

@@ -1,4 +1,4 @@
-import 'package:agency_time/functions/statistics/web_view/web_overview/widgets/overview_stat_card.dart';
+import 'package:agency_time/models/company.dart';
 import 'package:agency_time/views/data_visualisation_views/web/widgets/data_card.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../../data_visualisation_dependencies.dart';
@@ -53,7 +53,7 @@ class _DataVisualisationTemplateState extends State<DataVisualisationTemplate> {
     bool breaked = width > breakPoint;
     int widePart(double procentage) =>
         breaked ? (gridWidth * procentage).ceil() : 10;
-    Company company = context.read<AuthCubit>().state.company!;
+    Company company = context.read<AuthorizationCubit>().state.company!;
 
     final NumberFormat moneyFormatter = CustomCurrencyFormatter.getFormatter(
         countryCode: company.countryCode, short: false);

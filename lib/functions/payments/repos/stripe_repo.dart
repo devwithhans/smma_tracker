@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
+import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:http/http.dart' as http;
 import 'dart:js' as js;
 
 class StripeRepo {
-  AuthCubit authCubit;
+  AuthorizationCubit authCubit;
   StripeRepo(this.authCubit);
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;

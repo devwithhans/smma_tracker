@@ -1,18 +1,17 @@
 import 'package:agency_time/functions/statistics/web_view/web_navigation/web_navigation.dart';
+import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/views/enter_app_view/web/web_register_user_view.dart';
 import 'package:agency_time/views/no_company_view/web/web_no_company_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 
-import '../blocs/auth_cubit/auth_cubit.dart';
-
 class Wrapper extends StatelessWidget {
   const Wrapper({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthCubit, AuthState>(
+    return BlocBuilder<AuthorizationCubit, AuthorizationState>(
       builder: ((context, state) {
         print(state.authStatus);
         if (state.authStatus == AuthStatus.signedIn) {

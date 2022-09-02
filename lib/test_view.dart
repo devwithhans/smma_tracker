@@ -1,6 +1,6 @@
-import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
+import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/utils/widgets/custom_button.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +10,8 @@ class TestingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthState auth = BlocProvider.of<AuthCubit>(context).state;
+    AuthorizationState auth =
+        BlocProvider.of<AuthorizationCubit>(context).state;
 
     return Scaffold(
       appBar: AppBar(

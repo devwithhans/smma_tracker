@@ -1,4 +1,4 @@
-import 'package:agency_time/functions/clients/models/month.dart';
+import 'package:agency_time/models/month.dart';
 import 'package:flutter/material.dart';
 
 class Client {
@@ -6,7 +6,7 @@ class Client {
   bool internal;
   String id;
   String name;
-  Month selectedMonth;
+  Month? selectedMonth;
   Month? compareMonth;
 
   Duration durationChange;
@@ -44,14 +44,14 @@ class Client {
   Client({
     this.internal = false,
     this.activeMonth = true,
-    required this.durationChange,
-    required this.hourlyRateChange,
-    required this.savedMonths,
-    required this.selectedMonth,
+    this.durationChange = const Duration(),
+    this.hourlyRateChange = 0,
+    this.savedMonths = const [],
+    this.selectedMonth,
     this.compareMonth,
     this.updatedAt,
-    required this.id,
-    required this.name,
+    this.id = '',
+    this.name = '',
   });
 }
 

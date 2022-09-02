@@ -1,11 +1,10 @@
-import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
 import 'package:agency_time/functions/clients/blocs/new_client_cubit/new_client_cubit.dart';
+import 'package:agency_time/functions/statistics/blocs/settings_bloc/settings_bloc.dart';
 import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/utils/widgets/custom_input_form.dart';
+import 'package:agency_time/views/data_visualisation_views/data_visualisation_dependencies.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
 class AddClientView extends StatelessWidget {
@@ -24,7 +23,8 @@ class AddClientView extends StatelessWidget {
 
     return BlocProvider(
       create: (context) => NewClientCubit(
-          companyId: context.read<AuthCubit>().state.appUser!.companyId),
+          companyId:
+              context.read<AuthorizationCubit>().state.appUser!.companyId!),
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -34,7 +34,7 @@ class AddClientView extends StatelessWidget {
         ),
         body: BlocBuilder<NewClientCubit, NewClientState>(
           builder: (context, state) {
-            if (state.status == Status.loading) {
+            if (state.status == status.loading) {
               return const Center(
                 child: CircularProgressIndicator(color: Colors.black),
               );

@@ -1,8 +1,8 @@
 import 'package:agency_time/functions/statistics/models/dashdata.dart';
 import 'package:agency_time/functions/statistics/views/dashboard_view/dashboard_widgets/pie_chart.dart';
-import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
-import 'package:agency_time/functions/authentication/models/company.dart';
 import 'package:agency_time/functions/clients/blocs/clients_bloc/clients_bloc.dart';
+import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
+import 'package:agency_time/models/company.dart';
 
 import 'package:agency_time/utils/constants/colors.dart';
 
@@ -30,7 +30,7 @@ class DashboardDataView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Company company = context.read<AuthCubit>().state.company!;
+    Company company = context.read<AuthorizationCubit>().state.company!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

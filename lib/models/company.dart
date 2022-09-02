@@ -1,5 +1,5 @@
-import 'package:agency_time/functions/authentication/models/user.dart';
 import 'package:agency_time/functions/tracking/models/tag.dart';
+import 'package:agency_time/models/user.dart';
 
 class Company {
   String id;
@@ -53,6 +53,7 @@ class Company {
           tag: value['tag'] ?? {},
           active: value['active'] ?? true));
     });
+
     return Company(
       id: id,
       tags: tags,

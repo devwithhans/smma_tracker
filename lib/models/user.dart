@@ -1,6 +1,6 @@
 class AppUser {
   String id;
-  String companyId;
+  String? companyId;
   String firstName;
   String lastName;
   String email;
@@ -8,7 +8,7 @@ class AppUser {
 
   AppUser({
     required this.id,
-    required this.companyId,
+    this.companyId,
     required this.firstName,
     required this.lastName,
     required this.email,
@@ -19,7 +19,7 @@ class AppUser {
     return AppUser(
         id: uid,
         stripeId: value['stripeId'] ?? '',
-        companyId: value['companyId'] ?? 'non',
+        companyId: value['companyId'],
         firstName: value['firstName'],
         lastName: value['lastName'],
         email: value['email']);

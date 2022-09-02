@@ -1,13 +1,12 @@
-import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
-import 'package:agency_time/functions/authentication/models/user.dart';
-import 'package:agency_time/functions/clients/models/client.dart';
-import 'package:agency_time/functions/clients/models/month.dart';
 import 'package:agency_time/functions/tracking/models/tag.dart';
 import 'package:agency_time/functions/tracking/models/tracking.dart';
+import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
+import 'package:agency_time/models/client.dart';
+import 'package:agency_time/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ClientsRepo {
-  AuthCubit authCubit;
+  AuthorizationCubit authCubit;
   ClientsRepo(this.authCubit);
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -43,16 +42,16 @@ class ClientsRepo {
     try {
       await clientDocument.update({
         'name': newValues.name,
-        'mrr': newValues.selectedMonth.mrr,
-        'target_hourly_rate': newValues.selectedMonth.hourlyRateTarget
+        'mrr': newValues.selectedMonth!.mrr,
+        'target_hourly_rate': newValues.selectedMonth!.hourlyRateTarget
       });
       await clientDocument
           .collection('months')
           .doc('${DateTime.now().year}-${DateTime.now().month}')
           .set({
         'name': newValues.name,
-        'mrr': newValues.selectedMonth.mrr,
-        'target_hourly_rate': newValues.selectedMonth.hourlyRateTarget,
+        'mrr': newValues.selectedMonth!.mrr,
+        'target_hourly_rate': newValues.selectedMonth!.hourlyRateTarget,
         'updatedAt': DateTime.now()
       }, SetOptions(merge: true));
       return newValues;

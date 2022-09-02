@@ -1,3 +1,5 @@
+import 'package:agency_time/models/company.dart';
+
 import '../data_visualisation_dependencies.dart';
 import 'package:intl/intl.dart';
 
@@ -6,7 +8,7 @@ class CompanyDataView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Company company = context.read<AuthCubit>().state.company!;
+    Company company = context.read<AuthorizationCubit>().state.company!;
 
     final NumberFormat moneyFormatter = CustomCurrencyFormatter.getFormatter(
         countryCode: company.countryCode, short: false);

@@ -1,13 +1,12 @@
 import 'dart:async';
-import 'package:agency_time/functions/authentication/models/company.dart';
-import 'package:agency_time/functions/clients/models/client.dart';
-import 'package:agency_time/functions/clients/models/month.dart';
 import 'package:agency_time/functions/clients/repos/client_repo.dart';
+import 'package:agency_time/models/client.dart';
+import 'package:agency_time/models/company.dart';
+import 'package:agency_time/models/month.dart';
 import 'package:agency_time/utils/functions/data_explanation.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 part 'clients_event.dart';
 part 'clients_state.dart';
 
@@ -64,7 +63,7 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
     Client client = clientToUpdateList.last;
 
     //
-    Month selectedMonth = client.selectedMonth;
+    Month selectedMonth = client.selectedMonth!;
 
     selectedMonth.employees
         .firstWhere((element) => element.member.id == userId)

@@ -1,6 +1,6 @@
 import 'package:agency_time/main.dart';
-import 'package:agency_time/functions/clients/models/client.dart';
 import 'package:agency_time/functions/clients/repos/client_repo.dart';
+import 'package:agency_time/models/client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';

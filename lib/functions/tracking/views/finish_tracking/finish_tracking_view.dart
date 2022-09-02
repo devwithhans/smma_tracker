@@ -1,7 +1,5 @@
-import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
-import 'package:agency_time/functions/clients/models/client.dart';
+import 'package:agency_time/models/client.dart';
 import 'package:agency_time/functions/tracking/models/tag.dart';
-import 'package:agency_time/functions/tracking/repos/tracker_repo.dart';
 import 'package:agency_time/functions/tracking/views/finish_tracking/widgets/duration_formfield.dart';
 import 'package:agency_time/functions/tracking/views/finish_tracking/widgets/search_tags.dart';
 import 'package:agency_time/utils/constants/colors.dart';
@@ -25,7 +23,7 @@ class FinishTrackingDialog extends StatefulWidget {
   final Duration duration;
   final List<Tag> tags;
   final Tag? tag;
-  final ClientLite client;
+  final Client client;
   final void Function(Tag? selected, Duration duration) onSave;
   final void Function() onDelete;
 
@@ -161,25 +159,25 @@ class _FinishTrackingDialogState extends State<FinishTrackingDialog> {
                         CustomElevatedButton(
                           text: 'SAVE',
                           onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              if (selectedTag != null) {
-                                if (tags
-                                    .where((element) =>
-                                        element.id == selectedTag!.id)
-                                    .isEmpty) {
-                                  RepositoryProvider.of<TrackerRepo>(context)
-                                      .addTag(selectedTag!);
-                                  context
-                                      .read<AuthCubit>()
-                                      .state
-                                      .company!
-                                      .tags
-                                      .add(selectedTag!);
-                                }
-                              }
-                              widget.onSave(
-                                  selectedTag, _newDuration ?? _duration);
-                            }
+                            // if (_formKey.currentState!.validate()) {
+                            //   if (selectedTag != null) {
+                            //     if (tags
+                            //         .where((element) =>
+                            //             element.id == selectedTag!.id)
+                            //         .isEmpty) {
+                            //       RepositoryProvider.of<TrackerRepo>(context)
+                            //           .addTag(selectedTag!);
+                            //       context
+                            //           .read<AuthCubit>()
+                            //           .state
+                            //           .company!
+                            //           .tags
+                            //           .add(selectedTag!);
+                            //     }
+                            //   }
+                            //   widget.onSave(
+                            //       selectedTag, _newDuration ?? _duration);
+                            // }
                           },
                           backgroundColor: kColorGreen,
                         ),

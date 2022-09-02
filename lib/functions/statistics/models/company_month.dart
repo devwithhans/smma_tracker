@@ -1,5 +1,5 @@
-import 'package:agency_time/functions/authentication/models/company.dart';
-import 'package:agency_time/functions/authentication/models/user.dart';
+import 'package:agency_time/models/company.dart';
+import 'package:agency_time/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CompanyMonth {

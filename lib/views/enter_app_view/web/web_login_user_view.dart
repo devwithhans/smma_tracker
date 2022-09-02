@@ -1,4 +1,4 @@
-import 'package:agency_time/functions/authentication/blocs/login_cubit/login_cubit.dart';
+import 'package:agency_time/logic/authentication/login_cubit/login_cubit.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/constants/validators.dart';
 import 'package:agency_time/utils/widgets/custom_button.dart';
@@ -21,9 +21,9 @@ class WebLoginView extends StatelessWidget {
     String email = '';
 
     return BlocProvider(
-      create: (context) => LoginCubit(),
+      create: (context) => AuthenticationCubit(),
       child: Scaffold(
-        body: BlocBuilder<LoginCubit, LoginState>(
+        body: BlocBuilder<AuthenticationCubit, AuthenticationState>(
           builder: (context, state) {
             if (state is LoginLoading) {
               return const LoadingScreen();
@@ -71,7 +71,7 @@ class WebLoginView extends StatelessWidget {
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               context
-                                  .read<LoginCubit>()
+                                  .read<AuthenticationCubit>()
                                   .loginUser(password, email);
                             }
                           },

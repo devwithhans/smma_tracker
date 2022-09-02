@@ -1,17 +1,14 @@
-import 'dart:math';
-
-import 'package:agency_time/functions/authentication/repos/signin_repo.dart';
+import 'package:agency_time/logic/authentication/repositories/signin_repo.dart';
 import 'package:agency_time/main.dart';
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 part 'login_state.dart';
 
-class LoginCubit extends Cubit<LoginState> {
-  LoginCubit() : super(LoginInitial());
+class AuthenticationCubit extends Cubit<AuthenticationState> {
+  AuthenticationCubit() : super(LoginInitial());
 
   SignInRepo signInRepo = SignInRepo();
 
@@ -23,7 +20,6 @@ class LoginCubit extends Cubit<LoginState> {
       emit(LoginInitial());
       Navigator.pop(navigatorKey.currentContext!);
     } on FirebaseAuthException catch (e) {
-      print(e.code);
       if (e.code == 'user-not-found') {
         emit(LoginFailed(
             errorMessage: 'No user found for that email', errorCode: e.code));
@@ -35,30 +31,32 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  void registerUser(
-      String password, String email, String name, bool newletter) async {
+  void registerUser({
+    required RegisterLoad registerLoad,
+  }) async {
     emit(LoginLoading());
-
     try {
       await signInRepo.registerUser(
-        email: email,
-        name: name,
-        newletter: newletter,
-        password: password,
+        registerLoad: registerLoad,
       );
-
-      // await FirebaseAuth.instance
-      //     .signInWithCredential(userCredential.credential!);
-
       emit(LoginInitial());
     } on FirebaseAuthException catch (e) {
-      print(e.code);
       if (e.code == 'email-already-in-use') {
-        print('email-already-in-use');
         emit(LoginFailed(errorMessage: e.message!, errorCode: e.code));
       }
     }
   }
 }
 
-//helper functions:
+class RegisterLoad {
+  RegisterLoad(
+      {required this.password,
+      required this.email,
+      required this.name,
+      required this.newletter});
+
+  final String password;
+  final String email;
+  final String name;
+  final bool newletter;
+}

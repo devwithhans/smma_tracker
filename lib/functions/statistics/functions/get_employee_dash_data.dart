@@ -1,6 +1,6 @@
 import 'package:agency_time/functions/statistics/models/company_month.dart';
 import 'package:agency_time/functions/statistics/models/dashdata.dart';
-import 'package:agency_time/functions/authentication/models/user.dart';
+import 'package:agency_time/models/user.dart';
 import 'package:agency_time/utils/functions/data_explanation.dart';
 import 'package:flutter/material.dart';
 

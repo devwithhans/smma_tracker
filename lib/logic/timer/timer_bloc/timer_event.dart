@@ -1,4 +1,4 @@
-part of 'stopwatch_bloc.dart';
+part of 'timer_bloc.dart';
 
 abstract class StopWatchEvent extends Equatable {
   const StopWatchEvent();
@@ -28,4 +28,15 @@ class StartTimer extends StopWatchEvent {
   });
 }
 
-class StopTimer extends StopWatchEvent {}
+class Ticked extends StopWatchEvent {
+  int durationAsSeconds;
+  Ticked(this.durationAsSeconds);
+}
+
+class StopTimer extends StopWatchEvent {
+  final Duration duration;
+  final Tag? newTag;
+  const StopTimer({required this.duration, required this.newTag});
+}
+
+class CancelTracking extends StopWatchEvent {}

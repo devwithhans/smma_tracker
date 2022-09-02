@@ -1,10 +1,13 @@
+import 'dart:async';
+import 'dart:ui';
+
 import 'package:agency_time/firebase_options.dart';
-import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
 import 'package:agency_time/functions/clients/views/add_clients_view.dart';
 import 'package:agency_time/functions/clients/repos/client_repo.dart';
 import 'package:agency_time/functions/statistics/repos/settings_repo.dart';
-import 'package:agency_time/functions/tracking/repos/tracker_repo.dart';
-import 'package:agency_time/functions/authentication/views/wrapper.dart';
+import 'package:agency_time/wrapper.dart';
+import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
+import 'package:agency_time/logic/timer/repositories/timer_repo.dart';
 import 'package:agency_time/utils/error_handling/error_handler.dart';
 import 'package:agency_time/views/enter_app_view/web/web_login_user_view.dart';
 import 'package:agency_time/views/enter_app_view/web/web_register_user_view.dart';
@@ -22,7 +25,11 @@ import 'package:overlay_support/overlay_support.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+
+  FirebaseAuth.instance
+      .useAuthEmulator('localhost', 9099)
+      .onError((error, stackTrace) => null);
+  FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
 
   setUrlStrategy(PathUrlStrategy());
 
@@ -31,10 +38,17 @@ Future<void> main() async {
     sslEnabled: false,
     persistenceEnabled: false,
   );
-  FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+  };
 
   BlocOverrides.runZoned(
-    () => runApp(RestartWidget(child: const MyApp())),
+    () => runApp(
+      const RestartWidget(
+        child: MyApp(),
+      ),
+    ),
     blocObserver: ErrorHandler(),
   );
 }
@@ -47,15 +61,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AuthCubit(),
+      create: (context) => AuthorizationCubit(),
       child: MultiRepositoryProvider(
         providers: [
           RepositoryProvider(
-              create: (context) => TrackerRepo(context.read<AuthCubit>())),
+              create: (context) =>
+                  TimerRepository(context.read<AuthorizationCubit>())),
+          // RepositoryProvider(
+          //     create: (context) => TrackerRepo(context.read<AuthCubit>())),
           RepositoryProvider(
-              create: (context) => SettingsRepo(context.read<AuthCubit>())),
+              create: (context) =>
+                  SettingsRepo(context.read<AuthorizationCubit>())),
           RepositoryProvider(
-              create: (context) => ClientsRepo(context.read<AuthCubit>())),
+              create: (context) =>
+                  ClientsRepo(context.read<AuthorizationCubit>())),
         ],
         child: GestureDetector(
             onTap: () {

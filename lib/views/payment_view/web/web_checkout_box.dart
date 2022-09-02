@@ -15,7 +15,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
 
   @override
   Widget build(BuildContext context) {
-    StripeRepo stripeRepo = StripeRepo(context.read<AuthCubit>());
+    StripeRepo stripeRepo = StripeRepo(context.read<AuthorizationCubit>());
     return BlocProvider(
       create: (context) => PaymentCubit(stripeRepo),
       child: BlocBuilder<PaymentCubit, PaymentState>(

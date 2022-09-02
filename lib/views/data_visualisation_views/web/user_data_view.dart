@@ -1,3 +1,6 @@
+import 'package:agency_time/models/company.dart';
+import 'package:agency_time/models/user.dart';
+
 import '../data_visualisation_dependencies.dart';
 import 'package:intl/intl.dart';
 
@@ -6,8 +9,8 @@ class UserDataView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppUser appUser = context.read<AuthCubit>().state.appUser!;
-    Company company = context.read<AuthCubit>().state.company!;
+    AppUser appUser = context.read<AuthorizationCubit>().state.appUser!;
+    Company company = context.read<AuthorizationCubit>().state.company!;
 
     return ListView(
       children: [

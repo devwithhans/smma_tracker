@@ -1,36 +1,41 @@
-part of 'auth_cubit.dart';
+part of 'authorization_cubit.dart';
 
 enum AuthStatus {
   signedIn,
   signedOut,
+  noCompany,
   initial,
   failed,
-  noCompany,
 }
 
-class AuthState extends Equatable {
-  const AuthState({
+enum UserRole {
+  owner,
+  user,
+}
+
+class AuthorizationState extends Equatable {
+  const AuthorizationState({
     this.authStatus = AuthStatus.initial,
     this.appUser,
     this.company,
     this.invite,
-    this.role,
+    this.role = UserRole.user,
   });
 
   final AuthStatus authStatus;
   final AppUser? appUser;
   final Company? company;
-  final String? role;
+  final UserRole role;
   final Invite? invite;
 
-  AuthState copyWith({
+  AuthorizationState copyWith({
     AuthStatus? authStatus,
     AppUser? appUser,
     Company? company,
-    String? role,
+    UserRole? role,
     Invite? invite,
   }) {
-    return AuthState(
+    return AuthorizationState(
         role: role ?? this.role,
         invite: invite ?? this.invite,
         company: company ?? this.company,

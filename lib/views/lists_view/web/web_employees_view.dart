@@ -4,7 +4,7 @@ import 'package:agency_time/functions/statistics/views/dashboard_view/user_stat_
 import 'package:agency_time/functions/clients/blocs/clients_bloc/clients_bloc.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/functions/print_duration.dart';
-import 'package:agency_time/utils/widgets/custom_searchfield.dart';
+
 import 'package:agency_time/views/lists_view/web/widgets/column_row.dart';
 import 'package:agency_time/views/lists_view/web/widgets/column_row_clickable.dart';
 import 'package:agency_time/views/lists_view/web/widgets/web_list_header.dart';

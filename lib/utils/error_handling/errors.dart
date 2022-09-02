@@ -1,4 +1,3 @@
-import 'package:agency_time/utils/error_handling/error_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AppErrors {
@@ -11,6 +10,16 @@ class AppErrors {
         title: 'We could not connect to the servers',
         message:
             'Check if you have internet connection and try again. If problem persist please contact the support,',
+      );
+  static ErrorContent failedToLoadUser(User? user, String codePosition) =>
+      ErrorContent(
+        codePosition: codePosition,
+        user: user,
+        developerMessage:
+            'If there is no connection to the firestore database, or the user dont have any internet',
+        title: 'Ups something went wrong',
+        message:
+            'We have already sent a message to the developer. Try again later',
       );
 }
 

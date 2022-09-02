@@ -4,8 +4,8 @@ import 'package:agency_time/functions/tracking/blocs/update_trackig_cubit/update
 import 'package:agency_time/functions/tracking/models/tag.dart';
 import 'package:agency_time/functions/tracking/models/tracking.dart';
 import 'package:agency_time/functions/tracking/views/finish_tracking/widgets/edit_duration.dart';
+import 'package:agency_time/logic/timer/repositories/timer_repo.dart';
 
-import 'package:agency_time/functions/tracking/repos/tracker_repo.dart';
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:agency_time/utils/functions/print_duration.dart';
 import 'package:agency_time/utils/widgets/custom_alert_dialog.dart';
@@ -33,7 +33,7 @@ class _EditTrackingState extends State<EditTracking> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => UpdateTrackingCubit(context.read<TrackerRepo>()),
+      create: (context) => UpdateTrackingCubit(context.read<TimerRepository>()),
       child: Scaffold(
         body: BlocBuilder<UpdateTrackingCubit, UpdateTrackingState>(
           builder: (context, state) {

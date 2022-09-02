@@ -2,9 +2,7 @@ import 'dart:async';
 import 'package:agency_time/functions/statistics/models/company_month.dart';
 import 'package:agency_time/functions/statistics/models/dashdata.dart';
 import 'package:agency_time/functions/statistics/repos/settings_repo.dart';
-import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
-import 'package:agency_time/functions/authentication/models/company.dart';
-import 'package:agency_time/utils/functions/data_explanation.dart';
+import 'package:agency_time/models/company.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -15,11 +13,11 @@ part 'stats_state.dart';
 class StatsBloc extends Bloc<StatsEvent, StatsState> {
   SettingsRepo settingsRepo;
   Company company;
-  late StreamSubscription _monthsStream;
+  late StreamSubscription monthsStream;
 
   StatsBloc(this.settingsRepo, this.company) : super(StatsState()) {
     settingsRepo.checkIfMonthsUpToDate();
-    _monthsStream = settingsRepo.companyMonths().listen(((event) {
+    monthsStream = settingsRepo.companyMonths().listen(((event) {
       emit(state.copyWith(status: StatsStatus.loading));
       for (var monthRaw in event.docs) {
         add(AddMonth(monthRaw));

@@ -1,5 +1,5 @@
-import 'package:agency_time/functions/authentication/blocs/auth_cubit/auth_cubit.dart';
 import 'package:agency_time/functions/payments/models/new_company_cubit/new_company_cubit.dart';
+import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 
 import 'package:agency_time/utils/constants/currencies.dart';
 import 'package:agency_time/utils/constants/spacings.dart';
@@ -18,7 +18,7 @@ class CompanyDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
-    AuthState authState = context.read<AuthCubit>().state;
+    AuthorizationState authState = context.read<AuthorizationCubit>().state;
 
     return Form(
       key: formKey,
