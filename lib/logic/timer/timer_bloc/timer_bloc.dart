@@ -11,7 +11,7 @@ import 'package:overlay_support/overlay_support.dart';
 part './timer_event.dart';
 part './timer_state.dart';
 
-class TimerBloc extends Bloc<StopWatchEvent, StopWatchState> {
+class TimerBloc extends Bloc<StopWatchEvent, TimerState> {
   StreamSubscription<int>? _tickerSubscription;
   ClientsBloc clientsBloc;
   TimerRepository stopWatchRepository;
@@ -22,7 +22,7 @@ class TimerBloc extends Bloc<StopWatchEvent, StopWatchState> {
     required this.clientsBloc,
     required this.stopWatchRepository,
     required this.ticker,
-  }) : super(StopWatchState()) {
+  }) : super(TimerState()) {
     _checkForExistingTracking();
     on<StartTimer>(_startNewTimer);
     on<StartExistingTimer>(_startExistingTimer);
@@ -110,7 +110,7 @@ class TimerBloc extends Bloc<StopWatchEvent, StopWatchState> {
 
   void _cancelTracker(CancelTracking event, Emitter emit) {
     _tickerSubscription?.cancel();
-    emit(StopWatchState());
+    emit(TimerState());
   }
 
   void _ticked(Ticked event, Emitter emit) {

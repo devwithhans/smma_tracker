@@ -1,7 +1,4 @@
-import 'package:agency_time/functions/clients/repos/client_repo.dart';
-import 'package:agency_time/functions/tracking/models/tag.dart';
-import 'package:agency_time/functions/tracking/views/finish_tracking/finish_tracking_view.dart';
-import 'package:agency_time/logic/timer/repositories/timer_repo.dart';
+import 'package:agency_time/logic/timer/repositories/ui_helper.dart';
 import 'package:agency_time/logic/timer/timer_bloc/timer_bloc.dart';
 import 'package:agency_time/models/client.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
@@ -13,7 +10,6 @@ import 'package:agency_time/views/lists_view/web/widgets/two_line_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:side_sheet/side_sheet.dart';
 
 class ClientListResult extends StatelessWidget {
   const ClientListResult({
@@ -27,7 +23,7 @@ class ClientListResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TimerBloc, StopWatchState>(
+    return BlocBuilder<TimerBloc, TimerState>(
       builder: (context, state) {
         bool isTracking;
         bool isLoading;
@@ -75,36 +71,14 @@ class ClientListResult extends StatelessWidget {
                     style: AppTextStyle.medium,
                   ),
                   PlayButton(
-                    isTracking: isTracking,
-                    onPressed: () {
-                      if (state.timerStatus == TimerStatus.running) {
-                        SideSheet.right(
-                          width: 500,
-                          body: FinishTrackingDialog(
-                            onDelete: () {
-                              context
-                                  .read<TimerRepository>()
-                                  .deleteTracking(state.trackingDocumentId!);
-                            },
-                            onSave: (Tag? newTag, Duration duration) {
-                              context.read<TimerBloc>().add(
-                                    StopTimer(
-                                        duration: duration, newTag: newTag),
-                                  );
-                            },
-                            client: state.client!,
-                            duration: Duration(seconds: state.duration),
-                            tags: context.read<ClientsRepo>().getTags(),
-                          ),
+                      isTracking: isTracking,
+                      onPressed: () {
+                        FinishTimerUIHelper.onToggleTimer(
+                          state: state,
                           context: context,
+                          client: client,
                         );
-                      } else {
-                        context
-                            .read<TimerBloc>()
-                            .add(StartTimer(client: client));
-                      }
-                    },
-                  )
+                      })
                 ],
               ),
             ],

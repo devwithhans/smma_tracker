@@ -8,10 +8,10 @@ import 'package:agency_time/functions/statistics/web_view/web_navigation/web_scr
 import 'package:agency_time/functions/clients/repos/client_repo.dart';
 import 'package:agency_time/functions/statistics/repos/settings_repo.dart';
 import 'package:agency_time/functions/tracking/models/tag.dart';
-import 'package:agency_time/functions/tracking/views/finish_tracking/finish_tracking_view.dart';
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/logic/timer/repositories/timer_repo.dart';
 import 'package:agency_time/logic/timer/repositories/ticker.dart';
+import 'package:agency_time/logic/timer/repositories/ui_helper.dart';
 import 'package:agency_time/logic/timer/timer_bloc/timer_bloc.dart';
 import 'package:agency_time/models/client.dart';
 import 'package:agency_time/utils/constants/colors.dart';
@@ -71,7 +71,7 @@ class WebNavigation extends StatelessWidget {
                       ),
                     ],
                   ),
-                  BlocBuilder<TimerBloc, StopWatchState>(
+                  BlocBuilder<TimerBloc, TimerState>(
                     builder: (context, state) {
                       if (state.client != null) {
                         Client client = state.client!;
@@ -112,41 +112,19 @@ class WebNavigation extends StatelessWidget {
                                 SizedBox(width: 30),
                                 InkWell(
                                   onTap: () {
-                                    SideSheet.right(
-                                        width: 500,
-                                        body: FinishTrackingDialog(
-                                          onDelete: () {
-                                            // context
-                                            //     .read<TrackerRepo>()
-                                            //     .deleteTracking(
-                                            //         trackingDocId: state
-                                            //             .trackingDocumentId!);
-                                          },
-                                          onSave:
-                                              (Tag? newTag, Duration duration) {
-                                            context.read<TimerBloc>().add(
-                                                  StopTimer(
-                                                    duration: duration,
-                                                    newTag: newTag,
-                                                  ),
-                                                );
-                                          },
-                                          client: client,
-                                          duration:
-                                              Duration(seconds: state.duration),
-                                          tags: context
-                                              .read<ClientsRepo>()
-                                              .getTags(),
-                                        ),
-                                        context: context);
+                                    FinishTimerUIHelper.onToggleTimer(
+                                      state: state,
+                                      context: context,
+                                      client: client,
+                                    );
                                   },
                                   child: Container(
                                     height: 50,
                                     width: 50,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                         color: Colors.white,
                                         shape: BoxShape.circle),
-                                    child: Icon(
+                                    child: const Icon(
                                       Icons.stop_rounded,
                                       size: 30,
                                     ),

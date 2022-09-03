@@ -121,4 +121,24 @@ class TimerRepository {
     }
     return null;
   }
+
+  Future<void> addTag(Tag tag) async {
+    AppUser user = authCubit.state.appUser!;
+
+    try {
+      // FirebaseFirestore.instance.useFirestoreEmulator('localHost', 8080);
+
+      FirebaseFirestore.instance
+          .collection('companies')
+          .doc(user.companyId)
+          .update({
+        'tags.${tag.id}': {
+          'tag': tag.tag,
+          'description': tag.description,
+        }
+      });
+    } on FirebaseFunctionsException catch (error) {
+      rethrow;
+    }
+  }
 }
