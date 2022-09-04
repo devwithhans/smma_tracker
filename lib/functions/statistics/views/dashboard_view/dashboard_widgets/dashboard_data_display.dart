@@ -1,10 +1,10 @@
 import 'package:agency_time/functions/statistics/models/dashdata.dart';
 import 'package:agency_time/functions/statistics/views/dashboard_view/dashboard_widgets/pie_chart.dart';
-import 'package:agency_time/functions/clients/blocs/clients_bloc/clients_bloc.dart';
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/models/company.dart';
 
 import 'package:agency_time/utils/constants/colors.dart';
+import 'package:agency_time/logic/clients/clients_bloc/clients_bloc.dart';
 
 import 'package:agency_time/utils/functions/print_duration.dart';
 import 'package:agency_time/utils/widgets/stats_card.dart';

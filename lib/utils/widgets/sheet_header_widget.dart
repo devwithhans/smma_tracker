@@ -1,5 +1,5 @@
 import 'package:agency_time/utils/constants/text_styles.dart';
-import 'package:agency_time/views/data_visualisation_views/data_visualisation_dependencies.dart';
+import 'package:agency_time/views/view_data_visualisation/data_visualisation_dependencies.dart';
 
 class SheetHeader extends StatelessWidget {
   const SheetHeader({

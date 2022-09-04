@@ -1,4 +1,3 @@
-import 'package:agency_time/functions/statistics/views/bottom_navigation.dart';
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:agency_time/utils/widgets/procentage_card.dart';
 import 'package:flutter/material.dart';
@@ -89,14 +88,14 @@ class StatCard extends StatelessWidget {
             subText is String
                 ? Text(
                     subText,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: kColorGreyText,
                     ),
                   )
                 : subText.isNaN
-                    ? SizedBox()
+                    ? const SizedBox()
                     : ProcentageChange(procentage: subText),
           ],
         ),

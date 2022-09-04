@@ -1,7 +1,7 @@
-import 'package:agency_time/functions/statistics/web_view/web_navigation/web_navigation.dart';
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/views/enter_app_view/web/web_register_user_view.dart';
 import 'package:agency_time/views/no_company_view/web/web_no_company_view.dart';
+import 'package:agency_time/views/view_folder_template/web/web_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';

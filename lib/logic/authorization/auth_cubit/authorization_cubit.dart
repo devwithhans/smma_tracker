@@ -23,7 +23,7 @@ class AuthorizationCubit extends Cubit<AuthorizationState> {
     authStream =
         FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user != null) {
-        _handleSignedInUser(user).catchError((e) {
+        await _handleSignedInUser(user).catchError((e) {
           addError(ErrorContent(message: e.toString()));
           // AppErrors.failedToLoadUser(user, 'authCubits'));
         });

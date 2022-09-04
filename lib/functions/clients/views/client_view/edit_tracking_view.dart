@@ -3,7 +3,7 @@ import 'package:agency_time/functions/clients/views/client_view/widgets/custom_a
 import 'package:agency_time/functions/tracking/blocs/update_trackig_cubit/update_tracking_cubit.dart';
 import 'package:agency_time/functions/tracking/models/tag.dart';
 import 'package:agency_time/functions/tracking/models/tracking.dart';
-import 'package:agency_time/functions/tracking/views/finish_tracking/widgets/edit_duration.dart';
+
 import 'package:agency_time/logic/timer/repositories/timer_repo.dart';
 
 import 'package:agency_time/utils/constants/colors.dart';
@@ -116,9 +116,9 @@ class _EditTrackingState extends State<EditTracking> {
         _newDuration ?? widget.tracking.duration,
       ),
       onPressed: () async {
-        _newDuration = await editDuration(
-            context, _newDuration ?? widget.tracking.duration);
-        setState(() {});
+        // _newDuration = await editDuration(
+        //     context, _newDuration ?? widget.tracking.duration);
+        // setState(() {});
       },
     );
   }

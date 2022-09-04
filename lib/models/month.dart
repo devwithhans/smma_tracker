@@ -22,6 +22,36 @@ class Month {
     required this.updatedAt,
     this.tags = const {},
   });
+
+  static Month? getCompanyMonth({
+    required String monthId,
+    required Map<String, dynamic> monthMap,
+    required Company company,
+  }) {
+    double mrr = monthMap['mrr'] != null ? monthMap['mrr'].toDouble() : 0;
+    Duration duration = Duration(seconds: monthMap['duration'] ?? 0);
+    Timestamp updatedAtStamp = monthMap['updatedAt'] ?? Timestamp.now();
+
+    List<Employee> employees = [];
+    Map employeesData = monthMap['employees'] ?? {};
+    company.members.forEach((member) {
+      Map? employeeMap = employeesData[member.id];
+      employees.add(Employee.getEmployeeFromMap(employeeMap, member));
+    });
+    return Month(
+      date: DateTime(int.parse(monthId.split('-').first),
+          int.parse(monthId.split('-').last)),
+      duration: duration,
+      mrr: mrr,
+      // employees: employees,
+      hourlyRate: mrr / duration.inHours,
+      hourlyRateTarget: monthMap['hourlyRateTarget'] ?? 0,
+      tags: monthMap['tags'] ?? {},
+      updatedAt: DateTime.fromMicrosecondsSinceEpoch(
+          updatedAtStamp.microsecondsSinceEpoch),
+    );
+  }
+
   static Month? convertMonth(
     Map<String, dynamic>? value,
     String monthId,
@@ -37,38 +67,9 @@ class Month {
 
     List<Employee> employees = [];
     Map employeesData = value['employees'] ?? {};
-    company.members.forEach((element) {
-      Map? employeeData = employeesData[element.id];
-      if (employeeData != null) {
-        Duration totalDuration = employeeData['duration'] != null
-            ? Duration(seconds: employeeData['duration'])
-            : const Duration();
-
-        employees.add(Employee(
-            member: element,
-            lastActivity: employeeData['updatedAt'] != null
-                ? DateTime.fromMicrosecondsSinceEpoch(
-                    employeeData['updatedAt'].microsecondsSinceEpoch)
-                : null,
-            totalDuration: totalDuration,
-            clientsDuration: Duration(),
-            totalHourlyRate: 0,
-            clientsHourlyRate: newMrr / (totalDuration.inSeconds / 3600),
-            internalDuration: Duration(),
-            tags: employeeData['tags'] ?? {}));
-      } else {
-        employees.add(
-          Employee(
-            member: element,
-            totalDuration: Duration(),
-            clientsDuration: Duration(),
-            totalHourlyRate: 0,
-            clientsHourlyRate: 0,
-            internalDuration: Duration(),
-            tags: {},
-          ),
-        );
-      }
+    company.members.forEach((member) {
+      Map? employeeMap = employeesData[member.id];
+      employees.add(Employee.getEmployeeFromMap(employeeMap, member));
     });
 
     Timestamp updatedAtStamp = value['updatedAt'] ?? Timestamp.now();

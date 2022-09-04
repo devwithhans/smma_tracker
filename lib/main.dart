@@ -2,8 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:agency_time/firebase_options.dart';
-import 'package:agency_time/functions/clients/views/add_clients_view.dart';
-import 'package:agency_time/functions/clients/repos/client_repo.dart';
+import 'package:agency_time/logic/clients/repos/client_repo.dart';
 import 'package:agency_time/functions/statistics/repos/settings_repo.dart';
 import 'package:agency_time/wrapper.dart';
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
@@ -97,7 +96,6 @@ class MyApp extends StatelessWidget {
                 ),
                 routes: {
                   '/': (context) => const Wrapper(),
-                  AddClientView.id: (context) => AddClientView(),
                   WebRegisterView.pageName: (context) => WebRegisterView(),
                   WebLoginView.pageName: (context) => WebLoginView(),
                   WebNewCompany.pageName: (context) => const WebNewCompany(),

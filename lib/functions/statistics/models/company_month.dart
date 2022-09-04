@@ -34,57 +34,18 @@ class CompanyMonth {
     String monthId,
     Company company,
   ) {
-    if (value == null) {
-      return null;
-    }
+    if (value == null) return null;
+
     Duration internalDuration =
         Duration(seconds: value['internalDuration'] ?? 0);
     Duration clientsDuration = Duration(seconds: value['clientsDuration'] ?? 0);
     Duration totalDuration = internalDuration + clientsDuration;
-
     double newMrr = value['mrr'] != null ? value['mrr'].toDouble() : 0;
     List<Employee> employees = [];
     Map employeesData = value['employees'] ?? {};
     company.members.forEach((element) {
       Map? employeeData = employeesData[element.id];
-      if (employeeData != null) {
-        Duration internalDuration = employeeData['internalDuration'] != null
-            ? Duration(seconds: employeeData['internalDuration'])
-            : const Duration();
-        Duration clientsDuration = employeeData['clientsDuration'] != null
-            ? Duration(seconds: employeeData['clientsDuration'])
-            : const Duration();
-        Duration totalDuration = clientsDuration + internalDuration;
-
-        double totalHourlyRate = newMrr / (totalDuration.inSeconds / 3600);
-        double clientsHourlyRate = newMrr / (clientsDuration.inSeconds / 3600);
-
-        employees.add(Employee(
-            member: element,
-            lastActivity: employeeData['updatedAt'] != null
-                ? DateTime.fromMicrosecondsSinceEpoch(
-                    employeeData['updatedAt'].microsecondsSinceEpoch)
-                : null,
-            totalDuration: totalDuration,
-            clientsDuration: clientsDuration,
-            totalHourlyRate: totalHourlyRate.isFinite ? totalHourlyRate : 0,
-            clientsHourlyRate:
-                clientsHourlyRate.isFinite ? clientsHourlyRate : 0,
-            internalDuration: internalDuration,
-            tags: employeeData['tags'] ?? {}));
-      } else {
-        employees.add(
-          Employee(
-            member: element,
-            totalDuration: Duration(),
-            clientsDuration: Duration(),
-            totalHourlyRate: 0,
-            clientsHourlyRate: 0,
-            internalDuration: Duration(),
-            tags: {},
-          ),
-        );
-      }
+      employees.add(Employee.getEmployeeFromMap(employeeData, element));
     });
 
     Timestamp updatedAtStamp = value['updatedAt'];
@@ -113,8 +74,6 @@ class Employee {
   Duration internalDuration;
   Duration clientsDuration;
   Duration totalDuration;
-  double clientsHourlyRate;
-  double totalHourlyRate;
   DateTime? lastActivity;
   final Map tags;
   Employee({
@@ -122,9 +81,33 @@ class Employee {
     this.lastActivity,
     required this.clientsDuration,
     required this.totalDuration,
-    required this.clientsHourlyRate,
     required this.internalDuration,
-    required this.totalHourlyRate,
     required this.tags,
   });
+
+  static getEmployeeFromMap(Map? employeeMap, Member member) {
+    if (employeeMap != null) {
+      Duration totalDuration = employeeMap['duration'] != null
+          ? Duration(seconds: employeeMap['duration'])
+          : const Duration();
+      return Employee(
+          member: member,
+          lastActivity: employeeMap['updatedAt'] != null
+              ? DateTime.fromMicrosecondsSinceEpoch(
+                  employeeMap['updatedAt'].microsecondsSinceEpoch)
+              : null,
+          totalDuration: totalDuration,
+          clientsDuration: Duration(),
+          internalDuration: Duration(),
+          tags: employeeMap['tags'] ?? {});
+    } else {
+      return Employee(
+        member: member,
+        totalDuration: Duration(),
+        clientsDuration: Duration(),
+        internalDuration: Duration(),
+        tags: {},
+      );
+    }
+  }
 }

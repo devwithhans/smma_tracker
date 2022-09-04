@@ -28,6 +28,12 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
             errorMessage: 'Wrong password provided for that user',
             errorCode: e.code));
       }
+    } catch (e) {
+      print('EROOR');
+      emit(LoginFailed(
+          errorMessage:
+              'Could not connect to the server, check your internet connection and try again',
+          errorCode: e.toString()));
     }
   }
 

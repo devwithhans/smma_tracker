@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'package:agency_time/functions/clients/blocs/clients_bloc/clients_bloc.dart';
+import 'package:agency_time/logic/clients/clients_bloc/clients_bloc.dart';
 
 import 'package:agency_time/functions/tracking/models/tag.dart';
 import 'package:agency_time/logic/timer/repositories/timer_repo.dart';
 import 'package:agency_time/logic/timer/repositories/ticker.dart';
 import 'package:agency_time/models/client.dart';
-import 'package:agency_time/views/payment_view/paymeny_view_dependencies.dart';
+import 'package:agency_time/views/dialog_payment/paymeny_view_dependencies.dart';
 import 'package:equatable/equatable.dart';
 import 'package:overlay_support/overlay_support.dart';
 part './timer_event.dart';

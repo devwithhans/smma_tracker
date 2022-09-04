@@ -1,5 +1,5 @@
 import 'package:agency_time/functions/tracking/models/tag.dart';
-import 'package:agency_time/functions/clients/repos/client_repo.dart';
+import 'package:agency_time/logic/clients/repos/client_repo.dart';
 import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/utils/widgets/custom_input_form.dart';
 import 'package:agency_time/utils/widgets/filter_scroll.dart';
