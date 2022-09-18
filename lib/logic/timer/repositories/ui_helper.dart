@@ -1,7 +1,7 @@
 import 'dart:js';
 
 import 'package:agency_time/logic/clients/clients_bloc/clients_bloc.dart';
-import 'package:agency_time/functions/tracking/models/tag.dart';
+import 'package:agency_time/models/tag.dart';
 import 'package:agency_time/logic/clients/repos/client_repo.dart';
 import 'package:agency_time/logic/timer/repositories/timer_repo.dart';
 import 'package:agency_time/logic/timer/timer_bloc/timer_bloc.dart';

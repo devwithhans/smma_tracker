@@ -7,7 +7,7 @@ import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/utils/widgets/custom_input_form.dart';
 import 'package:agency_time/utils/widgets/loading_screen.dart';
 import 'package:agency_time/utils/widgets/responsive_widgets/splitscreen.dart';
-import 'package:agency_time/views/enter_app_view/web/web_login_user_view.dart';
+import 'package:agency_time/views/view_enter_app/web/web_login_user_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

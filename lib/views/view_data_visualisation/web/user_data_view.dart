@@ -1,5 +1,7 @@
 import 'package:agency_time/models/company.dart';
+import 'package:agency_time/models/dashdata.dart';
 import 'package:agency_time/models/user.dart';
+import 'package:agency_time/utils/constants/text_styles.dart';
 
 import '../data_visualisation_dependencies.dart';
 import 'package:intl/intl.dart';
@@ -19,10 +21,11 @@ class UserDataView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const OverviewHeader(
-                title: 'Your data',
-                subText: 'Here is how you spend your time',
+              Text(
+                'Your performance',
+                style: AppTextStyle.boldLarge,
               ),
+              SizedBox(height: 40),
               BlocBuilder<StatsBloc, StatsState>(
                 builder: (context, state) {
                   DashData dashData = getEmployeeDashData(

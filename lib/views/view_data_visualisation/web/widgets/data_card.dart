@@ -20,17 +20,16 @@ class DataCard extends StatelessWidget {
   final dynamic subValue;
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: InkWell(
-        onTap: onTap,
-        child: StatCard(
-          responsive: responsive,
-          expanded: true,
-          type: selected == title ? StatCardType.black : StatCardType.white,
-          title: title,
-          value: value,
-          subText: subValue,
-        ),
+    return InkWell(
+      onTap: onTap,
+      child: StatCard(
+        onPressed: () {},
+        responsive: responsive,
+        expanded: true,
+        type: selected == title ? StatCardType.black : StatCardType.white,
+        title: title,
+        value: value,
+        subText: subValue,
       ),
     );
   }

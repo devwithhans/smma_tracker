@@ -1,6 +1,6 @@
 import 'package:agency_time/logic/timer/repositories/timer_repo.dart';
 import 'package:agency_time/models/client.dart';
-import 'package:agency_time/functions/tracking/models/tag.dart';
+import 'package:agency_time/models/tag.dart';
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/widgets/custom_alert_dialog.dart';

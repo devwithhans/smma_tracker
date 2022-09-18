@@ -1,3 +1,5 @@
+import 'package:agency_time/logic/payments/repos/stripe_repo.dart';
+
 import '../../paymeny_view_dependencies.dart';
 
 class PriceCard extends StatelessWidget {

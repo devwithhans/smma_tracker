@@ -4,6 +4,7 @@ import 'package:agency_time/models/client.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/functions/print_duration.dart';
 import 'package:agency_time/utils/widgets/procentage_card.dart';
+import 'package:agency_time/views/sheet_client_stats/shared/client_stats_sheet.dart';
 import 'package:agency_time/views/view_lists/web/widgets/column_row_clickable.dart';
 import 'package:agency_time/views/view_lists/web/widgets/play_button.dart';
 import 'package:agency_time/views/view_lists/web/widgets/two_line_text.dart';
@@ -46,8 +47,10 @@ class ClientListResult extends StatelessWidget {
           }
           return ColumnRowClickable(
             onPressed: () {
-              // SideSheet.right(
-              //     body: ClientView(client: client), context: context);
+              SideSheet.right(
+                body: ClientStatsSheet(),
+                context: context,
+              );
             },
             items: [
               TwoLineText(

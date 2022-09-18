@@ -1,16 +1,14 @@
 import 'dart:async';
-import 'dart:ui';
-
 import 'package:agency_time/firebase_options.dart';
 import 'package:agency_time/logic/clients/repos/client_repo.dart';
-import 'package:agency_time/functions/statistics/repos/settings_repo.dart';
+import 'package:agency_time/logic/settings/repos/settings_repo.dart';
 import 'package:agency_time/wrapper.dart';
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/logic/timer/repositories/timer_repo.dart';
 import 'package:agency_time/utils/error_handling/error_handler.dart';
-import 'package:agency_time/views/enter_app_view/web/web_login_user_view.dart';
-import 'package:agency_time/views/enter_app_view/web/web_register_user_view.dart';
-import 'package:agency_time/views/register_company_view/web/web_register_company_view.dart';
+import 'package:agency_time/views/view_enter_app/web/web_login_user_view.dart';
+import 'package:agency_time/views/view_enter_app/web/web_register_user_view.dart';
+import 'package:agency_time/views/view_register_company/web/web_register_company_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';

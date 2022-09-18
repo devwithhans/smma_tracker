@@ -12,10 +12,23 @@ LineChartData mainData({
   required NumberFormat moneyFormatter,
 }) {
   return LineChartData(
+    borderData: FlBorderData(show: false),
     minX: 0,
     maxX: months.length.toDouble() - 1,
     minY: 0,
     maxY: 6,
+    gridData: FlGridData(
+      show: true,
+      drawHorizontalLine: true,
+      drawVerticalLine: false,
+      getDrawingHorizontalLine: (value) {
+        return FlLine(
+          color: Colors.grey.shade300,
+          strokeWidth: 1,
+        );
+      },
+      horizontalInterval: 1,
+    ),
     lineTouchData: LineTouchData(
       touchTooltipData: LineTouchTooltipData(
           tooltipBgColor: Color(0xff23b6e6),
@@ -59,7 +72,7 @@ LineChartData mainData({
       ),
       leftTitles: AxisTitles(
         sideTitles: SideTitles(
-          showTitles: true,
+          showTitles: false,
           interval: 1,
           getTitlesWidget: getLeftTitleWidgets,
           reservedSize: 100,
@@ -85,19 +98,17 @@ LineChartData mainData({
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
-        barWidth: 5,
+        barWidth: 2,
         isStrokeCapRound: true,
         dotData: FlDotData(
-          show: true,
+          show: false,
         ),
         belowBarData: BarAreaData(
           show: true,
-          gradient: LinearGradient(
-            colors:
-                kGradientColors.map((color) => color.withOpacity(0.3)).toList(),
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
+          gradient: LinearGradient(colors: [
+            Colors.white.withOpacity(0.0001),
+            kGradientColors[0].withOpacity(0.3),
+          ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
         ),
       ),
     ],

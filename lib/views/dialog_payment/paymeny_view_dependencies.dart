@@ -1,5 +1,3 @@
-export 'package:agency_time/functions/payments/blocs/payment_bloc/payment_bloc.dart';
-export 'package:agency_time/functions/payments/repos/stripe_repo.dart';
 export 'package:agency_time/utils/constants/spacings.dart';
 export 'package:agency_time/utils/constants/text_styles.dart';
 export 'package:agency_time/utils/widgets/custom_button.dart';

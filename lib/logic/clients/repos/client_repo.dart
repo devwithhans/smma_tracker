@@ -1,5 +1,5 @@
-import 'package:agency_time/functions/tracking/models/tag.dart';
-import 'package:agency_time/functions/tracking/models/tracking.dart';
+import 'package:agency_time/models/tag.dart';
+import 'package:agency_time/models/tracking.dart';
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/models/client.dart';
 import 'package:agency_time/models/user.dart';

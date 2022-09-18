@@ -1,6 +1,7 @@
 import 'package:agency_time/models/company.dart';
-import 'package:agency_time/views/view_data_visualisation/web/widgets/data_card.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:agency_time/utils/constants/text_styles.dart';
+import 'package:agency_time/utils/widgets/stats_card.dart';
+import 'package:agency_time/views/view_lists/web/widgets/client_list_result.dart';
 import '../../data_visualisation_dependencies.dart';
 import 'package:intl/intl.dart';
 
@@ -48,202 +49,148 @@ class _DataVisualisationTemplateState extends State<DataVisualisationTemplate> {
     graphDataSpots ??= widget.cardsList.first.graphDataSpots;
 
     double width = MediaQuery.of(context).size.width - 500;
-    int gridWidth = 10;
-    double breakPoint = 800;
-    bool breaked = width > breakPoint;
-    int widePart(double procentage) =>
-        breaked ? (gridWidth * procentage).ceil() : 10;
-    Company company = context.read<AuthorizationCubit>().state.company!;
 
+    Company company = context.read<AuthorizationCubit>().state.company!;
     final NumberFormat moneyFormatter = CustomCurrencyFormatter.getFormatter(
         countryCode: company.countryCode, short: false);
 
-    List<Widget> cardWidgets = [];
-
-    int count = 0;
-    widget.cardsList.forEach(
-      (e) {
-        if (count != 0 && count != widget.cardsList.length) {
-          cardWidgets.add(
-            SizedBox(height: 20, width: 20),
-          );
-        }
-        cardWidgets.add(DataCard(
-          responsive: true,
-          selected: selectedGraph,
-          value: e.value,
-          title: e.title,
-          subValue: e.subValue,
-          onTap: () {
-            selectedGraph = e.title;
-            graphDataSpots = e.graphDataSpots ?? [];
-            setState(() {});
-          },
-        ));
-        count += 1;
-      },
-    );
-
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        StaggeredGrid.count(
-          mainAxisSpacing: 20,
-          crossAxisSpacing: 20,
-          crossAxisCount: gridWidth,
-          children: [
-            StaggeredGridTile.count(
-              crossAxisCellCount: widePart(0.4),
-              mainAxisCellCount: breaked
-                  ? 3
-                  : widget.cardsList.length == 6
-                      ? 3
-                      : 2,
-              child: Builder(builder: (context) {
-                if (widePart(0.4) == 10) {
-                  if (widget.cardsList.length == 6) {
-                    List<Widget> firstColumn = [];
-                    List<Widget> secondColumn = [];
-                    for (var i = 0; i < widget.cardsList.length; i++) {
-                      ValueCard e = widget.cardsList[i];
-                      Widget card = DataCard(
-                        responsive: true,
-                        selected: selectedGraph,
-                        value: e.value,
-                        title: e.title,
-                        subValue: e.subValue,
-                        onTap: () {
-                          selectedGraph = e.title;
-                          graphDataSpots = e.graphDataSpots ?? [];
-                          setState(() {});
-                        },
-                      );
-
-                      if (i < 3) {
-                        firstColumn.add(card);
-                        if (i != 2) {
-                          firstColumn.add(SizedBox(width: 20));
-                        }
-                      } else {
-                        secondColumn.add(card);
-                        if (i != 5) {
-                          secondColumn.add(SizedBox(width: 20));
-                        }
-                      }
-                    }
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: firstColumn,
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        Expanded(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: secondColumn,
-                          ),
-                        )
-                      ],
-                    );
-                  }
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: cardWidgets,
-                  );
-                } else {
-                  if (widget.cardsList.length == 6) {
-                    List<Widget> firstColumn = [];
-                    List<Widget> secondColumn = [];
-                    for (var i = 0; i < widget.cardsList.length; i++) {
-                      ValueCard e = widget.cardsList[i];
-                      Widget card = DataCard(
-                        responsive: true,
-                        selected: selectedGraph,
-                        value: e.value,
-                        title: e.title,
-                        subValue: e.subValue,
-                        onTap: () {
-                          selectedGraph = e.title;
-                          graphDataSpots = e.graphDataSpots ?? [];
-                          setState(() {});
-                        },
-                      );
-
-                      if (i < 3) {
-                        firstColumn.add(card);
-                        if (i != 2) {
-                          firstColumn.add(SizedBox(height: 20));
-                        }
-                      } else {
-                        secondColumn.add(card);
-                        if (i != 5) {
-                          secondColumn.add(SizedBox(height: 20));
-                        }
-                      }
-                    }
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: firstColumn,
-                          ),
-                        ),
-                        const SizedBox(width: 20),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: secondColumn,
-                          ),
-                        )
-                      ],
-                    );
-                  }
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: cardWidgets,
-                  );
-                }
-              }),
-            ),
-            StaggeredGridTile.count(
-              crossAxisCellCount: widePart(0.6),
-              mainAxisCellCount: breaked ? 3 : 5,
-              child: SizedBox(
-                  child: UniversalGraph(
-                title: selectedGraph,
-                graphDataSpots: graphDataSpots ?? [],
-                moneyFormatter: moneyFormatter,
-              )),
-            ),
-            Visibility(
-              visible: widget.pieChartList != null,
-              child: StaggeredGridTile.fit(
-                crossAxisCellCount: widePart(1),
-                // mainAxisCellCount: breaked ? 2.1 : 7,
-                child: Builder(builder: (context) {
-                  if (widePart(0.4) == 10) {
-                    return Column(
-                      children: widget.pieChartList!,
-                    );
-                  } else {
-                    return Row(children: widget.pieChartList!);
-                  }
-                }),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  StatCard(
+                    onPressed: () {
+                      graphDataSpots = widget.cardsList[0].graphDataSpots;
+                      setState(() {});
+                    },
+                    title: widget.cardsList[0].title,
+                    type: StatCardType.white,
+                    value: widget.cardsList[0].value,
+                    subText: widget.cardsList[0].subValue,
+                  ),
+                  const SizedBox(width: 20),
+                  StatCard(
+                    onPressed: () {
+                      graphDataSpots = widget.cardsList[1].graphDataSpots;
+                      setState(() {});
+                    },
+                    title: widget.cardsList[1].title,
+                    type: StatCardType.white,
+                    value: widget.cardsList[1].value,
+                    subText: widget.cardsList[1].subValue,
+                  ),
+                  const SizedBox(width: 20),
+                  StatCard(
+                    onPressed: () {
+                      graphDataSpots = widget.cardsList[2].graphDataSpots;
+                      setState(() {});
+                    },
+                    type: StatCardType.white,
+                    title: widget.cardsList[2].title,
+                    value: widget.cardsList[2].value,
+                    subText: widget.cardsList[2].subValue,
+                  ),
+                ],
               ),
-            )
-          ],
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  StatCard(
+                    onPressed: () {
+                      graphDataSpots = widget.cardsList[3].graphDataSpots;
+                      setState(() {});
+                    },
+                    title: widget.cardsList[3].title,
+                    type: StatCardType.white,
+                    value: widget.cardsList[3].value,
+                    subText: widget.cardsList[3].subValue,
+                  ),
+                  const SizedBox(width: 20),
+                  StatCard(
+                    onPressed: () {
+                      graphDataSpots = widget.cardsList[4].graphDataSpots;
+                      setState(() {});
+                    },
+                    title: widget.cardsList[4].title,
+                    type: StatCardType.white,
+                    value: widget.cardsList[4].value,
+                    subText: widget.cardsList[4].subValue,
+                  ),
+                  const SizedBox(width: 20),
+                  StatCard(
+                    onPressed: () {
+                      graphDataSpots = widget.cardsList[5].graphDataSpots;
+                      setState(() {});
+                    },
+                    type: StatCardType.white,
+                    title: widget.cardsList[5].title,
+                    value: widget.cardsList[5].value,
+                    subText: widget.cardsList[5].subValue,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 40),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          height: 400,
+          child: Expanded(
+            child: UniversalGraph(
+                graphDataSpots: graphDataSpots!,
+                title: 'Company history',
+                moneyFormatter: moneyFormatter),
+          ),
+        ),
+        const SizedBox(height: 40),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Top 3 hourly rate',
+                style: AppTextStyle.boldMedium,
+              ),
+              Text(
+                'Maybe you should spend some more time here?',
+                style: AppTextStyle.fatGray,
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 20),
+        const Divider(
+          height: 0,
+        ),
+        BlocBuilder<ClientsBloc, ClientsState>(
+          builder: (context, state) {
+            return ClientListResult(
+                searchResult: state.clients, moneyFormatter: moneyFormatter);
+          },
+        )
       ],
     );
   }
+}
+
+List<List<Widget>> splitList(List list) {
+  int arraySized = (list.length / 2).ceil();
+  List<Widget> firstList = [];
+  List<Widget> secondList = [];
+
+  for (var i = 0; i < list.length; i++) {
+    if (i >= arraySized) {
+      secondList.add(list[i]);
+    } else {
+      firstList.add(list[i]);
+    }
+  }
+  return [firstList, secondList];
 }

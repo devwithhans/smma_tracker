@@ -1,16 +1,14 @@
-import 'package:agency_time/functions/statistics/blocs/stats_bloc/stats_bloc.dart';
-import 'package:agency_time/functions/statistics/models/company_month.dart';
-import 'package:agency_time/functions/statistics/views/dashboard_view/user_stat_profile_view.dart';
-import 'package:agency_time/logic/clients/clients_bloc/clients_bloc.dart';
+import 'package:agency_time/views/view_data_visualisation/web/user_stat_profile_view.dart';
+import 'package:agency_time/models/company_month.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
-import 'package:agency_time/utils/functions/print_duration.dart';
+import 'package:agency_time/views/view_data_visualisation/data_visualisation_dependencies.dart';
 
-import 'package:agency_time/views/lists_view/web/widgets/column_row.dart';
-import 'package:agency_time/views/lists_view/web/widgets/column_row_clickable.dart';
-import 'package:agency_time/views/lists_view/web/widgets/web_list_header.dart';
-import 'package:flutter/material.dart';
+import 'package:agency_time/views/view_lists/web/widgets/column_row.dart';
+import 'package:agency_time/views/view_lists/web/widgets/column_row_clickable.dart';
+import 'package:agency_time/views/view_lists/web/widgets/web_list_header.dart';
+
 import 'package:intl/intl.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:side_sheet/side_sheet.dart';
 
 class WebEmployeesView extends StatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:agency_time/functions/tracking/models/tag.dart';
+import 'package:agency_time/models/tag.dart';
 import 'package:agency_time/models/user.dart';
 
 class Company {

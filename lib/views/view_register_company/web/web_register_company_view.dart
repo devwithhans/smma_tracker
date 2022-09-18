@@ -1,8 +1,8 @@
-import 'package:agency_time/functions/payments/models/new_company_cubit/new_company_cubit.dart';
+import 'package:agency_time/logic/authentication/new_company_cubit/new_company_cubit.dart';
 import 'package:agency_time/utils/constants/spacings.dart';
 import 'package:agency_time/utils/widgets/loading_screen.dart';
 import 'package:agency_time/utils/widgets/responsive_widgets/splitscreen.dart';
-import 'package:agency_time/views/register_company_view/web/widgets/company_details.dart';
+import 'package:agency_time/views/view_register_company/web/widgets/company_details.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';

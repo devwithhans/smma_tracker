@@ -2,25 +2,33 @@ import 'package:agency_time/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomElevatedButton extends StatelessWidget {
-  const CustomElevatedButton(
-      {Key? key,
-      required this.text,
-      this.loading = false,
-      required this.onPressed,
-      this.backgroundColor = Colors.black,
-      this.textColor = Colors.white})
-      : super(key: key);
+  const CustomElevatedButton({
+    Key? key,
+    required this.text,
+    this.border = false,
+    this.loading = false,
+    required this.onPressed,
+    this.backgroundColor = Colors.black,
+    this.textColor = Colors.white,
+  }) : super(key: key);
 
   final void Function() onPressed;
   final String text;
   final Color backgroundColor;
   final Color textColor;
   final bool loading;
+  final bool border;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              side: border ? BorderSide(color: Colors.black) : BorderSide(),
+            ),
+          ),
           minimumSize: MaterialStateProperty.all<Size>(Size(100, 55)),
           elevation: MaterialStateProperty.all<double>(0),
           backgroundColor: MaterialStateProperty.all<Color>(backgroundColor)),
@@ -31,7 +39,7 @@ class CustomElevatedButton extends StatelessWidget {
             )
           : Text(
               text,
-              style: TextStyle(color: textColor, fontSize: 18),
+              style: TextStyle(color: textColor, fontSize: 16),
             ),
     );
   }

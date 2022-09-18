@@ -1,5 +1,7 @@
+import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/functions/print_duration.dart';
 import 'package:agency_time/utils/widgets/custom_graph/get_main_data.dart';
+import 'package:agency_time/utils/widgets/custom_toggl_button.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -30,58 +32,62 @@ class UniversalGraph extends StatelessWidget {
 
     return Container(
       decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(18),
-          ),
-          color: Color(0xff2C2C2C)),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 10, 20, 10),
-        child: noData || graphDataSpots.isEmpty
-            ? Center(
-                child: Text(
-                  'Not enough data to show ${title} graph',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+        borderRadius: BorderRadius.all(
+          Radius.circular(18),
+        ),
+      ),
+      child: noData || graphDataSpots.isEmpty
+          ? Center(
+              child: Text(
+                'Not enough data to show ${title} graph',
+                style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: AppTextStyle.boldMedium,
+                ),
+                Text(
+                  'Tap on the cards above to change data',
+                  style: AppTextStyle.fatGray,
+                ),
+                SizedBox(height: 10),
+                SizedBox(
+                  width: 300,
+                  child: CustomToggl(
+                    buttons: const ['Week', 'Month', 'Year'],
+                    selected: 'selected',
+                    onPressed: (v) {},
                   ),
                 ),
-              )
-            : Column(
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                SizedBox(height: 10),
+                Expanded(
+                  child: LineChart(
+                    mainData(
+                      moneyFormatter: moneyFormatter,
+                      months: sortetMonth,
+                      getBottomTitleWidgets: getBottomTitleWidgets(sortetMonth),
+                      getLeftTitleWidgets:
+                          getLeftTitleWidgets(sortetMonth, moneyFormatter),
+                      spots: getFlSpots(sortetMonth),
                     ),
                   ),
-                  SizedBox(height: 20),
-                  Expanded(
-                    child: LineChart(
-                      mainData(
-                        moneyFormatter: moneyFormatter,
-                        months: sortetMonth,
-                        getBottomTitleWidgets:
-                            getBottomTitleWidgets(sortetMonth),
-                        getLeftTitleWidgets:
-                            getLeftTitleWidgets(sortetMonth, moneyFormatter),
-                        spots: getFlSpots(sortetMonth),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-      ),
+                ),
+              ],
+            ),
     );
   }
 }
 
 Widget Function(double, TitleMeta)? getBottomTitleWidgets(months) {
   return (double value, TitleMeta meta) {
-    print('meta.max');
-    print(meta.max == value);
     const style = TextStyle(
       color: Color(0xff68737d),
       fontWeight: FontWeight.bold,
@@ -90,7 +96,7 @@ Widget Function(double, TitleMeta)? getBottomTitleWidgets(months) {
     DateTime date = months[value.toInt()].date;
     Widget text;
     text = Text(
-      '${DateFormat('MM/dd/yy').format(date)}',
+      '${DateFormat('MMM').format(date)}',
       style: style,
       textAlign: meta.max == value ? TextAlign.left : TextAlign.center,
     );

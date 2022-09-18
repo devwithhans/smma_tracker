@@ -40,9 +40,15 @@ class CustomToggl extends StatelessWidget {
             ),
             fillColor: selected == e ? Colors.black : Colors.white,
             textStyle: TextStyle(
+              fontWeight: FontWeight.w600,
               color: selected == e ? Colors.white : Colors.black,
             ),
-            child: Text(e),
+            child: Text(
+              e,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             onPressed: () {
               onPressed(e);

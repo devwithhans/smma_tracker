@@ -1,5 +1,5 @@
-import 'package:agency_time/functions/tracking/models/tag.dart';
-import 'package:agency_time/functions/tracking/views/finish_tracking/widgets/search_tags.dart';
+import 'package:agency_time/models/tag.dart';
+import 'package:agency_time/views/sheet_finish_tracker/shared/widgets/search_tags.dart';
 import 'package:agency_time/views/view_data_visualisation/data_visualisation_dependencies.dart';
 import 'package:agency_time/views/sheet_finish_tracker/shared/widgets/duration_formfield.dart';
 

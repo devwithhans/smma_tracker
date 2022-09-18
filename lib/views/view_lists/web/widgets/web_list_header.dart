@@ -1,7 +1,7 @@
 import 'package:agency_time/logic/clients/clients_bloc/clients_bloc.dart';
-import 'package:agency_time/functions/statistics/blocs/stats_bloc/stats_bloc.dart';
 import 'package:agency_time/utils/widgets/custom_searchfield.dart';
-import 'package:agency_time/views/payment_view/paymeny_view_dependencies.dart';
+import 'package:agency_time/views/dialog_payment/paymeny_view_dependencies.dart';
+import 'package:agency_time/views/view_data_visualisation/data_visualisation_dependencies.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:intl/intl.dart';
 

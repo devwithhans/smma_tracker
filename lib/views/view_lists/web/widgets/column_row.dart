@@ -1,4 +1,4 @@
-import 'package:agency_time/views/payment_view/paymeny_view_dependencies.dart';
+import 'package:agency_time/views/dialog_payment/paymeny_view_dependencies.dart';
 
 class ColumnRow extends StatelessWidget {
   const ColumnRow({

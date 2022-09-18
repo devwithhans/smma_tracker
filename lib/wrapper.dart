@@ -1,7 +1,8 @@
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
-import 'package:agency_time/views/enter_app_view/web/web_register_user_view.dart';
-import 'package:agency_time/views/no_company_view/web/web_no_company_view.dart';
-import 'package:agency_time/views/view_folder_template/web/web_navigation.dart';
+import 'package:agency_time/views/section_navigation/web/web_navigation_section.dart';
+import 'package:agency_time/views/view_enter_app/web/web_register_user_view.dart';
+import 'package:agency_time/views/view_no_company/web/web_no_company_view.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -17,7 +18,6 @@ class Wrapper extends StatelessWidget {
         if (state.authStatus == AuthStatus.signedIn) {
           bool hasActiveSubscription = state.company!.subscription != null &&
               state.company!.roles[state.appUser!.id] == 'owner';
-
           return WebNavigation(hasActiveSubscription: hasActiveSubscription);
         }
         if (state.authStatus == AuthStatus.signedOut) {

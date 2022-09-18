@@ -1,8 +1,7 @@
 export 'package:agency_time/logic/clients/clients_bloc/clients_bloc.dart';
-export 'package:agency_time/functions/statistics/blocs/stats_bloc/stats_bloc.dart';
-export 'package:agency_time/functions/statistics/functions/get_employee_dash_data.dart';
-export 'package:agency_time/functions/statistics/models/dashdata.dart';
-export 'package:agency_time/functions/statistics/views/dashboard_view/dashboard_widgets/pie_chart.dart';
+export 'package:agency_time/logic/data_visualisation/functions/get_employee_dash_data.dart';
+// export 'package:agency_time/functions/statistics/models/dashdata.dart';
+export 'package:agency_time/utils/widgets/pie_chart.dart';
 export 'package:agency_time/views/view_data_visualisation/web/widgets/overview_header.dart';
 export 'package:agency_time/utils/functions/print_duration.dart';
 export 'package:agency_time/utils/widgets/custom_graph.dart';
@@ -13,3 +12,4 @@ export 'package:agency_time/utils/widgets/loading_screen.dart';
 export 'package:agency_time/views/view_data_visualisation/web/widgets/data_visualisation_template.dart';
 export 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 export 'package:agency_time/views/sheet_finish_tracker/shared/widgets/edit_tag_and_duration.dart';
+export 'package:agency_time/logic/data_visualisation/blocs/stats_bloc/stats_bloc.dart';
