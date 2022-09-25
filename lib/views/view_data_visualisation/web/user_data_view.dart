@@ -35,7 +35,7 @@ class UserDataView extends StatelessWidget {
                     userId: appUser.id,
                   );
 
-                  return DataVisualisationTemplate(
+                  return GraphAndCards(
                     cardsList: [
                       ValueCard(
                           value: printDuration(dashData.totalDuration),
@@ -85,31 +85,6 @@ class UserDataView extends StatelessWidget {
                                         .internalDuration),
                               )
                               .toList()),
-                    ],
-                    pieChartList: [
-                      BlocBuilder<ClientsBloc, ClientsState>(
-                        builder: (context, state) {
-                          return Expanded(
-                            child: CustomPieChart(
-                                chartData: overviewShowingSections(
-                                    internals: state.internalClients,
-                                    clientsDuration: dashData.clientDuration,
-                                    internalDuration:
-                                        dashData.internalDuration),
-                                title: 'Time distribution'),
-                          );
-                        },
-                      ),
-                      const SizedBox(width: 20, height: 20),
-                      Expanded(
-                        child: CustomPieChart(
-                            chartData: tagsShowingSections(
-                              tags: company.tags,
-                              tagsMap: dashData.tags,
-                            ),
-                            title: 'Time distribution on tags'),
-                      ),
-                      const SizedBox(width: 20, height: 20),
                     ],
                   );
                 },

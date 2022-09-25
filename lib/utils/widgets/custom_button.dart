@@ -26,10 +26,12 @@ class CustomElevatedButton extends StatelessWidget {
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
-              side: border ? BorderSide(color: Colors.black) : BorderSide(),
+              side: border
+                  ? const BorderSide(color: Colors.black)
+                  : const BorderSide(),
             ),
           ),
-          minimumSize: MaterialStateProperty.all<Size>(Size(100, 55)),
+          minimumSize: MaterialStateProperty.all<Size>(Size(100, 50)),
           elevation: MaterialStateProperty.all<double>(0),
           backgroundColor: MaterialStateProperty.all<Color>(backgroundColor)),
       onPressed: loading ? () {} : onPressed,
@@ -39,7 +41,7 @@ class CustomElevatedButton extends StatelessWidget {
             )
           : Text(
               text,
-              style: TextStyle(color: textColor, fontSize: 16),
+              style: TextStyle(color: textColor, fontSize: 14),
             ),
     );
   }

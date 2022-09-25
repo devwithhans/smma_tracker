@@ -41,28 +41,28 @@ class DashboardDataView extends StatelessWidget {
         const SizedBox(height: 10),
         Row(
           children: [
-            Expanded(
-              child: StatCard(
-                onPressed: () {},
-                loading: loading,
-                type: StatCardType.white,
-                title: 'Hours',
-                value: printDuration(dashData.totalDuration),
-                subText: dashData.totalDurationChange.isNegative
-                    ? 'h / last'
-                    : '+${dashData.totalDurationChange.inHours}h / last',
-              ),
-            ),
+            // Expanded(
+            //   child: StatCard(
+            //     onPressed: () {},
+            //     loading: loading,
+            //     type: StatCardType.white,
+            //     title: 'Hours',
+            //     value: printDuration(dashData.totalDuration),
+            //     subText: dashData.totalDurationChange.isNegative
+            //         ? 'h / last'
+            //         : '+${dashData.totalDurationChange.inHours}h / last',
+            //   ),
+            // ),
             const SizedBox(width: 15),
-            Expanded(
-              child: StatCard(
-                  onPressed: () {},
-                  loading: loading,
-                  type: StatCardType.white,
-                  title: 'Hourly rate',
-                  value: moneyFormatter.format(dashData.totalHourlyRate),
-                  subText: dashData.totalHourlyRateChange),
-            ),
+            // Expanded(
+            //   child: StatCard(
+            //       onPressed: () {},
+            //       loading: loading,
+            //       type: StatCardType.white,
+            //       title: 'Hourly rate',
+            //       value: moneyFormatter.format(dashData.totalHourlyRate),
+            //       subText: dashData.totalHourlyRateChange),
+            // ),
           ],
         ),
         const SizedBox(height: 15),
@@ -73,28 +73,28 @@ class DashboardDataView extends StatelessWidget {
         const SizedBox(height: 10),
         Row(
           children: [
-            Expanded(
-              child: StatCard(
-                onPressed: () {},
-                loading: loading,
-                type: StatCardType.white,
-                title: 'Hours',
-                value: printDuration(dashData.clientDuration),
-                subText: dashData.clientDuration.isNegative
-                    ? 'h / last'
-                    : '+${dashData.clientDurationChange.inHours}h / last',
-              ),
-            ),
+            // Expanded(
+            //   child: StatCard(
+            //     onPressed: () {},
+            //     loading: loading,
+            //     type: StatCardType.white,
+            //     title: 'Hours',
+            //     value: printDuration(dashData.clientDuration),
+            //     subText: dashData.clientDuration.isNegative
+            //         ? 'h / last'
+            //         : '+${dashData.clientDurationChange.inHours}h / last',
+            //   ),
+            // ),
             const SizedBox(width: 15),
-            Expanded(
-              child: StatCard(
-                  onPressed: () {},
-                  loading: loading,
-                  type: StatCardType.white,
-                  title: 'Hourly rate',
-                  value: moneyFormatter.format(dashData.clientsHourlyRate),
-                  subText: dashData.clientHourlyRateChange),
-            ),
+            // Expanded(
+            //   child: StatCard(
+            //       onPressed: () {},
+            //       loading: loading,
+            //       type: StatCardType.white,
+            //       title: 'Hourly rate',
+            //       value: moneyFormatter.format(dashData.clientsHourlyRate),
+            //       subText: dashData.clientHourlyRateChange),
+            // ),
           ],
         ),
         const SizedBox(
@@ -107,18 +107,18 @@ class DashboardDataView extends StatelessWidget {
         const SizedBox(height: 10),
         Row(
           children: [
-            Expanded(
-              child: StatCard(
-                onPressed: () {},
-                loading: loading,
-                type: StatCardType.white,
-                title: 'Hours',
-                value: printDuration(dashData.internalDuration),
-                subText: dashData.internalDuration.isNegative
-                    ? 'h / last'
-                    : '+${dashData.internalDurationChange.inHours}h / last',
-              ),
-            ),
+            // Expanded(
+            //   child: StatCard(
+            //     onPressed: () {},
+            //     loading: loading,
+            //     type: StatCardType.white,
+            //     title: 'Hours',
+            //     value: printDuration(dashData.internalDuration),
+            //     subText: dashData.internalDuration.isNegative
+            //         ? 'h / last'
+            //         : '+${dashData.internalDurationChange.inHours}h / last',
+            //   ),
+            // ),
           ],
         ),
         const SizedBox(

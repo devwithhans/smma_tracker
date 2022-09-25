@@ -31,6 +31,7 @@ LineChartData mainData({
     ),
     lineTouchData: LineTouchData(
       touchTooltipData: LineTouchTooltipData(
+          fitInsideHorizontally: true,
           tooltipBgColor: Color(0xff23b6e6),
           getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
             return touchedBarSpots.map((barSpot) {
@@ -73,9 +74,6 @@ LineChartData mainData({
       leftTitles: AxisTitles(
         sideTitles: SideTitles(
           showTitles: false,
-          interval: 1,
-          getTitlesWidget: getLeftTitleWidgets,
-          reservedSize: 100,
         ),
       ),
       bottomTitles: AxisTitles(
@@ -90,8 +88,8 @@ LineChartData mainData({
     lineBarsData: [
       LineChartBarData(
         spots: spots,
-        isCurved: false,
-        preventCurveOverShooting: true,
+        isCurved: true,
+        // preventCurveOverShooting: true,
         preventCurveOvershootingThreshold: 0,
         gradient: LinearGradient(
           colors: kGradientColors,

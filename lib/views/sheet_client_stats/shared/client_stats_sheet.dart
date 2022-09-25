@@ -24,29 +24,29 @@ class ClientStatsSheet extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: StatCard(
-                    onPressed: () {},
-                    type: StatCardType.white,
-                    title: 'MRR',
-                    value: moneyFormatter.format(23000),
-                    subText: 2,
-                  ),
-                ),
-                StatCard(
-                  onPressed: () {},
-                  type: StatCardType.white,
-                  title: 'Hourly rate',
-                  value: moneyFormatter.format(23000),
-                  subText: 2,
-                ),
-                StatCard(
-                  onPressed: () {},
-                  type: StatCardType.white,
-                  title: 'Tracked time',
-                  value: moneyFormatter.format(23000),
-                  subText: 2,
-                ),
+                // Expanded(
+                //   child: StatCard(
+                //     onPressed: () {},
+                //     type: StatCardType.white,
+                //     title: 'MRR',
+                //     value: moneyFormatter.format(23000),
+                //     subText: 2,
+                //   ),
+                // ),
+                // StatCard(
+                //   onPressed: () {},
+                //   type: StatCardType.white,
+                //   title: 'Hourly rate',
+                //   value: moneyFormatter.format(23000),
+                //   subText: 2,
+                // ),
+                // StatCard(
+                //   onPressed: () {},
+                //   type: StatCardType.white,
+                //   title: 'Tracked time',
+                //   value: moneyFormatter.format(23000),
+                //   subText: 2,
+                // ),
               ],
             )
           ],

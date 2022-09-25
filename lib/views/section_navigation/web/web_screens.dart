@@ -1,5 +1,5 @@
 import 'package:agency_time/views/view_settings/web/settings_view.dart';
-import 'package:agency_time/views/view_data_visualisation/web/company_data_view.dart';
+import 'package:agency_time/views/menu_view_company_overview/company_overview_view.dart';
 import 'package:agency_time/views/view_data_visualisation/web/user_data_view.dart';
 import 'package:agency_time/views/view_lists/web/web_clients_view.dart';
 import 'package:agency_time/views/view_lists/web/web_employees_view.dart';

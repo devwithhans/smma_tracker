@@ -36,12 +36,12 @@ class AuthRepo {
   }
 
   Future<Company> _addMembersToCompanyDocument(Company company) async {
-    List<Member> members = [];
+    List<UserData> members = [];
     List membersUIDs = company.roles.keys.toList();
     for (var uid in membersUIDs) {
       DocumentSnapshot<Map<String, dynamic>> member =
           await FirebaseFirestore.instance.collection('users').doc(uid).get();
-      members.add(Member.convert(member.data()!, uid));
+      members.add(UserData.convert(member.data()!, uid));
     }
 
     company = company.copyWith(members: members);

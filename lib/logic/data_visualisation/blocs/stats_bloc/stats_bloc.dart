@@ -14,21 +14,24 @@ part 'stats_state.dart';
 class StatsBloc extends Bloc<StatsEvent, StatsState> {
   SettingsRepo settingsRepo;
   Company company;
-  late StreamSubscription monthsStream;
+  StreamSubscription? _currentDataStream;
 
-  StatsBloc(this.settingsRepo, this.company) : super(StatsState()) {
+  StatsBloc(this.settingsRepo, this.company) : super(const StatsState()) {
     settingsRepo.checkIfMonthsUpToDate();
-    monthsStream = settingsRepo.companyMonths().listen(((event) {
-      emit(state.copyWith(status: StatsStatus.loading));
-      for (var monthRaw in event.docs) {
+    on<AddMonth>(_addMonth);
+    on<GetStats>(_getStats);
+    on<StartStream>(_startStream);
+  }
+
+  void _startStream(StartStream event, Emitter emit) async {
+    Stream stream = settingsRepo.companyCurrentMonthStream();
+    _currentDataStream?.cancel();
+    _currentDataStream = stream.listen((data) async {
+      for (var monthRaw in data.docs) {
         add(AddMonth(monthRaw));
       }
-      add(GetStats());
-    }));
-
-    on<AddMonth>(_addMonth);
-
-    on<GetStats>(_getStats);
+      add(const GetStats());
+    });
   }
 
   void _getStats(GetStats event, Emitter emit) {

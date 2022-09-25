@@ -1,3 +1,4 @@
+import 'package:agency_time/models/company_month.dart';
 import 'package:agency_time/models/tag.dart';
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/models/company.dart';
@@ -100,14 +101,41 @@ class SettingsRepo {
     }
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> companyMonths() {
+  Future getCurrentMonth() async {
+    AppUser user = authCubit.state.appUser!;
+    DocumentSnapshot<Map<String, dynamic>> currentMonth =
+        await FirebaseFirestore.instance
+            .collection('companies')
+            .doc(user.companyId)
+            .collection('month')
+            .doc()
+            .get();
+
+    return CompanyMonth.convertMonth(
+        currentMonth.data(), currentMonth.id, authCubit.state.company!);
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> companyCurrentDayStream() {
+    AppUser user = authCubit.state.appUser!;
+
+    return FirebaseFirestore.instance
+        .collection('companies')
+        .doc(user.companyId)
+        .collection('days')
+        .orderBy('day')
+        .limitToLast(2)
+        .snapshots(includeMetadataChanges: true);
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> companyCurrentMonthStream() {
     AppUser user = authCubit.state.appUser!;
 
     return FirebaseFirestore.instance
         .collection('companies')
         .doc(user.companyId)
         .collection('months')
-        .limit(12)
+        .orderBy('updatedAt')
+        .limitToLast(2)
         .snapshots(includeMetadataChanges: true);
   }
 }

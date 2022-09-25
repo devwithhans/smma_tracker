@@ -16,5 +16,5 @@ class AppTextStyle {
       const TextStyle(fontSize: 40, fontWeight: FontWeight.w600);
 
   static TextStyle fatGray = const TextStyle(
-      fontSize: 16, fontWeight: FontWeight.w500, color: kColorGreyText);
+      fontSize: 14, fontWeight: FontWeight.w500, color: kColorGreyText);
 }

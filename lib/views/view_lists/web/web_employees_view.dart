@@ -1,3 +1,4 @@
+import 'package:agency_time/models/employee.dart';
 import 'package:agency_time/views/view_data_visualisation/web/user_stat_profile_view.dart';
 import 'package:agency_time/models/company_month.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';

@@ -8,6 +8,8 @@ import 'package:agency_time/logic/timer/repositories/ticker.dart';
 import 'package:agency_time/logic/timer/repositories/ui_helper.dart';
 import 'package:agency_time/logic/timer/timer_bloc/timer_bloc.dart';
 import 'package:agency_time/models/client.dart';
+import 'package:agency_time/new_data_handling/blocs/data_bloc/data_bloc.dart';
+import 'package:agency_time/new_data_handling/repositories/data_repository.dart';
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:agency_time/views/dialog_payment/web/web_checkout_overlap.dart';
 import 'package:agency_time/views/section_navigation/web/web_screens.dart';
@@ -31,12 +33,6 @@ class WebNavigation extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => NavigationCubit()),
-          // BlocProvider(
-          //     create: (context) => TimerBloc(
-          //         context.read<AuthCubit>().state.appUser!.companyId,
-          //         ticker: const Ticker(),
-          //         trackerRepository: context.read<TrackerRepo>(),
-          //         clientsBloc: context.read<ClientsBloc>())),
           BlocProvider(
             create: (context) => TimerBloc(
               stopWatchRepository: context.read<TimerRepository>(),
@@ -45,10 +41,15 @@ class WebNavigation extends StatelessWidget {
             ),
           ),
           BlocProvider(
+            create: (context) =>
+                DataBloc(context.read<DataReposity>())..add(RunStream()),
+          ),
+          BlocProvider(
               create: (context) => SettingsBloc(context.read<SettingsRepo>())),
           BlocProvider(
               create: (context) => StatsBloc(context.read<SettingsRepo>(),
-                  context.read<AuthorizationCubit>().state.company!)),
+                  context.read<AuthorizationCubit>().state.company!)
+                ..add(StartStream())),
         ],
         child: BlocBuilder<NavigationCubit, NavigationState>(
           builder: (context, state) {

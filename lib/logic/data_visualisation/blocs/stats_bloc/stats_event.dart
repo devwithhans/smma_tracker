@@ -16,3 +16,7 @@ class GetStats extends StatsEvent {
   final DateTime? month;
   const GetStats({this.month});
 }
+
+class StartStream extends StatsEvent {
+  const StartStream();
+}

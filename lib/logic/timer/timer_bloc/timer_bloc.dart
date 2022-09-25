@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:agency_time/logic/clients/clients_bloc/clients_bloc.dart';
-import 'dart:html' as html;
 
 import 'package:agency_time/models/tag.dart';
 import 'package:agency_time/logic/timer/repositories/timer_repo.dart';

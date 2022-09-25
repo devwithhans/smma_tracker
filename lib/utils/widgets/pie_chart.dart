@@ -1,4 +1,5 @@
 import 'package:agency_time/models/company_month.dart';
+import 'package:agency_time/models/employee.dart';
 import 'package:agency_time/models/tag.dart';
 import 'package:agency_time/models/client.dart';
 import 'package:agency_time/utils/constants/colors.dart';

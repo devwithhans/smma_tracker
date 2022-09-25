@@ -1,5 +1,4 @@
 import 'package:agency_time/logic/data_visualisation/blocs/navigation_cubit/navigation_cubit.dart';
-import 'package:agency_time/utils/constants/colors.dart';
 import 'package:agency_time/views/section_navigation/web/web_screens.dart';
 import 'package:agency_time/views/section_navigation/web/widgets/web_menu_button.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +25,7 @@ class _WebSideMenuState extends State<WebSideMenu> {
       constraints: BoxConstraints(minWidth: 110, maxWidth: 300),
       width: width * 0.01,
       padding: EdgeInsets.all(20),
-      color: kColorBlack,
+      color: Colors.black87,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -42,8 +41,8 @@ class _WebSideMenuState extends State<WebSideMenu> {
                   ),
                 ],
               ),
-              SizedBox(height: 30),
-              Divider(
+              const SizedBox(height: 30),
+              const Divider(
                 height: 10,
                 color: Color(0xff434343),
               ),
@@ -64,7 +63,7 @@ class _WebSideMenuState extends State<WebSideMenu> {
                             icon: e.icon,
                             text: e.title,
                           ),
-                          Divider(
+                          const Divider(
                             height: 10,
                             color: Color(0xff434343),
                           ),

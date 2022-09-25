@@ -2,7 +2,7 @@ import 'package:agency_time/models/company.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/widgets/stats_card.dart';
 import 'package:agency_time/views/view_lists/web/widgets/client_list_result.dart';
-import '../../data_visualisation_dependencies.dart';
+import '../../view_data_visualisation/data_visualisation_dependencies.dart';
 import 'package:intl/intl.dart';
 
 class ValueCard {
@@ -19,22 +19,19 @@ class ValueCard {
   });
 }
 
-class DataVisualisationTemplate extends StatefulWidget {
-  const DataVisualisationTemplate({
+class GraphAndCards extends StatefulWidget {
+  const GraphAndCards({
     required this.cardsList,
-    this.pieChartList,
     Key? key,
   }) : super(key: key);
 
   final List<ValueCard> cardsList;
-  final List<Widget>? pieChartList;
 
   @override
-  State<DataVisualisationTemplate> createState() =>
-      _DataVisualisationTemplateState();
+  State<GraphAndCards> createState() => _GraphAndCardsState();
 }
 
-class _DataVisualisationTemplateState extends State<DataVisualisationTemplate> {
+class _GraphAndCardsState extends State<GraphAndCards> {
   List<GraphDataSpots>? graphDataSpots;
   late String selectedGraph;
   @override
@@ -47,9 +44,6 @@ class _DataVisualisationTemplateState extends State<DataVisualisationTemplate> {
   @override
   Widget build(BuildContext context) {
     graphDataSpots ??= widget.cardsList.first.graphDataSpots;
-
-    double width = MediaQuery.of(context).size.width - 500;
-
     Company company = context.read<AuthorizationCubit>().state.company!;
     final NumberFormat moneyFormatter = CustomCurrencyFormatter.getFormatter(
         countryCode: company.countryCode, short: false);
@@ -64,36 +58,33 @@ class _DataVisualisationTemplateState extends State<DataVisualisationTemplate> {
               Row(
                 children: [
                   StatCard(
+                    valueCard: widget.cardsList[0],
+                    selectedGraph: selectedGraph,
                     onPressed: () {
                       graphDataSpots = widget.cardsList[0].graphDataSpots;
+                      selectedGraph = widget.cardsList[0].title;
                       setState(() {});
                     },
-                    title: widget.cardsList[0].title,
-                    type: StatCardType.white,
-                    value: widget.cardsList[0].value,
-                    subText: widget.cardsList[0].subValue,
                   ),
                   const SizedBox(width: 20),
                   StatCard(
+                    valueCard: widget.cardsList[1],
+                    selectedGraph: selectedGraph,
                     onPressed: () {
                       graphDataSpots = widget.cardsList[1].graphDataSpots;
+                      selectedGraph = widget.cardsList[1].title;
                       setState(() {});
                     },
-                    title: widget.cardsList[1].title,
-                    type: StatCardType.white,
-                    value: widget.cardsList[1].value,
-                    subText: widget.cardsList[1].subValue,
                   ),
                   const SizedBox(width: 20),
                   StatCard(
+                    valueCard: widget.cardsList[2],
+                    selectedGraph: selectedGraph,
                     onPressed: () {
                       graphDataSpots = widget.cardsList[2].graphDataSpots;
+                      selectedGraph = widget.cardsList[2].title;
                       setState(() {});
                     },
-                    type: StatCardType.white,
-                    title: widget.cardsList[2].title,
-                    value: widget.cardsList[2].value,
-                    subText: widget.cardsList[2].subValue,
                   ),
                 ],
               ),
@@ -103,34 +94,31 @@ class _DataVisualisationTemplateState extends State<DataVisualisationTemplate> {
                   StatCard(
                     onPressed: () {
                       graphDataSpots = widget.cardsList[3].graphDataSpots;
+                      selectedGraph = widget.cardsList[3].title;
                       setState(() {});
                     },
-                    title: widget.cardsList[3].title,
-                    type: StatCardType.white,
-                    value: widget.cardsList[3].value,
-                    subText: widget.cardsList[3].subValue,
+                    valueCard: widget.cardsList[3],
+                    selectedGraph: selectedGraph,
                   ),
                   const SizedBox(width: 20),
                   StatCard(
                     onPressed: () {
                       graphDataSpots = widget.cardsList[4].graphDataSpots;
+                      selectedGraph = widget.cardsList[4].title;
                       setState(() {});
                     },
-                    title: widget.cardsList[4].title,
-                    type: StatCardType.white,
-                    value: widget.cardsList[4].value,
-                    subText: widget.cardsList[4].subValue,
+                    valueCard: widget.cardsList[4],
+                    selectedGraph: selectedGraph,
                   ),
                   const SizedBox(width: 20),
                   StatCard(
                     onPressed: () {
                       graphDataSpots = widget.cardsList[5].graphDataSpots;
+                      selectedGraph = widget.cardsList[5].title;
                       setState(() {});
                     },
-                    type: StatCardType.white,
-                    title: widget.cardsList[5].title,
-                    value: widget.cardsList[5].value,
-                    subText: widget.cardsList[5].subValue,
+                    valueCard: widget.cardsList[5],
+                    selectedGraph: selectedGraph,
                   ),
                 ],
               ),
@@ -141,12 +129,10 @@ class _DataVisualisationTemplateState extends State<DataVisualisationTemplate> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           height: 400,
-          child: Expanded(
-            child: UniversalGraph(
-                graphDataSpots: graphDataSpots!,
-                title: 'Company history',
-                moneyFormatter: moneyFormatter),
-          ),
+          child: UniversalGraph(
+              graphDataSpots: graphDataSpots!,
+              title: 'Company history',
+              moneyFormatter: moneyFormatter),
         ),
         const SizedBox(height: 40),
         Padding(

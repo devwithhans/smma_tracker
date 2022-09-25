@@ -26,8 +26,7 @@ class UniversalGraph extends StatelessWidget {
     List<GraphDataSpots> sortetMonth = [];
     sortetMonth.addAll(graphDataSpots);
     sortetMonth.sort(
-      (a, b) => a.date.microsecondsSinceEpoch
-          .compareTo(b.date.microsecondsSinceEpoch),
+      (a, b) => a.date.day.compareTo(b.date.day),
     );
 
     return Container(
@@ -39,7 +38,7 @@ class UniversalGraph extends StatelessWidget {
       child: noData || graphDataSpots.isEmpty
           ? Center(
               child: Text(
-                'Not enough data to show ${title} graph',
+                'Not enough data to show $title graph',
                 style: const TextStyle(
                   fontSize: 20,
                   color: Colors.white,
@@ -58,7 +57,7 @@ class UniversalGraph extends StatelessWidget {
                   'Tap on the cards above to change data',
                   style: AppTextStyle.fatGray,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 SizedBox(
                   width: 300,
                   child: CustomToggl(
@@ -67,7 +66,7 @@ class UniversalGraph extends StatelessWidget {
                     onPressed: (v) {},
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Expanded(
                   child: LineChart(
                     mainData(
@@ -88,17 +87,12 @@ class UniversalGraph extends StatelessWidget {
 
 Widget Function(double, TitleMeta)? getBottomTitleWidgets(months) {
   return (double value, TitleMeta meta) {
-    const style = TextStyle(
-      color: Color(0xff68737d),
-      fontWeight: FontWeight.bold,
-      fontSize: 16,
-    );
     DateTime date = months[value.toInt()].date;
     Widget text;
     text = Text(
-      '${DateFormat('MMM').format(date)}',
-      style: style,
-      textAlign: meta.max == value ? TextAlign.left : TextAlign.center,
+      DateFormat('d/M').format(date),
+      style: AppTextStyle.fatGray,
+      textAlign: TextAlign.right,
     );
     return SideTitleWidget(
       axisSide: meta.axisSide,
@@ -106,6 +100,70 @@ Widget Function(double, TitleMeta)? getBottomTitleWidgets(months) {
       child: text,
     );
   };
+}
+
+List<FlSpot> getFlSpots(List<GraphDataSpots> months) {
+  List<FlSpot> result = [];
+
+  dynamic maxValue = getMaxValue(months).value;
+  for (var element in months) {
+    result.add(
+      FlSpot(
+        months.indexOf(element).toDouble(),
+        getValueAsDouble(
+          maxValue: maxValue,
+          value: element.value,
+          totalSpots: 5,
+        ),
+      ),
+    );
+  }
+
+  return result;
+}
+
+dynamic getValueAsDouble({
+  required dynamic maxValue,
+  required int totalSpots,
+  required dynamic value,
+}) {
+  if (value is Duration) {
+    if (value == Duration()) {
+      return 0;
+    }
+    Duration roundedValue =
+        Duration(seconds: (maxValue.inSeconds / 36000).ceil() * 36000);
+
+    // Duration valueDuration = value;
+    return ((value.inMilliseconds / roundedValue.inMilliseconds) * totalSpots);
+  } else {
+    double num = value;
+    double roundedValue = (maxValue / 10000).ceil() * 10000;
+
+    return (num / roundedValue) * totalSpots;
+  }
+}
+
+GraphDataSpots getMaxValue(List<GraphDataSpots> months) {
+  List<GraphDataSpots> sortedList = [];
+  sortedList.addAll(months);
+  sortedList.sort((a, b) => a.value.compareTo(b.value));
+
+  return sortedList.last;
+}
+
+String getValueAsString(
+    dynamic maxValue, int totalSpots, double spot, moneyFormatter) {
+  if (maxValue is Duration) {
+    Duration roundedMaxValue =
+        Duration(seconds: (maxValue.inSeconds / 36000).ceil() * 36000);
+    return printDuration(Duration(
+        milliseconds:
+            ((roundedMaxValue.inMilliseconds / totalSpots) * spot).toInt()));
+  } else {
+    double roundedNum = (maxValue / 10000).ceil() * 10000;
+    return moneyFormatter.format((roundedNum / totalSpots) * spot);
+  }
 }
 
 Widget Function(double, TitleMeta)? getLeftTitleWidgets(
@@ -149,78 +207,8 @@ Widget Function(double, TitleMeta)? getLeftTitleWidgets(
   };
 }
 
-List<FlSpot> getFlSpots(List<GraphDataSpots> months) {
-  List<FlSpot> result = [];
-
-  months.forEach((element) {
-    dynamic maxValue = getMaxValue(months).value;
-
-    result.add(
-      FlSpot(
-        months.indexOf(element).toDouble(),
-        getValueAsDouble(
-          maxValue: maxValue,
-          value: element.value,
-          totalSpots: 5,
-        ),
-      ),
-    );
-  });
-
-  return result;
-}
-
-dynamic getValueAsDouble({
-  required dynamic maxValue,
-  required int totalSpots,
-  required dynamic value,
-}) {
-  if (value is Duration) {
-    if (value == Duration()) {
-      return 0;
-    }
-    Duration roundedValue =
-        Duration(seconds: (maxValue.inSeconds / 36000).ceil() * 36000);
-
-    // Duration valueDuration = value;
-    return ((value.inMilliseconds / roundedValue.inMilliseconds) * totalSpots);
-  } else {
-    double num = value;
-    double roundedValue = (maxValue / 10000).ceil() * 10000;
-
-    return (num / roundedValue) * totalSpots;
-  }
-}
-
-GraphDataSpots getMaxValue(List<GraphDataSpots> months) {
-  List<GraphDataSpots> sortedList = [];
-  sortedList.addAll(months);
-  sortedList.sort((a, b) => a.value.compareTo(b.value));
-
-  return sortedList.last;
-}
-
 class GraphDataSpots {
   DateTime date;
   dynamic value;
-
   GraphDataSpots({required this.date, required this.value});
-}
-
-String getValueAsString(
-    dynamic maxValue, int totalSpots, double spot, moneyFormatter) {
-  if (maxValue is Duration) {
-    Duration duration = maxValue;
-    Duration roundedMaxValue =
-        Duration(seconds: (maxValue.inSeconds / 36000).ceil() * 36000);
-
-    return printDuration(Duration(
-        milliseconds:
-            ((roundedMaxValue.inMilliseconds / totalSpots) * spot).toInt()));
-  } else {
-    double num = maxValue;
-
-    double roundedNum = (maxValue / 10000).ceil() * 10000;
-    return moneyFormatter.format((roundedNum / totalSpots) * spot);
-  }
 }

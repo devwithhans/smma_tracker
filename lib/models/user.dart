@@ -26,21 +26,21 @@ class AppUser {
   }
 }
 
-class Member {
+class UserData {
   String id;
   String firstName;
   String lastName;
   String email;
 
-  Member({
+  UserData({
     required this.id,
     required this.firstName,
     required this.lastName,
     required this.email,
   });
 
-  static Member convert(Map<String, dynamic> value, String uid) {
-    return Member(
+  static UserData convert(Map<String, dynamic> value, String uid) {
+    return UserData(
         id: uid,
         firstName: value['firstName'],
         lastName: value['lastName'],

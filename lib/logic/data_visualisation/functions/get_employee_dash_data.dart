@@ -1,5 +1,6 @@
 import 'package:agency_time/models/company_month.dart';
 import 'package:agency_time/models/dashdata.dart';
+import 'package:agency_time/models/employee.dart';
 import 'package:agency_time/models/user.dart';
 import 'package:agency_time/utils/functions/data_explanation.dart';
 
@@ -21,7 +22,7 @@ DashData getEmployeeDashData({
         .toList();
     if (selectedMonthEmployeeList.isEmpty) {
       selectedMonthEmployee = Employee(
-        member: Member(email: '', id: '', firstName: '', lastName: ''),
+        member: UserData(email: '', id: '', firstName: '', lastName: ''),
         clientsDuration: Duration(),
         totalDuration: Duration(),
         internalDuration: Duration(),

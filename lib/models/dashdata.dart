@@ -1,5 +1,6 @@
 import 'package:agency_time/models/company_month.dart';
 import 'package:agency_time/utils/functions/data_explanation.dart';
+import 'package:agency_time/views/sheet_finish_tracker/shared/widgets/select_tag.dart';
 import 'package:flutter/material.dart';
 
 class DashData {
@@ -45,12 +46,14 @@ class DashData {
     required CompanyMonth selectedMonth,
     required CompanyMonth compareMonth,
   }) {
+    print('selectedMonth.days.length');
+    print(selectedMonth.days.length);
     return DashData(
       tags: selectedMonth.tags,
       selectedMrr: selectedMonth.mrr,
       compareMrr: compareMonth.mrr,
       changeMrr: getChangeProcentage(selectedMonth.mrr, compareMonth.mrr),
-      clientDuration: selectedMonth.clientsDuration,
+      clientDuration: selectedMonth.clientsDuration, //NOOTTTEEE
       clientDurationChange:
           selectedMonth.clientsDuration - compareMonth.clientsDuration,
       clientsHourlyRate: selectedMonth.clientsHourlyRate,

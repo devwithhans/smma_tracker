@@ -5,7 +5,7 @@ class Company {
   String id;
   List<Tag> tags;
   String companyName;
-  List<Member> members;
+  List<UserData> members;
   Map roles;
   String countryCode;
   Subscription? subscription;
@@ -24,7 +24,7 @@ class Company {
     String? id,
     List<Tag>? tags,
     String? companyName,
-    List<Member>? members,
+    List<UserData>? members,
     Map? roles,
     String? countryCode,
     Subscription? subscription,

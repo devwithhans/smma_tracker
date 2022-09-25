@@ -2,7 +2,7 @@ import 'package:agency_time/logic/clients/clients_bloc/clients_bloc.dart';
 import 'package:agency_time/utils/widgets/custom_searchfield.dart';
 import 'package:agency_time/views/dialog_payment/paymeny_view_dependencies.dart';
 import 'package:agency_time/views/view_data_visualisation/data_visualisation_dependencies.dart';
-import 'package:month_picker_dialog/month_picker_dialog.dart';
+
 import 'package:intl/intl.dart';
 
 class WebListHeader extends StatelessWidget {
@@ -54,23 +54,23 @@ class WebListHeader extends StatelessWidget {
               const SizedBox(height: 20),
             ],
           ),
-          CustomMonthButton(
-              icon: Icons.calendar_month,
-              onPressed: () async {
-                DateTime? selection = await showMonthPicker(
-                  firstDate: context.read<StatsBloc>().state.months.first.date!,
-                  lastDate: context.read<StatsBloc>().state.months.last.date!,
-                  context: context,
-                  initialDate: currentMonth,
-                );
-                if (selection != null) {
-                  context.read<StatsBloc>().add(GetStats(month: selection));
-                  context
-                      .read<ClientsBloc>()
-                      .add(GetClientsWithMonth(month: selection));
-                }
-              },
-              text: DateFormat('MMM, y').format(currentMonth))
+          // CustomMonthButton(
+          //     icon: Icons.calendar_month,
+          //     onPressed: () async {
+          //       DateTime? selection = await showMonthPicker(
+          //         firstDate: context.read<StatsBloc>().state.months.first.date!,
+          //         lastDate: context.read<StatsBloc>().state.months.last.date!,
+          //         context: context,
+          //         initialDate: currentMonth,
+          //       );
+          //       if (selection != null) {
+          //         context.read<StatsBloc>().add(GetStats(month: selection));
+          //         context
+          //             .read<ClientsBloc>()
+          //             .add(GetClientsWithMonth(month: selection));
+          //       }
+          //     },
+          //     text: DateFormat('MMM, y').format(currentMonth))
         ],
       ),
     );

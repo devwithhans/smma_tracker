@@ -1,7 +1,7 @@
 import 'package:agency_time/logic/data_visualisation/functions/get_employee_dash_data.dart';
 import 'package:agency_time/logic/data_visualisation/blocs/stats_bloc/stats_bloc.dart';
 import 'package:agency_time/models/company.dart';
-import 'package:agency_time/models/company_month.dart';
+import 'package:agency_time/models/employee.dart';
 import 'package:agency_time/utils/widgets/custom_app_bar.dart';
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/utils/functions/currency_formatter.dart';
