@@ -1,6 +1,7 @@
 import 'package:agency_time/utils/widgets/custom_input_form.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 class DropDownSearch extends StatefulWidget {
   const DropDownSearch({
@@ -54,36 +55,43 @@ class _DropDownSearchState extends State<DropDownSearch> {
           visible: selectedCurrency == null &&
               searchParameter.isNotEmpty &&
               focusNode.hasFocus,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  blurRadius: 10,
-                  offset: Offset(1, 4),
-                )
-              ],
-              borderRadius: const BorderRadius.all(Radius.circular(8)),
-              border: Border.all(color: const Color(0xFFC8C8C8), width: 0.5),
-            ),
-            width: double.infinity,
-            constraints: const BoxConstraints(maxHeight: 200, minHeight: 0),
-            child: ListView(
-                children: result
-                    .map(
-                      (currency) => CurrencySearchResultTile(
-                        currency: currency,
-                        onTap: () {
-                          selectedCurrency = currency;
-                          widget.onChange(currency.code);
-                          controller.text =
-                              '${CurrencyUtils.currencyToEmoji(currency.flag ?? '')} ${currency.code}';
-                          setState(() {});
-                        },
-                      ),
+          child: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.center,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      blurRadius: 10,
+                      offset: Offset(1, 4),
                     )
-                    .toList()),
+                  ],
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  border:
+                      Border.all(color: const Color(0xFFC8C8C8), width: 0.5),
+                ),
+                width: double.infinity,
+                constraints: const BoxConstraints(maxHeight: 200, minHeight: 0),
+                child: ListView(
+                    children: result
+                        .map(
+                          (currency) => CurrencySearchResultTile(
+                            currency: currency,
+                            onTap: () {
+                              selectedCurrency = currency;
+                              widget.onChange(currency.code);
+                              controller.text =
+                                  '${CurrencyUtils.currencyToEmoji(currency.flag ?? '')} ${currency.code}';
+                              setState(() {});
+                            },
+                          ),
+                        )
+                        .toList()),
+              ),
+            ],
           ),
         )
       ],

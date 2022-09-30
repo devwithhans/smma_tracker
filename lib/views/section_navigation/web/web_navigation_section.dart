@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:agency_time/logic/clients/repos/client_repo.dart';
+import 'package:agency_time/logic/data_visualisation/blocs/data_bloc/data_bloc.dart';
 import 'package:agency_time/logic/data_visualisation/blocs/navigation_cubit/navigation_cubit.dart';
 import 'package:agency_time/logic/data_visualisation/blocs/settings_bloc/settings_bloc.dart';
 import 'package:agency_time/logic/settings/repos/settings_repo.dart';
@@ -8,7 +9,6 @@ import 'package:agency_time/logic/timer/repositories/ticker.dart';
 import 'package:agency_time/logic/timer/repositories/ui_helper.dart';
 import 'package:agency_time/logic/timer/timer_bloc/timer_bloc.dart';
 import 'package:agency_time/models/client.dart';
-import 'package:agency_time/new_data_handling/blocs/data_bloc/data_bloc.dart';
 import 'package:agency_time/new_data_handling/repositories/data_repository.dart';
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:agency_time/views/dialog_payment/web/web_checkout_overlap.dart';
@@ -46,10 +46,6 @@ class WebNavigation extends StatelessWidget {
           ),
           BlocProvider(
               create: (context) => SettingsBloc(context.read<SettingsRepo>())),
-          BlocProvider(
-              create: (context) => StatsBloc(context.read<SettingsRepo>(),
-                  context.read<AuthorizationCubit>().state.company!)
-                ..add(StartStream())),
         ],
         child: BlocBuilder<NavigationCubit, NavigationState>(
           builder: (context, state) {

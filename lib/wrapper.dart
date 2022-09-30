@@ -15,7 +15,6 @@ class Wrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthorizationCubit, AuthorizationState>(
       builder: ((context, state) {
-        print(state.authStatus);
         if (state.authStatus == AuthStatus.signedIn) {
           bool hasActiveSubscription = state.company!.subscription != null &&
               state.company!.roles[state.appUser!.id] == 'owner';

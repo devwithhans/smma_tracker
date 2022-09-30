@@ -1,5 +1,3 @@
-import 'package:agency_time/logic/data_visualisation/functions/get_employee_dash_data.dart';
-import 'package:agency_time/logic/data_visualisation/blocs/stats_bloc/stats_bloc.dart';
 import 'package:agency_time/models/company.dart';
 import 'package:agency_time/models/employee.dart';
 import 'package:agency_time/utils/widgets/custom_app_bar.dart';
@@ -12,10 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class UserStatProfile extends StatelessWidget {
-  const UserStatProfile({required this.employee, required this.state, Key? key})
-      : super(key: key);
+  const UserStatProfile({required this.employee, Key? key}) : super(key: key);
   final Employee employee;
-  final StatsState state;
 
   @override
   Widget build(BuildContext context) {
@@ -36,18 +32,18 @@ class UserStatProfile extends StatelessWidget {
               child: ListView(
                 padding: EdgeInsets.all(20),
                 children: [
-                  DashboardDataView(
-                    loading: false,
-                    moneyFormatter: moneyFormatter,
-                    userId: employee.member.id,
-                    dashData: getEmployeeDashData(
-                      mrr: state.selectedMonth.mrr,
-                      userId: employee.member.id,
-                      employee: employee,
-                      thisMonthEmployees: state.selectedMonth.employees,
-                      lastMonthEmployees: state.compareMonth.employees,
-                    ),
-                  ),
+                  // DashboardDataView(
+                  //   loading: false,
+                  //   moneyFormatter: moneyFormatter,
+                  //   userId: employee.member.id,
+                  //   dashData: getEmployeeDashData(
+                  //     mrr: state.selectedMonth.mrr,
+                  //     userId: employee.member.id,
+                  //     employee: employee,
+                  //     thisMonthEmployees: state.selectedMonth.employees,
+                  //     lastMonthEmployees: state.compareMonth.employees,
+                  //   ),
+                  // ),
                 ],
               ),
             ),

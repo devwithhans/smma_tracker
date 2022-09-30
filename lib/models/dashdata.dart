@@ -46,8 +46,6 @@ class DashData {
     required CompanyMonth selectedMonth,
     required CompanyMonth compareMonth,
   }) {
-    print('selectedMonth.days.length');
-    print(selectedMonth.days.length);
     return DashData(
       tags: selectedMonth.tags,
       selectedMrr: selectedMonth.mrr,

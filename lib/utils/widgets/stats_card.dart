@@ -19,7 +19,7 @@ class StatCard extends StatelessWidget {
   final bool loading;
   final bool expanded;
   final bool responsive;
-  final Function()? onPressed;
+  final Function(String selected)? onPressed;
   @override
   Widget build(BuildContext context) {
     bool selected = selectedGraph == valueCard.title;
@@ -50,7 +50,11 @@ class StatCard extends StatelessWidget {
         fillColor: selected ? Colors.black : Colors.transparent,
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
         constraints: BoxConstraints(minHeight: 50, maxHeight: 120),
-        onPressed: onPressed,
+        onPressed: () {
+          if (onPressed != null) {
+            onPressed!(valueCard.title);
+          }
+        },
         shape: RoundedRectangleBorder(
             side: BorderSide(color: kColorGrey),
             borderRadius: BorderRadius.circular(15)),

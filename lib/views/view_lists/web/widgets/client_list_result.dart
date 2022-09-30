@@ -65,6 +65,7 @@ class ClientListResult extends StatelessWidget {
               TwoLineText(
                 title: moneyFormatter.format(client.selectedMonth!.hourlyRate),
                 subTitle: ProcentageChange(
+                    small: true,
                     procentage: client.hourlyRateChange.isFinite
                         ? client.hourlyRateChange
                         : 100),

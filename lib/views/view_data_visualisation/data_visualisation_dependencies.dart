@@ -1,6 +1,4 @@
 export 'package:agency_time/logic/clients/clients_bloc/clients_bloc.dart';
-export 'package:agency_time/logic/data_visualisation/functions/get_employee_dash_data.dart';
-// export 'package:agency_time/functions/statistics/models/dashdata.dart';
 export 'package:agency_time/utils/widgets/pie_chart.dart';
 export 'package:agency_time/views/view_data_visualisation/web/widgets/overview_header.dart';
 export 'package:agency_time/utils/functions/print_duration.dart';
@@ -12,4 +10,3 @@ export 'package:agency_time/utils/widgets/loading_screen.dart';
 export 'package:agency_time/views/menu_view_company_overview/widgets/company_card_and_graph.dart';
 export 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 export 'package:agency_time/views/sheet_finish_tracker/shared/widgets/edit_tag_and_duration.dart';
-export 'package:agency_time/logic/data_visualisation/blocs/stats_bloc/stats_bloc.dart';

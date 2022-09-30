@@ -7,10 +7,12 @@ class DataState extends Equatable {
   final Changes changes;
   final List<Month> allMonths;
   final List<Day> allDays;
+  final List<GraphDataSpot> graphDataSpots;
 
   const DataState({
     this.currentMonth,
     this.allDays = const [],
+    this.graphDataSpots = const [],
     this.changes = const Changes(),
     this.compareMonth,
     this.compareMonthDate,
@@ -23,6 +25,7 @@ class DataState extends Equatable {
     DateTime? compareMonthDate,
     List<Month>? allMonths,
     List<Day>? allDays,
+    List<GraphDataSpot>? graphDataSpots,
     Changes? changes,
   }) {
     return DataState(
@@ -30,12 +33,19 @@ class DataState extends Equatable {
       compareMonth: compareMonth ?? this.compareMonth,
       allMonths: allMonths ?? this.allMonths,
       allDays: allDays ?? this.allDays,
+      graphDataSpots: graphDataSpots ?? this.graphDataSpots,
       compareMonthDate: compareMonthDate ?? this.compareMonthDate,
       changes: changes ?? this.changes,
     );
   }
 
   @override
-  List get props =>
-      [currentMonth, allMonths, compareMonth, compareMonthDate, changes];
+  List get props => [
+        currentMonth,
+        allMonths,
+        compareMonth,
+        compareMonthDate,
+        graphDataSpots,
+        changes,
+      ];
 }

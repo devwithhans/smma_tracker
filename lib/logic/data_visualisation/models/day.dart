@@ -23,7 +23,6 @@ class Day {
     DateTime today = DateTime.now();
     if (today.year == monthDate.year && today.month == monthDate.month) {
       daysInMonth = today.day;
-      print(daysInMonth);
     }
 
     for (int i = 1; i <= daysInMonth; i++) {
@@ -37,7 +36,6 @@ class Day {
       }
       days.add(day);
     }
-    print(days.last.dayDate);
     return days;
   }
 

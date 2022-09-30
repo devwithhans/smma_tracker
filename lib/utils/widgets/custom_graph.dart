@@ -9,12 +9,10 @@ import 'package:intl/intl.dart';
 class UniversalGraph extends StatelessWidget {
   const UniversalGraph({
     required this.graphDataSpots,
-    required this.title,
     required this.moneyFormatter,
     Key? key,
   }) : super(key: key);
   final List<GraphDataSpots> graphDataSpots;
-  final String title;
 
   final NumberFormat moneyFormatter;
   @override
@@ -23,11 +21,12 @@ class UniversalGraph extends StatelessWidget {
         (graphDataSpots.first.value == 0 ||
             graphDataSpots.first.value == Duration());
 
-    List<GraphDataSpots> sortetMonth = [];
-    sortetMonth.addAll(graphDataSpots);
-    sortetMonth.sort(
+    List<GraphDataSpots> sortetGraphDataSpots = [];
+    sortetGraphDataSpots.addAll(graphDataSpots);
+    sortetGraphDataSpots.sort(
       (a, b) => a.date.day.compareTo(b.date.day),
     );
+    // sortetGraphDataSpots.removeRange(1, 23);
 
     return Container(
       decoration: const BoxDecoration(
@@ -36,10 +35,10 @@ class UniversalGraph extends StatelessWidget {
         ),
       ),
       child: noData || graphDataSpots.isEmpty
-          ? Center(
+          ? const Center(
               child: Text(
-                'Not enough data to show $title graph',
-                style: const TextStyle(
+                'Not enough data to show the graph',
+                style: TextStyle(
                   fontSize: 20,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -49,33 +48,16 @@ class UniversalGraph extends StatelessWidget {
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: AppTextStyle.boldMedium,
-                ),
-                Text(
-                  'Tap on the cards above to change data',
-                  style: AppTextStyle.fatGray,
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  width: 300,
-                  child: CustomToggl(
-                    buttons: const ['Week', 'Month', 'Year'],
-                    selected: 'selected',
-                    onPressed: (v) {},
-                  ),
-                ),
-                const SizedBox(height: 10),
                 Expanded(
                   child: LineChart(
                     mainData(
                       moneyFormatter: moneyFormatter,
-                      months: sortetMonth,
-                      getBottomTitleWidgets: getBottomTitleWidgets(sortetMonth),
-                      getLeftTitleWidgets:
-                          getLeftTitleWidgets(sortetMonth, moneyFormatter),
-                      spots: getFlSpots(sortetMonth),
+                      graphDataSpots: sortetGraphDataSpots,
+                      getBottomTitleWidgets:
+                          getBottomTitleWidgets(sortetGraphDataSpots),
+                      getLeftTitleWidgets: getLeftTitleWidgets(
+                          sortetGraphDataSpots, moneyFormatter),
+                      spots: getFlSpots(sortetGraphDataSpots),
                     ),
                   ),
                 ),
@@ -189,7 +171,6 @@ Widget Function(double, TitleMeta)? getLeftTitleWidgets(
           style: style, textAlign: TextAlign.left);
     } else if (maxValue is Duration) {
       int maxValueRound = (maxValue.inSeconds / 36000).ceil() * 36000;
-      print(maxValueRound);
 
       Duration duration = Duration(seconds: maxValueRound);
       if (duration == Duration()) {
@@ -209,6 +190,8 @@ Widget Function(double, TitleMeta)? getLeftTitleWidgets(
 
 class GraphDataSpots {
   DateTime date;
+  String dateString;
   dynamic value;
-  GraphDataSpots({required this.date, required this.value});
+  GraphDataSpots(
+      {required this.date, required this.value, required this.dateString});
 }

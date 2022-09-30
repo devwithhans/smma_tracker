@@ -6,6 +6,15 @@ class DataReposity {
   AuthorizationCubit authCubit;
   DataReposity(this.authCubit);
 
+  Stream monthsStream() {
+    return FirebaseFirestore.instance
+        .collection('companies')
+        .doc(authCubit.state.appUser!.companyId)
+        .collection('months')
+        .orderBy('updatedAt')
+        .snapshots();
+  }
+
   Future<List<Month>> getMonths(int lastX) async {
     String companyId = authCubit.state.appUser!.companyId!;
 
@@ -15,7 +24,7 @@ class DataReposity {
         .doc('QyuKKbXD4fX3ipFca2se')
         .collection('months')
         .orderBy('updatedAt')
-        .limitToLast(3)
+        .limitToLast(12)
         .get();
     List<Month> monthsList = [];
 

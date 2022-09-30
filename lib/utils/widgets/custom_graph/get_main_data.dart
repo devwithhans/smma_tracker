@@ -8,13 +8,13 @@ LineChartData mainData({
   Widget Function(double, TitleMeta)? getLeftTitleWidgets,
   Widget Function(double, TitleMeta)? getBottomTitleWidgets,
   List<FlSpot>? spots,
-  required List<GraphDataSpots> months,
+  required List<GraphDataSpots> graphDataSpots,
   required NumberFormat moneyFormatter,
 }) {
   return LineChartData(
     borderData: FlBorderData(show: false),
     minX: 0,
-    maxX: months.length.toDouble() - 1,
+    maxX: graphDataSpots.length.toDouble() - 1,
     minY: 0,
     maxY: 6,
     gridData: FlGridData(
@@ -44,8 +44,8 @@ LineChartData mainData({
                 ),
                 children: [
                   TextSpan(
-                    text: getValueAsString(
-                        getMaxValue(months).value, 5, flSpot.y, moneyFormatter),
+                    text: getValueAsString(getMaxValue(graphDataSpots).value, 5,
+                        flSpot.y, moneyFormatter),
                     style: TextStyle(
                       color: Colors.grey[100],
                       fontWeight: FontWeight.normal,
@@ -89,7 +89,6 @@ LineChartData mainData({
       LineChartBarData(
         spots: spots,
         isCurved: true,
-        // preventCurveOverShooting: true,
         preventCurveOvershootingThreshold: 0,
         gradient: LinearGradient(
           colors: kGradientColors,

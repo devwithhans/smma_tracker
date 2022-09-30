@@ -5,19 +5,24 @@ import 'package:flutter_svg/svg.dart';
 class ProcentageChange extends StatelessWidget {
   const ProcentageChange({
     Key? key,
+    this.small = false,
     required this.procentage,
   }) : super(key: key);
 
   final double procentage;
+  final bool small;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+      padding: small ? null : EdgeInsets.symmetric(horizontal: 8, vertical: 1),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
-        border: Border.all(
-            color: procentage.isNegative ? kColorRed : kColorGreen, width: 2),
+        border: small
+            ? null
+            : Border.all(
+                color: procentage.isNegative ? kColorRed : kColorGreen,
+                width: 2),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -35,7 +40,7 @@ class ProcentageChange extends StatelessWidget {
           Text(
             '${procentage.abs().toStringAsFixed(0)}%',
             style: TextStyle(
-              fontSize: 15,
+              fontSize: small ? 10 : 15,
               fontWeight: FontWeight.w600,
               color: procentage.isNegative ? kColorRed : kColorGreen,
             ),

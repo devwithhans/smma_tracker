@@ -1,9 +1,7 @@
-import 'package:agency_time/models/company.dart';
-import 'package:agency_time/new_data_handling/blocs/data_bloc/data_bloc.dart';
-import 'package:agency_time/new_data_handling/models/duration_data.dart';
+import '../view_data_visualisation/data_visualisation_dependencies.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/widgets/custom_button.dart';
-import '../view_data_visualisation/data_visualisation_dependencies.dart';
+import 'package:agency_time/models/company.dart';
 import 'package:intl/intl.dart';
 
 class CompanyDataView extends StatelessWidget {
@@ -49,114 +47,11 @@ class CompanyDataView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
-            BlocBuilder<DataBloc, DataState>(builder: (context, state) {
-              if (state.currentMonth == null || state.compareMonth == null) {
-                return const Center(
-                  child: Text('loading'),
-                );
-              }
-
-              DurationData selectedDurations = state.currentMonth!.durationData;
-              DurationData compareDurations = state.compareMonth!.durationData;
-
-              return Column(
-                children: [
-                  GraphAndCards(
-                    cardsList: [
-                      ValueCard(
-                        value: printDuration(
-                            state.currentMonth!.durationData.totalDuration),
-                        title: 'Total duration',
-                        subValue: state.changes.totalDuration.isNegative
-                            ? 'h / last'
-                            : '+${state.changes.totalDuration.inHours}h / last',
-                        graphDataSpots: state.currentMonth!.days
-                            .map(
-                              (e) => GraphDataSpots(
-                                date: e.dayDate,
-                                value: e.durationData.totalDuration,
-                              ),
-                            )
-                            .toList(),
-                      ),
-                      ValueCard(
-                        value: printDuration(
-                            state.currentMonth!.durationData.clientDuration),
-                        title: 'Client duration',
-                        subValue: state.changes.clientDuration.isNegative
-                            ? 'h / last'
-                            : '+${state.changes.clientDuration.inHours}h / last',
-                        graphDataSpots: state.allDays
-                            .map(
-                              (e) => GraphDataSpots(
-                                date: e.dayDate,
-                                value: e.durationData.clientDuration,
-                              ),
-                            )
-                            .toList(),
-                      ),
-                      ValueCard(
-                        value: printDuration(
-                            state.currentMonth!.durationData.internalDuration),
-                        title: 'Internal duration',
-                        subValue: state.changes.internalDuration.isNegative
-                            ? 'h / last'
-                            : '+${state.changes.internalDuration.inHours}h / last',
-                        graphDataSpots: state.currentMonth!.days
-                            .map(
-                              (e) => GraphDataSpots(
-                                date: e.dayDate,
-                                value: e.durationData.internalDuration,
-                              ),
-                            )
-                            .toList(),
-                      ),
-                      ValueCard(
-                        value: moneyFormatter.format(
-                            state.currentMonth!.durationData.totalHourlyRate),
-                        title: 'Total hourly rate',
-                        subValue: state.changes.totalHourlyRate,
-                        graphDataSpots: state.currentMonth!.days
-                            .map(
-                              (e) => GraphDataSpots(
-                                date: e.dayDate,
-                                value: e.durationData.totalHourlyRate,
-                              ),
-                            )
-                            .toList(),
-                      ),
-                      ValueCard(
-                        value: moneyFormatter.format(
-                            state.currentMonth!.durationData.clientHourlyRate),
-                        title: 'Clients hourly rate',
-                        subValue: state.changes.clientHourlyRate,
-                        graphDataSpots: state.currentMonth!.days
-                            .map(
-                              (e) => GraphDataSpots(
-                                date: e.dayDate,
-                                value: e.durationData.clientHourlyRate,
-                              ),
-                            )
-                            .toList(),
-                      ),
-                      ValueCard(
-                        value: moneyFormatter.format(state.currentMonth!.mrr),
-                        title: 'Monthly revenue',
-                        subValue: state.changes.mrr,
-                        graphDataSpots: state.currentMonth!.days
-                            .map(
-                              (e) => GraphDataSpots(
-                                date: e.dayDate,
-                                value: e.revenue,
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            }),
+            Column(
+              children: const [
+                GraphAndCards(),
+              ],
+            )
           ],
         ),
         const SizedBox(height: 200),
