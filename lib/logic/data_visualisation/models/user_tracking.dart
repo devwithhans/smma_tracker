@@ -1,5 +1,5 @@
 import 'package:agency_time/models/user.dart';
-import 'package:agency_time/new_data_handling/models/duration_data.dart';
+import 'package:agency_time/logic/data_visualisation/models/duration_data.dart';
 
 class UserTracking {
   DurationData durationData;

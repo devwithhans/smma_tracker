@@ -7,6 +7,6 @@ export 'package:flutter/material.dart';
 export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:agency_time/utils/functions/currency_formatter.dart';
 export 'package:agency_time/utils/widgets/loading_screen.dart';
-export 'package:agency_time/views/menu_view_company_overview/widgets/company_card_and_graph.dart';
+export 'package:agency_time/views/side_menu/view_company_performance/widgets/company_card_and_graph.dart';
 export 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 export 'package:agency_time/views/sheet_finish_tracker/shared/widgets/edit_tag_and_duration.dart';

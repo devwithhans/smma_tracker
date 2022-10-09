@@ -64,43 +64,6 @@ class SettingsRepo {
     }
   }
 
-  Future<void> createNewMonth() async {
-    String companyId = authCubit.state.company!.id;
-    FirebaseFunctions firebaseFunctions =
-        FirebaseFunctions.instanceFor(region: 'europe-west1');
-
-    try {
-      HttpsCallable callable = firebaseFunctions.httpsCallable('startNewMonth',
-          options: HttpsCallableOptions());
-      final resp = await callable.call(<String, dynamic>{
-        'companyId': companyId,
-      });
-    } on FirebaseFunctionsException catch (e) {
-      print(e);
-    }
-  }
-
-  Future<void> checkIfMonthsUpToDate() async {
-    AppUser user = authCubit.state.appUser!;
-    DateTime month = DateTime.now();
-    String monthId = '${month.year}-${month.month}';
-    if (month.isAfter(DateTime.now())) {
-      throw Exception('You cannot choose a future month');
-    }
-
-    DocumentSnapshot<Map<String, dynamic>> companyMonth;
-
-    companyMonth = await FirebaseFirestore.instance
-        .collection('companies')
-        .doc(user.companyId)
-        .collection('months')
-        .doc(monthId)
-        .get();
-    if (!companyMonth.exists) {
-      await createNewMonth();
-    }
-  }
-
   Future getCurrentMonth() async {
     AppUser user = authCubit.state.appUser!;
     DocumentSnapshot<Map<String, dynamic>> currentMonth =

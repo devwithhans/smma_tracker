@@ -22,9 +22,9 @@ class _WebSideMenuState extends State<WebSideMenu> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Container(
-      constraints: BoxConstraints(minWidth: 110, maxWidth: 300),
+      constraints: BoxConstraints(minWidth: 80, maxWidth: 200),
       width: width * 0.01,
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.all(5),
       color: Colors.black87,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -33,15 +33,18 @@ class _WebSideMenuState extends State<WebSideMenu> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              SizedBox(height: 10),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SvgPicture.asset(
                     'assets/whitelogo.svg',
-                    width: 70,
+                    width: 45,
                   ),
                 ],
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 10),
               const Divider(
                 height: 10,
                 color: Color(0xff434343),

@@ -1,41 +1,65 @@
 import 'package:agency_time/models/tag.dart';
 import 'package:agency_time/models/tracking.dart';
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
-import 'package:agency_time/models/client.dart';
 import 'package:agency_time/models/user.dart';
+import 'package:agency_time/views/view_data_visualisation/data_visualisation_dependencies.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 
 class ClientsRepo {
   AuthorizationCubit authCubit;
   ClientsRepo(this.authCubit);
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  Future<void> pauseClient(
+      {required String id, required bool paused, required double mrr}) async {
+    FirebaseFunctions firebaseFunctions = FirebaseFunctions.instance;
+    firebaseFunctions.useFunctionsEmulator('localhost', 5001);
 
-  Future<Client> editClient(Client newValues) async {
+    DocumentReference clientDocument = firestore
+        .collection('companies')
+        .doc(authCubit.state.company!.id)
+        .collection('clients')
+        .doc(id)
+        .collection('months')
+        .doc('${DateTime.now().year}-${DateTime.now().month}');
+
+    await clientDocument.update({
+      'paused': paused,
+    });
+  }
+
+  Future<void> editClient({
+    required double mrr,
+    required double hourlyRateTarget,
+    required String name,
+    required String description,
+    required String id,
+  }) async {
     AppUser user = authCubit.state.appUser!;
 
     DocumentReference clientDocument = firestore
         .collection('companies')
         .doc(user.companyId)
         .collection('clients')
-        .doc(newValues.id);
+        .doc(id);
 
     try {
       await clientDocument.update({
-        'name': newValues.name,
-        'mrr': newValues.selectedMonth!.mrr,
-        'target_hourly_rate': newValues.selectedMonth!.hourlyRateTarget
+        'name': name,
+        'mrr': mrr,
+        'description': mrr,
+        'target_hourly_rate': hourlyRateTarget,
       });
       await clientDocument
           .collection('months')
           .doc('${DateTime.now().year}-${DateTime.now().month}')
           .set({
-        'name': newValues.name,
-        'mrr': newValues.selectedMonth!.mrr,
-        'target_hourly_rate': newValues.selectedMonth!.hourlyRateTarget,
+        'name': name,
+        'mrr': mrr,
+        'target_hourly_rate': hourlyRateTarget,
         'updatedAt': DateTime.now()
       }, SetOptions(merge: true));
-      return newValues;
     } on FirebaseException catch (e) {
       print(e.message);
       print(e.code);
@@ -49,6 +73,7 @@ class ClientsRepo {
         .collection('companies')
         .doc(user.companyId)
         .collection('clients')
+        .where('paused', isEqualTo: false)
         .snapshots();
   }
 

@@ -9,7 +9,7 @@ import 'package:agency_time/logic/timer/repositories/ticker.dart';
 import 'package:agency_time/logic/timer/repositories/ui_helper.dart';
 import 'package:agency_time/logic/timer/timer_bloc/timer_bloc.dart';
 import 'package:agency_time/models/client.dart';
-import 'package:agency_time/new_data_handling/repositories/data_repository.dart';
+import 'package:agency_time/logic/data_visualisation/repos/data_repository.dart';
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:agency_time/views/dialog_payment/web/web_checkout_overlap.dart';
 import 'package:agency_time/views/section_navigation/web/web_screens.dart';
@@ -42,7 +42,7 @@ class WebNavigation extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) =>
-                DataBloc(context.read<DataReposity>())..add(RunStream()),
+                DataBloc(context.read<DataRepository>())..add(RunStream()),
           ),
           BlocProvider(
               create: (context) => SettingsBloc(context.read<SettingsRepo>())),

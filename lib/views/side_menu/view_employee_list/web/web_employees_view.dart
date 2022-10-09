@@ -4,10 +4,6 @@ import 'package:agency_time/models/company_month.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/views/view_data_visualisation/data_visualisation_dependencies.dart';
 
-import 'package:agency_time/views/view_lists/web/widgets/column_row.dart';
-import 'package:agency_time/views/view_lists/web/widgets/column_row_clickable.dart';
-import 'package:agency_time/views/view_lists/web/widgets/web_list_header.dart';
-
 import 'package:intl/intl.dart';
 
 import 'package:side_sheet/side_sheet.dart';

@@ -1,6 +1,6 @@
 import 'package:agency_time/models/day.dart';
-import 'package:agency_time/new_data_handling/models/duration_data.dart';
-import 'package:agency_time/new_data_handling/models/user_tracking.dart';
+import 'package:agency_time/logic/data_visualisation/models/duration_data.dart';
+import 'package:agency_time/logic/data_visualisation/models/user_tracking.dart';
 
 class Day {
   final DateTime dayDate;

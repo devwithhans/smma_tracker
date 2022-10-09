@@ -1,4 +1,5 @@
-import 'package:agency_time/views/view_lists/web/widgets/column_row.dart';
+import 'package:agency_time/utils/widgets/client_list_result/column_row.dart';
+
 import 'package:agency_time/views/dialog_payment/paymeny_view_dependencies.dart';
 
 class ColumnRowClickable extends StatelessWidget {

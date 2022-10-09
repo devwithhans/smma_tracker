@@ -43,6 +43,7 @@ class DataState extends Equatable {
   List get props => [
         currentMonth,
         allMonths,
+        allDays,
         compareMonth,
         compareMonthDate,
         graphDataSpots,

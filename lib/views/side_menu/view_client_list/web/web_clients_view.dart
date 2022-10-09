@@ -3,10 +3,11 @@ import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.d
 import 'package:agency_time/models/client.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/functions/currency_formatter.dart';
+import 'package:agency_time/utils/widgets/client_list_result/client_list_result.dart';
+import 'package:agency_time/utils/widgets/client_list_result/column_row.dart';
+import 'package:agency_time/utils/widgets/client_list_result/web_list_header.dart';
 import 'package:agency_time/views/sheet_add_client/shared/add_client_sheet.dart';
-import 'package:agency_time/views/view_lists/web/widgets/client_list_result.dart';
-import 'package:agency_time/views/view_lists/web/widgets/column_row.dart';
-import 'package:agency_time/views/view_lists/web/widgets/web_list_header.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

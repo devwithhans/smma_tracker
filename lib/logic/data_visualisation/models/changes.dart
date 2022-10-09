@@ -1,4 +1,4 @@
-import 'package:agency_time/new_data_handling/models/month.dart';
+import 'package:agency_time/logic/data_visualisation/models/month.dart';
 import 'package:agency_time/utils/functions/data_explanation.dart';
 import 'package:agency_time/views/view_data_visualisation/data_visualisation_dependencies.dart';
 

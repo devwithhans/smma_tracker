@@ -1,11 +1,11 @@
-import '../view_data_visualisation/data_visualisation_dependencies.dart';
+import '../../view_data_visualisation/data_visualisation_dependencies.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/models/company.dart';
 import 'package:intl/intl.dart';
 
-class CompanyDataView extends StatelessWidget {
-  const CompanyDataView({Key? key}) : super(key: key);
+class ViewCompanyPerformance extends StatelessWidget {
+  const ViewCompanyPerformance({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

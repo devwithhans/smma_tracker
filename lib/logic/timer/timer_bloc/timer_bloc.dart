@@ -78,7 +78,7 @@ class TimerBloc extends Bloc<StopWatchEvent, TimerState> {
     _tickerSubscription?.cancel();
     _tickerSubscription =
         ticker.tick(event.duration.inSeconds).listen((duration) async {
-      add(Ticked(duration));
+      add(Ticked(DateTime.now().difference(state.start!).inSeconds));
     });
 
     if (state.trackingDocumentId != null) {

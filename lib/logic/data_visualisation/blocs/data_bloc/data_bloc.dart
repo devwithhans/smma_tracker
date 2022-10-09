@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'package:agency_time/new_data_handling/models/changes.dart';
-import 'package:agency_time/new_data_handling/models/day.dart';
-import 'package:agency_time/new_data_handling/models/duration_data.dart';
-import 'package:agency_time/new_data_handling/models/graph_data_spots.dart';
-import 'package:agency_time/new_data_handling/models/graph_interval.dart';
-import 'package:agency_time/new_data_handling/models/month.dart';
-import 'package:agency_time/new_data_handling/repositories/data_repository.dart';
+import 'package:agency_time/logic/data_visualisation/models/changes.dart';
+import 'package:agency_time/logic/data_visualisation/models/day.dart';
+import 'package:agency_time/logic/data_visualisation/models/duration_data.dart';
+import 'package:agency_time/logic/data_visualisation/models/graph_data_spots.dart';
+import 'package:agency_time/logic/data_visualisation/models/graph_interval.dart';
+import 'package:agency_time/logic/data_visualisation/models/month.dart';
+import 'package:agency_time/logic/data_visualisation/repos/data_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -13,9 +13,10 @@ part 'data_event.dart';
 part 'data_state.dart';
 
 class DataBloc extends Bloc<DataEvent, DataState> {
-  DataReposity dataReposity;
+  DataRepository dataReposity;
   StreamSubscription? _currentDataStream;
   DataBloc(this.dataReposity) : super(DataState()) {
+    dataReposity.checkIfMonthsUpToDate();
     on<DataEvent>((event, emit) {});
     on<RunStream>(_startStream);
     on<GetMonths>(_getMonths);
@@ -29,6 +30,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     allMonths.forEach((e) {
       allDays.addAll(e.days);
     });
+    allMonths.sort((a, b) => a.monthDate.compareTo(b.monthDate));
     emit(state.copyWith(allMonths: allMonths, allDays: allDays));
     add(SetCompareMonth());
   }
@@ -82,7 +84,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   }
 
   _updateMonth(Month month) {
-    emit(state.copyWith(currentMonth: month));
+    emit(state.copyWith(currentMonth: month, allDays: month.days));
   }
 
   void _getGraphPlots(GetGraphPlots event, Emitter emit) {
@@ -133,7 +135,8 @@ class DataHelpers {
     Month compareMonth =
         Month(monthDate: DateTime.now(), durationData: const DurationData());
     if (allMonths.length >= 2) {
-      compareMonth = allMonths[allMonths.length - 1];
+      compareMonth = allMonths[allMonths.length - 2];
+      print(compareMonth.monthDate);
     }
     return compareMonth;
   }

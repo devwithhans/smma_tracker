@@ -1,7 +1,9 @@
+import 'package:agency_time/logic/data_visualisation/models/user_tracking.dart';
 import 'package:agency_time/models/company_month.dart';
 import 'package:agency_time/models/employee.dart';
 import 'package:agency_time/models/tag.dart';
 import 'package:agency_time/models/client.dart';
+import 'package:agency_time/models/user.dart';
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -243,25 +245,30 @@ List<PieChartSectionData> tagsShowingSections(
 }
 
 List<PieChartSectionData> employeesShowingSections(
-    {required List<Employee> employees}) {
-  List<Tag> tagsWithData = [];
+    {required List<UserTracking> userTrackings,
+    required List<UserData> users}) {
   int totalValue = 0;
 
   List<PieChartSectionData> result = [];
 
   int index = 0;
 
-  employees.forEach((e) => totalValue += e.totalDuration.inMilliseconds);
+  userTrackings.forEach(
+      (e) => totalValue += e.durationData.totalDuration.inMilliseconds);
 
-  employees.forEach((e) {
+  userTrackings.forEach((e) {
     index++;
-    double procentage = ((e.totalDuration.inMilliseconds / totalValue) * 100);
-    if (e.totalDuration > Duration()) {
+
+    UserData user = users.firstWhere((element) => element.id == e.userId);
+
+    double procentage =
+        ((e.durationData.totalDuration.inMilliseconds / totalValue) * 100);
+    if (e.durationData.totalDuration > Duration()) {
       result.add(PieChartSectionData(
         showTitle: false,
         radius: 15,
         value: procentage,
-        title: '${e.member.firstName}',
+        title: '${user.firstName}',
         // badgeWidget: Text('$procentage%'),
         color: kChartColors[index],
       ));

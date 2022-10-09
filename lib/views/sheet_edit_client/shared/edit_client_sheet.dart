@@ -1,102 +1,203 @@
-import 'package:agency_time/logic/tracking/blocs/update_trackig_cubit/update_tracking_cubit.dart';
-import 'package:agency_time/utils/widgets/custom_app_bar.dart';
-import 'package:agency_time/models/tag.dart';
-import 'package:agency_time/models/tracking.dart';
-import 'package:agency_time/logic/timer/repositories/timer_repo.dart';
-import 'package:agency_time/utils/constants/colors.dart';
-import 'package:agency_time/utils/functions/print_duration.dart';
-import 'package:agency_time/utils/widgets/custom_alert_dialog.dart';
+import 'package:agency_time/logic/clients/edit_client_cubit/edit_client_cubit.dart';
+import 'package:agency_time/logic/clients/new_client_cubit/new_client_cubit.dart';
+import 'package:agency_time/logic/clients/repos/client_repo.dart';
+import 'package:agency_time/logic/data_visualisation/blocs/settings_bloc/settings_bloc.dart';
+import 'package:agency_time/logic/data_visualisation/models/duration_data.dart';
+import 'package:agency_time/logic/data_visualisation/models/month.dart';
+import 'package:agency_time/models/client.dart';
 import 'package:agency_time/utils/widgets/custom_button.dart';
-import 'package:agency_time/utils/widgets/edit_value_field.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:agency_time/utils/widgets/custom_input_form.dart';
+import 'package:agency_time/views/view_data_visualisation/data_visualisation_dependencies.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
-class EditTracking extends StatefulWidget {
-  const EditTracking({
-    required this.tracking,
-    Key? key,
-  }) : super(key: key);
-  final Tracking tracking;
+class EditClientSheet extends StatelessWidget {
+  static String id = 'AddClient';
 
-  @override
-  State<EditTracking> createState() => _EditTrackingState();
-}
+  EditClientSheet({required this.client, Key? key}) : super(key: key);
 
-class _EditTrackingState extends State<EditTracking> {
-  Duration? _newDuration;
-  Tag? _newTag;
-  DateTime? newStart;
-
+  final _formKey = GlobalKey<FormState>();
+  final Client client;
   @override
   Widget build(BuildContext context) {
+    String name = client.name;
+    String description = '';
+    double mrr = client.selectedMonth!.mrr;
+    double hourlyRateTarget = client.selectedMonth!.hourlyRateTarget;
+
     return BlocProvider(
-      create: (context) => UpdateTrackingCubit(context.read<TimerRepository>()),
+      create: (context) => EditClientCubit(context.read<ClientsRepo>()),
       child: Scaffold(
-        body: BlocBuilder<UpdateTrackingCubit, UpdateTrackingState>(
+        appBar: AppBar(
+          title: Text(
+            'Edit ${client.name}',
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+        body: BlocBuilder<EditClientCubit, EditClientState>(
           builder: (context, state) {
-            if (state is UpdateTrackingLoading) {
+            if (state is EditClientLoading) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(color: Colors.black),
               );
             }
-            return SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+
+            return Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Stack(
                 children: [
-                  const CustomAppBar(title: 'Edit Tracking'),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const SizedBox(height: 20),
-                          editTrackedDuration(context),
-                          const SizedBox(height: 20),
-                          editTag(context),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 5, 20, 0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                  Form(
+                    key: _formKey,
+                    child: ListView(
                       children: [
-                        CustomElevatedButton(
-                          text: 'Save',
-                          backgroundColor: kColorGreen,
-                          onPressed: () {
-                            context.read<UpdateTrackingCubit>().updateTracking(
-                                  widget.tracking,
-                                  _newDuration ?? widget.tracking.duration,
-                                  _newTag != null
-                                      ? _newTag!.id
-                                      : widget.tracking.tag.id,
-                                );
-                          },
-                        ),
                         CustomTextButton(
-                          onPressed: () {
-                            customAlertDialog(
-                                context: context,
-                                title: 'Confirm deletion',
-                                description:
-                                    'Are you sure you wanna delete this tracking',
-                                onAccepted: () {
-                                  context
-                                      .read<UpdateTrackingCubit>()
-                                      .deleteTracking(widget.tracking.id);
-                                });
-                          },
-                          textColor: kColorRed,
-                          text: 'Delete',
-                        ),
-                        SizedBox(width: 15),
+                            text: 'Pause client',
+                            onPressed: () {
+                              context.read<EditClientCubit>().pauseClient(
+                                    id: client.id,
+                                    mrr: client.selectedMonth!.mrr,
+                                    pause: true,
+                                  );
+                            }),
+                        CustomTextButton(
+                            text: 'Activate client',
+                            onPressed: () {
+                              context.read<EditClientCubit>().pauseClient(
+                                    id: client.id,
+                                    mrr: client.selectedMonth!.mrr,
+                                    pause: false,
+                                  );
+                            }),
+                        client.internal
+                            ? Column(
+                                children: [
+                                  CustomInputForm(
+                                    initialValue: name,
+                                    onChanged: (v) {
+                                      name = v;
+                                    },
+                                    validator: (v) {
+                                      if (v == null || v.isEmpty) {
+                                        return 'Please enter a title';
+                                      }
+                                    },
+                                    title: 'Internal title',
+                                    hintText:
+                                        'Name the internal job you wanna track',
+                                  ),
+                                  SizedBox(height: 30),
+                                  CustomInputForm(
+                                    initialValue: description,
+                                    maxLines: 4,
+                                    onChanged: (v) {
+                                      description = v;
+                                    },
+                                    title: 'Description (optional)',
+                                    hintText: 'Description',
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                children: [
+                                  CustomInputForm(
+                                    initialValue: name,
+                                    onChanged: (v) {
+                                      name = v;
+                                    },
+                                    validator: (v) {
+                                      if (v == null || v.isEmpty) {
+                                        return 'Please enter a name';
+                                      }
+                                    },
+                                    title: 'Client name',
+                                    hintText: 'Eg. Brun & Bøge ApS',
+                                  ),
+                                  SizedBox(height: 30),
+                                  CustomInputForm(
+                                    initialValue: CurrencyTextInputFormatter(
+                                            locale: 'da',
+                                            decimalDigits: 0,
+                                            symbol: '')
+                                        .format(mrr.toString()),
+                                    onChanged: (value) {
+                                      mrr = value.isNotEmpty
+                                          ? double.parse(
+                                              value.replaceAll('.', ''))
+                                          : 0;
+                                    },
+                                    validator: (v) {
+                                      if (v == null || v.isEmpty) {
+                                        return 'Please enter the MRR';
+                                      }
+                                    },
+                                    suffixText: 'DKK',
+                                    inputFormatters: [
+                                      CurrencyTextInputFormatter(
+                                          locale: 'da',
+                                          decimalDigits: 0,
+                                          symbol: ''),
+                                    ],
+                                    keyboardType: TextInputType.number,
+                                    title: 'MRR',
+                                    hintText: 'Eg. 15.000 kr.',
+                                  ),
+                                  SizedBox(height: 30),
+                                  CustomInputForm(
+                                    initialValue: CurrencyTextInputFormatter(
+                                            locale: 'da',
+                                            decimalDigits: 0,
+                                            symbol: '')
+                                        .format(hourlyRateTarget.toString()),
+                                    onChanged: (value) {
+                                      hourlyRateTarget = double.parse(
+                                          value.replaceAll('.', ''));
+                                    },
+                                    validator: (v) {
+                                      if (v == null || v.isEmpty) {
+                                        return 'Please enter your HRG';
+                                      }
+                                    },
+                                    suffixText: 'DKK/h',
+                                    inputFormatters: [
+                                      CurrencyTextInputFormatter(
+                                          locale: 'da',
+                                          decimalDigits: 0,
+                                          symbol: ''),
+                                    ],
+                                    keyboardType: TextInputType.number,
+                                    title: 'Hourly rate goal',
+                                    hintText: 'Eg. 800 kr.',
+                                  ),
+                                ],
+                              ),
+                        SizedBox(height: 30),
                       ],
                     ),
                   ),
+                  Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          CustomElevatedButton(
+                            text: 'Save ${client.name}',
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                context.read<EditClientCubit>().editClient(
+                                      mrr: mrr,
+                                      id: client.id,
+                                      name: name,
+                                      description: description,
+                                      hourlyRateTarget: hourlyRateTarget,
+                                    );
+                              }
+                            },
+                          ),
+                          // SizedBox(height: 15),
+                        ],
+                      ))
                 ],
               ),
             );
@@ -105,37 +206,12 @@ class _EditTrackingState extends State<EditTracking> {
       ),
     );
   }
+}
 
-  EditValueField editTrackedDuration(BuildContext context) {
-    return EditValueField(
-      title: 'Duration:',
-      value: printDuration(
-        _newDuration ?? widget.tracking.duration,
-      ),
-      onPressed: () async {
-        // _newDuration = await editDuration(
-        //     context, _newDuration ?? widget.tracking.duration);
-        // setState(() {});
-      },
-    );
-  }
-
-  EditValueField editTag(BuildContext context) {
-    return EditValueField(
-      title: 'Tag:',
-      value: _newTag != null ? _newTag!.tag : widget.tracking.tag.tag,
-      onPressed: () async {
-        // _newTag = await Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => SelectTagView(
-        //       initialTag: _newTag != null ? _newTag! : widget.tracking.tag,
-        //     ),
-        //   ),
-        // );
-
-        setState(() {});
-      },
-    );
+class NumericTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    return newValue.copyWith(text: toCurrencyString(oldValue.text));
   }
 }

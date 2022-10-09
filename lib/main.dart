@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:agency_time/firebase_options.dart';
 import 'package:agency_time/logic/clients/repos/client_repo.dart';
 import 'package:agency_time/logic/settings/repos/settings_repo.dart';
-import 'package:agency_time/new_data_handling/repositories/data_repository.dart';
+import 'package:agency_time/logic/data_visualisation/repos/data_repository.dart';
 import 'package:agency_time/wrapper.dart';
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/logic/timer/repositories/timer_repo.dart';
@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
                   TimerRepository(context.read<AuthorizationCubit>())),
           RepositoryProvider(
               create: (context) =>
-                  DataReposity(context.read<AuthorizationCubit>())),
+                  DataRepository(context.read<AuthorizationCubit>())),
           RepositoryProvider(
               create: (context) =>
                   SettingsRepo(context.read<AuthorizationCubit>())),

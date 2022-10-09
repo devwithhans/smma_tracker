@@ -12,10 +12,40 @@ class EditClientCubit extends Cubit<EditClientState> {
 
   EditClientCubit(this.clientsRepo) : super(EditClientInitial());
 
-  Future<void> editClient(Client newValues) async {
+  Future<void> pauseClient({
+    required String id,
+    required bool pause,
+    required double mrr,
+  }) async {
     emit(EditClientLoading());
     try {
-      await clientsRepo.editClient(newValues);
+      await clientsRepo.pauseClient(
+        id: id,
+        mrr: mrr,
+        paused: pause,
+      );
+    } catch (e) {
+      emit(EditClientFailed());
+    }
+    emit(EditClientSucces());
+  }
+
+  Future<void> editClient({
+    required double mrr,
+    required double hourlyRateTarget,
+    required String name,
+    required String description,
+    required String id,
+  }) async {
+    emit(EditClientLoading());
+    try {
+      await clientsRepo.editClient(
+        mrr: mrr,
+        hourlyRateTarget: hourlyRateTarget,
+        name: name,
+        description: description,
+        id: id,
+      );
     } catch (e) {
       emit(EditClientFailed());
     }

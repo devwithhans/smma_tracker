@@ -2,11 +2,12 @@ import 'package:agency_time/logic/data_visualisation/blocs/data_bloc/data_bloc.d
 import 'package:agency_time/models/company.dart';
 
 import 'package:agency_time/utils/constants/text_styles.dart';
+import 'package:agency_time/utils/widgets/client_list_result/client_list_result.dart';
 import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/utils/widgets/custom_toggl_button.dart';
 import 'package:agency_time/utils/widgets/stats_card.dart';
-import 'package:agency_time/views/view_lists/web/widgets/client_list_result.dart';
-import '../../view_data_visualisation/data_visualisation_dependencies.dart';
+
+import '../../../view_data_visualisation/data_visualisation_dependencies.dart';
 import 'package:intl/intl.dart';
 
 class ValueCard {
@@ -67,8 +68,7 @@ class _GraphAndCardsState extends State<GraphAndCards> {
                       StatCard(
                         valueCard: ValueCard(
                           value: printDuration(
-                            state.currentMonth!.durationData.totalDuration,
-                          ),
+                              state.currentMonth!.durationData.totalDuration),
                           title: 'Total duration ',
                           subValue: state.changes.totalDuration.isNegative
                               ? 'h / last'
@@ -196,13 +196,62 @@ class _GraphAndCardsState extends State<GraphAndCards> {
                   const SizedBox(height: 10),
                   Expanded(
                     child: UniversalGraph(
-                        graphDataSpots: selectedGraphSpot,
+                        graphDataSpots: state.allDays
+                            .map(
+                              (e) => GraphDataSpots(
+                                date: e.dayDate,
+                                value: e.durationData.totalDuration,
+                                dateString: '',
+                              ),
+                            )
+                            .toList(),
                         moneyFormatter: moneyFormatter),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 40),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: BlocBuilder<ClientsBloc, ClientsState>(
+                      builder: (context, clientState) {
+                        return CustomPieChart(
+                          chartData: overviewShowingSections(
+                            internals: clientState.internalClients,
+                            clientsDuration:
+                                state.currentMonth!.durationData.clientDuration,
+                            internalDuration: state
+                                .currentMonth!.durationData.internalDuration,
+                          ),
+                          title: 'Time split',
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: CustomPieChart(
+                      chartData: tagsShowingSections(
+                          tags: company.tags,
+                          tagsMap: state.currentMonth!.tags),
+                      title: 'Tags',
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: CustomPieChart(
+                      chartData: employeesShowingSections(
+                          userTrackings: state.currentMonth!.userTracking,
+                          users: company.members),
+                      title: 'Tags',
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(

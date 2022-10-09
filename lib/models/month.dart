@@ -11,11 +11,13 @@ class Month {
   double hourlyRateTarget;
   List<Employee> employees;
   Map tags;
+  bool paused;
   DateTime updatedAt;
 
   Month({
     required this.date,
     this.mrr = 0,
+    this.paused = false,
     this.hourlyRateTarget = 0,
     this.hourlyRate = 0,
     this.duration = const Duration(),
@@ -46,7 +48,7 @@ class Month {
       mrr: mrr,
       // employees: employees,
       hourlyRate: mrr / duration.inHours,
-      hourlyRateTarget: monthMap['hourlyRateTarget'] ?? 0,
+      hourlyRateTarget: monthMap['target_hourly_rate'] ?? 0,
       tags: monthMap['tags'] ?? {},
       updatedAt: DateTime.fromMicrosecondsSinceEpoch(
           updatedAtStamp.microsecondsSinceEpoch),
@@ -64,6 +66,9 @@ class Month {
 
     Duration duration = Duration(seconds: value['duration'] ?? 0);
 
+    print("value['mrr']");
+    print(value['mrr']);
+
     double newMrr = value['mrr'] != null ? value['mrr'].toDouble() : 0;
 
     List<Employee> employees = [];
@@ -74,15 +79,16 @@ class Month {
     });
 
     Timestamp updatedAtStamp = value['updatedAt'] ?? Timestamp.now();
-
+    bool paused = value['paused'] ?? false;
     return Month(
       date: DateTime(int.parse(monthId.split('-').first),
           int.parse(monthId.split('-').last)),
       duration: duration,
+      paused: paused,
       mrr: newMrr,
       employees: employees,
-      hourlyRate: newMrr / duration.inHours,
-      hourlyRateTarget: value['hourlyRateTarget'] ?? 0,
+      hourlyRate: newMrr / (duration.inSeconds / 3600),
+      hourlyRateTarget: value['target_hourly_rate'] ?? 0,
       tags: value['tags'] ?? {},
       updatedAt: DateTime.fromMicrosecondsSinceEpoch(
           updatedAtStamp.microsecondsSinceEpoch),
