@@ -1,13 +1,12 @@
 import 'package:agency_time/models/company.dart';
-import 'package:agency_time/models/dashdata.dart';
 import 'package:agency_time/models/user.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 
-import '../../../view_data_visualisation/data_visualisation_dependencies.dart';
+import '../../view_data_visualisation/data_visualisation_dependencies.dart';
 import 'package:intl/intl.dart';
 
-class UserDataView extends StatelessWidget {
-  const UserDataView({Key? key}) : super(key: key);
+class UserPerformanceView extends StatelessWidget {
+  const UserPerformanceView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +24,12 @@ class UserDataView extends StatelessWidget {
                 'Let\'s get to work ${appUser.firstName}',
                 style: AppTextStyle.boldLarge,
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               Text(
                 'Your clients:',
                 style: AppTextStyle.boldMedium,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 children: [
                   BlocBuilder<ClientsBloc, ClientsState>(

@@ -66,9 +66,6 @@ class Month {
 
     Duration duration = Duration(seconds: value['duration'] ?? 0);
 
-    print("value['mrr']");
-    print(value['mrr']);
-
     double newMrr = value['mrr'] != null ? value['mrr'].toDouble() : 0;
 
     List<Employee> employees = [];

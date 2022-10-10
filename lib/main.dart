@@ -81,6 +81,7 @@ class MyApp extends StatelessWidget {
             },
             child: OverlaySupport.global(
               child: MaterialApp(
+                color: Colors.white,
                 navigatorKey: navigatorKey,
                 title: 'SMMA Tracker',
                 theme: ThemeData(

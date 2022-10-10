@@ -1,9 +1,9 @@
-import 'package:agency_time/views/side_menu/view_internal_list/web/web_clients_view.dart';
+import 'package:agency_time/views/side_menu/view_list_internal/web/web_internal_clients_view.dart';
 import 'package:agency_time/views/view_settings/web/settings_view.dart';
-import 'package:agency_time/views/side_menu/view_company_performance/view_company_performance.dart';
-import 'package:agency_time/views/side_menu/view_user_dash/web/user_data_view.dart';
-import 'package:agency_time/views/side_menu/view_client_list/web/web_clients_view.dart';
-import 'package:agency_time/views/side_menu/view_employee_list/web/web_employees_view.dart';
+import 'package:agency_time/views/side_menu/view_performance_company/view_company_performance.dart';
+import 'package:agency_time/views/side_menu/view_performance_user/user_performance_view.dart';
+import 'package:agency_time/views/side_menu/view_list_client/web/web_clients_view.dart';
+import 'package:agency_time/views/side_menu/view_list_employee/web/web_employees_view.dart';
 import 'package:flutter/material.dart';
 
 List<MenuObject> webScreens = [

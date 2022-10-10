@@ -24,7 +24,6 @@ class Changes {
   });
 
   static Changes getFromMonths(Month currentMonth, Month compareMonth) {
-    print('This shit');
     Duration clientDuraiton = currentMonth.durationData.clientDuration -
         compareMonth.durationData.clientDuration;
 

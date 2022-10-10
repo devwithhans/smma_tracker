@@ -64,19 +64,19 @@ class SettingsRepo {
     }
   }
 
-  Future getCurrentMonth() async {
-    AppUser user = authCubit.state.appUser!;
-    DocumentSnapshot<Map<String, dynamic>> currentMonth =
-        await FirebaseFirestore.instance
-            .collection('companies')
-            .doc(user.companyId)
-            .collection('month')
-            .doc()
-            .get();
+  // Future getCurrentMonth() async {
+  //   AppUser user = authCubit.state.appUser!;
+  //   DocumentSnapshot<Map<String, dynamic>> currentMonth =
+  //       await FirebaseFirestore.instance
+  //           .collection('companies')
+  //           .doc(user.companyId)
+  //           .collection('month')
+  //           .doc()
+  //           .get();
 
-    return CompanyMonth.convertMonth(
-        currentMonth.data(), currentMonth.id, authCubit.state.company!);
-  }
+  //   return CompanyMonth.convertMonth(
+  //       currentMonth.data(), currentMonth.id, authCubit.state.company!);
+  // }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> companyCurrentDayStream() {
     AppUser user = authCubit.state.appUser!;

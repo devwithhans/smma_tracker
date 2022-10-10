@@ -11,8 +11,8 @@ class ViewCompanyPerformance extends StatelessWidget {
   Widget build(BuildContext context) {
     Company company = context.read<AuthorizationCubit>().state.company!;
 
-    final NumberFormat moneyFormatter = CustomCurrencyFormatter.getFormatter(
-        countryCode: company.countryCode, short: false);
+    // final NumberFormat moneyFormatter = CustomCurrencyFormatter.getFormatter(
+    //     countryCode: company.countryCode, short: false);
 
     return ListView(
       children: [
@@ -46,7 +46,7 @@ class ViewCompanyPerformance extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 30),
             Column(
               children: const [
                 GraphAndCards(),

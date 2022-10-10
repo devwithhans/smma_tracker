@@ -178,13 +178,6 @@ class _GraphAndCardsState extends State<GraphAndCards> {
                     style: AppTextStyle.fatGray,
                   ),
                   const SizedBox(height: 10),
-                  Container(
-                    child: CustomTextButton(
-                      key: buttonKey,
-                      text: 'SELECT FOR HELVEDE',
-                      onPressed: () {},
-                    ),
-                  ),
                   SizedBox(
                     width: 300,
                     child: CustomToggl(

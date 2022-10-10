@@ -30,7 +30,7 @@ class StatCard extends StatelessWidget {
         baseColor: Colors.grey[300]!,
         highlightColor: Colors.grey[100]!,
         child: Container(
-          height: 150,
+          height: 130,
           width: 200,
           decoration: BoxDecoration(
             border: !selected ? Border.all(color: kColorGrey) : null,
@@ -49,7 +49,7 @@ class StatCard extends StatelessWidget {
         highlightElevation: 0,
         fillColor: selected ? Colors.black : Colors.transparent,
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-        constraints: BoxConstraints(minHeight: 50, maxHeight: 120),
+        constraints: BoxConstraints(minHeight: 50, maxHeight: 110),
         onPressed: () {
           if (onPressed != null) {
             onPressed!(valueCard.title);

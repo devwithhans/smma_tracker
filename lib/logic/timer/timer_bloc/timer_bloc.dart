@@ -87,7 +87,6 @@ class TimerBloc extends Bloc<StopWatchEvent, TimerState> {
   }
 
   Future<void> _stopTimer(StopTimer event, Emitter emit) async {
-    print('We get it');
     if (state.timerStatus != TimerStatus.running) return;
     emit(state.copyWith(timerStatus: TimerStatus.loading));
     Duration stopDuration = event.duration;

@@ -31,6 +31,7 @@ class _WebInternalsViewState extends State<WebInternalsView> {
         CustomCurrencyFormatter.getFormatter(countryCode: countryCode);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: BlocBuilder<ClientsBloc, ClientsState>(
         builder: (context, state) {
           searchResult = state.internalClients
