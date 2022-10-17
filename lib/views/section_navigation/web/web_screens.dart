@@ -8,14 +8,14 @@ import 'package:flutter/material.dart';
 
 List<MenuObject> webScreens = [
   MenuObject(
-    icon: Icons.person,
-    page: const UserDataView(),
-    title: 'My stats',
-  ),
-  MenuObject(
     icon: Icons.bar_chart_rounded,
     page: const ViewCompanyPerformance(),
     title: 'Company stats',
+  ),
+  MenuObject(
+    icon: Icons.person,
+    page: const UserPerformanceView(),
+    title: 'My stats',
   ),
   MenuObject(
     icon: Icons.store,

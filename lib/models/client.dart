@@ -13,6 +13,7 @@ class Client {
   Duration durationChange;
   double hourlyRateChange;
   bool paused;
+  Map relations;
 
   DateTime? updatedAt;
 
@@ -22,6 +23,7 @@ class Client {
     bool? activeMonth,
     bool? internal,
     String? name,
+    Map? relations,
     String? id,
     DateTime? updatedAt,
     Month? selectedMonth,
@@ -31,6 +33,7 @@ class Client {
       durationChange: durationChange ?? this.durationChange,
       hourlyRateChange: hourlyRateChange ?? this.hourlyRateChange,
       internal: internal ?? this.internal,
+      relations: relations ?? this.relations,
       activeMonth: activeMonth ?? this.activeMonth,
       updatedAt: updatedAt ?? this.updatedAt,
       id: id ?? this.id,
@@ -44,6 +47,7 @@ class Client {
     this.internal = false,
     this.activeMonth = true,
     this.paused = false,
+    this.relations = const {},
     this.durationChange = const Duration(),
     this.hourlyRateChange = 0,
     this.selectedMonth,
@@ -72,6 +76,7 @@ class Client {
       internal: clientMap['internal'] ?? false,
       id: clientSnapshot.id,
       name: clientMap['name'],
+      relations: clientMap['relations'] ?? {},
       paused: savedMonths[0].paused,
       updatedAt: clientMap['updatedAt'],
       compareMonth: savedMonths.length < 2 ? null : savedMonths[1],

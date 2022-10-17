@@ -89,6 +89,7 @@ LineChartData mainData({
       LineChartBarData(
         spots: spots,
         isCurved: true,
+        preventCurveOverShooting: true,
         preventCurveOvershootingThreshold: 0,
         gradient: LinearGradient(
           colors: kGradientColors,

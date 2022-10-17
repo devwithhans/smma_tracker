@@ -14,15 +14,19 @@ import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:side_sheet/side_sheet.dart';
 
+enum DataLevel { user, admin }
+
 class ClientListResult extends StatelessWidget {
   const ClientListResult({
     Key? key,
     required this.searchResult,
     required this.moneyFormatter,
+    this.dataLevel = DataLevel.admin,
   }) : super(key: key);
 
   final List<Client> searchResult;
   final NumberFormat moneyFormatter;
+  final DataLevel dataLevel;
 
   @override
   Widget build(BuildContext context) {

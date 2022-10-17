@@ -7,6 +7,7 @@ class ClientsState extends Equatable {
     this.status = Status.initial,
     this.allClients = const [],
     this.clients = const [],
+    this.relationClients = const [],
     this.internalClients = const [],
     this.month,
     this.compareMonth,
@@ -20,10 +21,12 @@ class ClientsState extends Equatable {
   final List<Client> allClients;
   final List<Client> clients;
   final List<Client> internalClients;
+  final List<Client> relationClients;
 
   ClientsState copyWith({
     List<Client>? allClients,
     List<Client>? clients,
+    List<Client>? relationClients,
     List<Client>? internalClients,
     Status? status,
     DateTime? month,
@@ -32,6 +35,7 @@ class ClientsState extends Equatable {
     return ClientsState(
         status: status ?? this.status,
         allClients: allClients ?? this.allClients,
+        relationClients: relationClients ?? this.relationClients,
         clients: clients ?? this.clients,
         internalClients: internalClients ?? this.internalClients,
         month: month ?? this.month,

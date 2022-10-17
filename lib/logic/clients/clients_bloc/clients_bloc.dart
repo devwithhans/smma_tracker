@@ -75,19 +75,30 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
           .toList();
       internals.addAll(filtered);
     } catch (e) {}
+
     List<Client> clients = [];
     try {
-      List<Client> filtered = modifiedClientList
-          .where((element) => element.internal == false)
-          .toList();
+      List<Client> filtered =
+          modifiedClientList.where((element) => !element.internal).toList();
       clients.addAll(filtered);
+    } catch (e) {}
+    List<Client> relationClients = [];
+
+    try {
+      List<Client> filtered = modifiedClientList
+          .where((element) => element.relations
+              .containsKey(clientsRepo.authCubit.state.appUser!.id))
+          .toList();
+      relationClients.addAll(filtered);
     } catch (e) {}
 
     emit(
       state.copyWith(
-          clients: clients,
-          internalClients: internals,
-          allClients: modifiedClientList),
+        clients: clients,
+        internalClients: internals,
+        allClients: modifiedClientList,
+        relationClients: relationClients,
+      ),
     );
   }
 
