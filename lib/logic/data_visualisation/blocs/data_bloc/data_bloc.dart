@@ -85,10 +85,6 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
   _updateMonth(Month month) {
     emit(state.copyWith(currentMonth: month, allDays: month.days));
-    state.allDays.forEach((element) {
-      print(element.dayDate);
-      print(element.durationData.totalDuration);
-    });
   }
 
   void _getGraphPlots(GetGraphPlots event, Emitter emit) {
@@ -140,7 +136,6 @@ class DataHelpers {
         Month(monthDate: DateTime.now(), durationData: const DurationData());
     if (allMonths.length >= 2) {
       compareMonth = allMonths[allMonths.length - 2];
-      print(compareMonth.monthDate);
     }
     return compareMonth;
   }

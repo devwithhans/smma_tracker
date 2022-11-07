@@ -6,7 +6,6 @@ import 'package:agency_time/logic/data_visualisation/repos/data_repository.dart'
 import 'package:agency_time/wrapper.dart';
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/logic/timer/repositories/timer_repo.dart';
-import 'package:agency_time/utils/error_handling/error_handler.dart';
 import 'package:agency_time/views/view_enter_app/web/web_login_user_view.dart';
 import 'package:agency_time/views/view_enter_app/web/web_register_user_view.dart';
 import 'package:agency_time/views/view_register_company/web/web_register_company_view.dart';
@@ -40,14 +39,10 @@ Future<void> main() async {
   FlutterError.onError = (details) {
     FlutterError.presentError(details);
   };
-
-  BlocOverrides.runZoned(
-    () => runApp(
-      const RestartWidget(
-        child: MyApp(),
-      ),
+  runApp(
+    const RestartWidget(
+      child: MyApp(),
     ),
-    blocObserver: ErrorHandler(),
   );
 }
 

@@ -26,6 +26,8 @@ class ManageCompanyCubit extends Cubit<ManageCompanyState> {
       emit(state.copyWith(newCompanyStatus: NewCompanyStatus.initial));
     } on FirebaseException catch (error) {
       // addError(AppError.noConnection(user));
+      print('FAILED');
+      print(error);
       emit(state.copyWith(newCompanyStatus: NewCompanyStatus.failed));
     }
   }

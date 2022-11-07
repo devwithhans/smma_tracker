@@ -50,11 +50,12 @@ class _GraphAndCardsState extends State<GraphAndCards> {
 
     return BlocBuilder<DataBloc, DataState>(
       builder: (c, state) {
-        if (state.currentMonth == null || state.compareMonth == null) {
+        if (state.dataStatus == DataStatus.loading) {
           return const Center(
             child: Text('loading'),
           );
         }
+        if (state.currentMonth == null || state.compareMonth == null) {}
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

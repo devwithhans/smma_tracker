@@ -1,6 +1,8 @@
+import 'package:agency_time/models/client.dart';
 import 'package:agency_time/models/company.dart';
 import 'package:agency_time/models/user.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
+import 'package:agency_time/utils/functions/sorting.dart';
 import 'package:agency_time/utils/widgets/client_list_result/client_list_result.dart';
 import 'package:agency_time/utils/widgets/client_list_result/two_line_text.dart';
 
@@ -29,16 +31,27 @@ class UserPerformanceView extends StatelessWidget {
               ),
               const SizedBox(height: 40),
               Text(
-                'Your clients:',
+                'Last activity:',
                 style: AppTextStyle.boldMedium,
               ),
               const SizedBox(height: 20),
-              BlocBuilder<ClientsBloc, ClientsState>(
-                builder: (context, state) {
-                  return ClientListResult(
-                      searchResult: state.relationClients,
-                      moneyFormatter: moneyFormatter);
-                },
+              Row(
+                children: [
+                  BlocBuilder<ClientsBloc, ClientsState>(
+                    builder: (context, state) {
+                      if (state.relationClients.isEmpty) {
+                        return Text('Please wait till we recieve your data');
+                      }
+                      List<Client> result = state.relationClients;
+                      result.sort((a, b) =>
+                          sortClientByUsersLastActivity(appUser.id, a, b));
+                      return Column(
+                        children: result.map((e) => Text(e.name)).toList(),
+                      );
+                    },
+                  ),
+                  const SizedBox()
+                ],
               ),
             ],
           ),

@@ -78,14 +78,7 @@ class ErrorScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  // CustomElevatedButton(
-                  //   text: 'Try again',
-                  //   onPressed: () {
-                  //     print('fuck');
-                  //   },
-                  // ),
-                ],
+                children: [],
               ),
             )
           ],

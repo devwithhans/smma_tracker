@@ -18,7 +18,6 @@ class Day {
       {required Map daysMap,
       required DateTime monthDate,
       required double mrr}) {
-    print(daysMap);
     List<Day> days = [];
     int daysInMonth = getDaysInMonth(monthDate.year, monthDate.month);
     DateTime today = DateTime.now();

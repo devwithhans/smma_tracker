@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:agency_time/logic/clients/repos/client_repo.dart';
+import 'package:agency_time/main.dart';
 import 'package:agency_time/models/client.dart';
 import 'package:agency_time/models/company.dart';
 import 'package:agency_time/models/month.dart';
+import 'package:agency_time/views/view_data_visualisation/data_visualisation_dependencies.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -25,7 +27,13 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
       for (var clientRaw in event.docs) {
         add(AddClient(client: clientRaw));
       }
-      // add(const GetClientsWithMonth());
+      if (event.docs.isEmpty) {
+        showDialog(
+            context: navigatorKey.currentContext!,
+            builder: (context) => Dialog(
+                child: Center(
+                    child: Container(child: Text('Welcome to SMMA TRacker')))));
+      }
     });
 
     on<AddClient>(_addClient);
