@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:agency_time/features/auth/models/user.dart';
+import 'package:agency_time/features/auth/repository/authenticate_repo.dart';
 import 'package:agency_time/logic/authorization/repositories/auth_repo.dart';
+import 'package:agency_time/main.dart';
 import 'package:agency_time/models/company.dart';
 import 'package:agency_time/models/invite.dart';
-import 'package:agency_time/models/user.dart';
 import 'package:agency_time/utils/error_handling/errors.dart';
-import 'package:bloc/bloc.dart';
+import 'package:agency_time/views/view_data_visualisation/data_visualisation_dependencies.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,9 +36,23 @@ class AuthorizationCubit extends Cubit<AuthorizationState> {
   }
 
   Future<void> _handleSignedInUser(User user) async {
-    AppUser appUser = await authRepo.getUserDocument(user.uid);
-    _emitNotCompany() async {
-      Invite? companyInvite = await authRepo.checkForInvites(appUser.email);
+    AppUser? appUser = await authRepo.getUserDocument(user.uid);
+
+    if (appUser == null) {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.getRedirectResult();
+      if (userCredential.user == null) {
+        FirebaseAuth.instance.signOut();
+        emit(state.copyWith(authStatus: AuthStatus.signedOut));
+      }
+      await AuthenticateRepo().createUserWithOauth(user);
+      Navigator.popUntil(
+          navigatorKey.currentContext!, (route) => route.isFirst);
+
+      print(userCredential.user!.uid);
+    }
+    emitNotCompany() async {
+      Invite? companyInvite = await authRepo.checkForInvites(appUser!.email);
       emit(state.copyWith(
         authStatus: AuthStatus.noCompany,
         appUser: appUser,
@@ -44,24 +60,22 @@ class AuthorizationCubit extends Cubit<AuthorizationState> {
       ));
     }
 
-    if (appUser.companyId == null) {
-      _emitNotCompany();
+    Company? company = await authRepo.getCompany(appUser!.id);
+
+    if (company == null) {
+      emitNotCompany();
       return;
     }
 
-    Company? company = await authRepo.getCompany(appUser.companyId!);
-    if (company == null) {
-      _emitNotCompany();
-    } else {
-      emit(
-        state.copyWith(
-          authStatus: AuthStatus.signedIn,
-          appUser: appUser,
-          company: company,
-          role: _getUserRoleFromString(company.roles[appUser.id]),
-        ),
-      );
-    }
+    emit(
+      state.copyWith(
+        authStatus: AuthStatus.signedIn,
+        appUser: appUser,
+        company: company,
+        role: UserRole.owner,
+      ),
+    );
+    print('company');
 
     Future<void> acceptInvite(String email) async {
       authRepo.acceptInvite(email);
