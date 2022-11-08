@@ -61,7 +61,6 @@ class AuthRepo {
 
   Future<void> acceptInvite(String email) async {
     FirebaseFunctions firebaseFunctions = FirebaseFunctions.instance;
-    firebaseFunctions.useFunctionsEmulator('localhost', 5001);
 
     HttpsCallable callable = firebaseFunctions.httpsCallable('acceptInvite');
     final resp = await callable.call({

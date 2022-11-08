@@ -53,8 +53,6 @@ class SettingsRepo {
     AppUser user = authCubit.state.appUser!;
 
     try {
-      // FirebaseFirestore.instance.useFirestoreEmulator('localHost', 8080);
-
       FirebaseFirestore.instance
           .collection('companies')
           .doc(user.companyId)

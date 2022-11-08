@@ -25,18 +25,7 @@ Future<void> main() async {
 
   //DILLLER
 
-  FirebaseAuth.instance
-      .useAuthEmulator('localhost', 9099)
-      .onError((error, stackTrace) => null);
-  FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
-
   setUrlStrategy(PathUrlStrategy());
-
-  FirebaseFirestore.instance.settings = const Settings(
-    host: 'localhost:8080',
-    sslEnabled: false,
-    persistenceEnabled: false,
-  );
 
   FlutterError.onError = (details) {
     FlutterError.presentError(details);

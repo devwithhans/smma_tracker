@@ -14,7 +14,6 @@ class ClientsRepo {
   Future<void> pauseClient(
       {required String id, required bool paused, required double mrr}) async {
     FirebaseFunctions firebaseFunctions = FirebaseFunctions.instance;
-    firebaseFunctions.useFunctionsEmulator('localhost', 5001);
 
     DocumentReference clientDocument = firestore
         .collection('companies')

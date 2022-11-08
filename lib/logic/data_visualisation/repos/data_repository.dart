@@ -39,7 +39,6 @@ class DataRepository {
   Future<void> createNewMonth() async {
     String companyId = authCubit.state.company!.id;
     FirebaseFunctions firebaseFunctions = FirebaseFunctions.instance;
-    firebaseFunctions.useFunctionsEmulator('localhost', 5001);
 
     try {
       HttpsCallable callable = firebaseFunctions.httpsCallable('upToDateMonth',
