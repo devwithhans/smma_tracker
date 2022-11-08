@@ -1,6 +1,5 @@
 export 'package:agency_time/utils/constants/spacings.dart';
 export 'package:agency_time/utils/constants/text_styles.dart';
-export 'package:agency_time/utils/widgets/custom_button.dart';
 export 'package:agency_time/utils/widgets/loading_screen.dart';
 export 'package:agency_time/views/dialog_payment/web/widgets/price_card.dart';
 export 'package:agency_time/views/dialog_payment/web/widgets/quantity_select.dart';

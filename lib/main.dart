@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'package:agency_time/features/auth/presentation/signin.dart';
+import 'package:agency_time/features/auth/presentation/signup.dart';
+import 'package:agency_time/features/auth/state/authorize/authorize_cubit.dart';
 import 'package:agency_time/firebase_options.dart';
 import 'package:agency_time/logic/clients/repos/client_repo.dart';
 import 'package:agency_time/logic/settings/repos/settings_repo.dart';
@@ -6,8 +9,6 @@ import 'package:agency_time/logic/data_visualisation/repos/data_repository.dart'
 import 'package:agency_time/wrapper.dart';
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/logic/timer/repositories/timer_repo.dart';
-import 'package:agency_time/views/view_enter_app/web/web_login_user_view.dart';
-import 'package:agency_time/views/view_enter_app/web/web_register_user_view.dart';
 import 'package:agency_time/views/view_register_company/web/web_register_company_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
@@ -54,21 +55,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AuthorizationCubit(),
+      create: (context) => AuthorizeCubit(),
       child: MultiRepositoryProvider(
         providers: [
           RepositoryProvider(
               create: (context) =>
-                  TimerRepository(context.read<AuthorizationCubit>())),
+                  TimerRepository(context.read<AuthorizeCubit>())),
           RepositoryProvider(
               create: (context) =>
-                  DataRepository(context.read<AuthorizationCubit>())),
+                  DataRepository(context.read<AuthorizeCubit>())),
           RepositoryProvider(
               create: (context) =>
-                  SettingsRepo(context.read<AuthorizationCubit>())),
+                  SettingsRepo(context.read<AuthorizeCubit>())),
           RepositoryProvider(
-              create: (context) =>
-                  ClientsRepo(context.read<AuthorizationCubit>())),
+              create: (context) => ClientsRepo(context.read<AuthorizeCubit>())),
         ],
         child: GestureDetector(
             onTap: () {
@@ -92,8 +92,9 @@ class MyApp extends StatelessWidget {
                 ),
                 routes: {
                   '/': (context) => const Wrapper(),
-                  WebRegisterView.pageName: (context) => WebRegisterView(),
-                  WebLoginView.pageName: (context) => WebLoginView(),
+                  Signup.pageName: (context) => Signup(),
+                  Signin.pageName: (context) => Signin(),
+
                   WebNewCompany.pageName: (context) => const WebNewCompany(),
                   // ClientView.id: (context) => ClientView(),
                 },

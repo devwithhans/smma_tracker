@@ -44,5 +44,7 @@ class AuthorizationState extends Equatable {
   }
 
   @override
-  List<Object> get props => [authStatus];
+  List<Object> get props => [
+        authStatus,
+      ];
 }

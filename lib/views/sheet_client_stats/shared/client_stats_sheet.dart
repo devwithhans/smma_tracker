@@ -1,10 +1,11 @@
 import 'package:agency_time/models/client.dart';
 import 'package:agency_time/utils/widgets/custom_app_bar.dart';
 import 'package:agency_time/models/company.dart';
-import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/views/sheet_edit_client/shared/edit_client_sheet.dart';
 import 'package:agency_time/views/view_data_visualisation/data_visualisation_dependencies.dart';
 import 'package:side_sheet/side_sheet.dart';
+
+import '../../../utils/widgets/buttons/text_button.dart';
 
 class ClientStatsSheet extends StatelessWidget {
   const ClientStatsSheet({required this.client, Key? key}) : super(key: key);

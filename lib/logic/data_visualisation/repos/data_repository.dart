@@ -1,11 +1,13 @@
+import 'package:agency_time/features/auth/models/user.dart';
+import 'package:agency_time/features/auth/state/authorize/authorize_cubit.dart';
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/logic/data_visualisation/models/month.dart';
-import 'package:agency_time/models/user.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 
 class DataRepository {
-  AuthorizationCubit authCubit;
+  AuthorizeCubit authCubit;
   DataRepository(this.authCubit);
 
   Stream monthsStream() {

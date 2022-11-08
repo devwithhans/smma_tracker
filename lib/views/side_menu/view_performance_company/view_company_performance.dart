@@ -1,6 +1,6 @@
+import '../../../utils/widgets/buttons/main_button.dart';
 import '../../view_data_visualisation/data_visualisation_dependencies.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
-import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/models/company.dart';
 import 'package:intl/intl.dart';
 

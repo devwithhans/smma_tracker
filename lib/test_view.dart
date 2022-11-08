@@ -1,5 +1,5 @@
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
-import 'package:agency_time/utils/widgets/custom_button.dart';
+import 'package:agency_time/utils/widgets/buttons/main_button.dart';
 
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';

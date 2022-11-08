@@ -1,6 +1,6 @@
 import 'package:agency_time/logic/clients/new_client_cubit/new_client_cubit.dart';
 import 'package:agency_time/logic/data_visualisation/blocs/settings_bloc/settings_bloc.dart';
-import 'package:agency_time/utils/widgets/custom_button.dart';
+import 'package:agency_time/utils/widgets/buttons/main_button.dart';
 import 'package:agency_time/utils/widgets/custom_input_form.dart';
 import 'package:agency_time/views/view_data_visualisation/data_visualisation_dependencies.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';

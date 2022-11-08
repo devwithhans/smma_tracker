@@ -1,11 +1,12 @@
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/models/company.dart';
 import 'package:agency_time/models/user.dart';
-import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/views/view_settings/web/edit_tags_view/edit_tags_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../utils/widgets/buttons/icon_button.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({Key? key}) : super(key: key);

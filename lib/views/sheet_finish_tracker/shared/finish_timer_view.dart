@@ -4,9 +4,11 @@ import 'package:agency_time/models/tag.dart';
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/widgets/custom_alert_dialog.dart';
-import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/utils/widgets/sheet_header_widget.dart';
 import 'package:agency_time/views/view_data_visualisation/data_visualisation_dependencies.dart';
+
+import '../../../utils/widgets/buttons/main_button.dart';
+import '../../../utils/widgets/buttons/text_button.dart';
 
 class FinishTimerView extends StatefulWidget {
   const FinishTimerView({

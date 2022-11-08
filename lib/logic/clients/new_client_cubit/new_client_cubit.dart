@@ -33,6 +33,7 @@ class NewClientCubit extends Cubit<NewClientState> {
                 'name': name,
                 'internal': internal,
                 'description': description,
+                'paused': false
               }
             : {
                 'name': name,
@@ -40,6 +41,7 @@ class NewClientCubit extends Cubit<NewClientState> {
                 'internal': internal,
                 'description': description,
                 'hourly_rate_target': hourly_rate_target,
+                'paused': false
               },
       );
     } on FirebaseException catch (e) {

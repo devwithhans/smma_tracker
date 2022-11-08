@@ -3,7 +3,6 @@ import 'package:agency_time/models/company.dart';
 
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/widgets/client_list_result/client_list_result.dart';
-import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/utils/widgets/custom_toggl_button.dart';
 import 'package:agency_time/utils/widgets/stats_card.dart';
 

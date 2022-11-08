@@ -1,6 +1,7 @@
 import 'package:agency_time/logic/payments/payment_bloc/payment_bloc.dart';
 import 'package:agency_time/logic/payments/repos/stripe_repo.dart';
 
+import '../../../utils/widgets/buttons/main_button.dart';
 import '../paymeny_view_dependencies.dart';
 
 class StripeCheckout extends StatefulWidget {

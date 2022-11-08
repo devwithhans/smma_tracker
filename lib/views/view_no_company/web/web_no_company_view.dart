@@ -3,11 +3,12 @@ import 'package:agency_time/models/invite.dart';
 import 'package:agency_time/utils/constants/spacings.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/widgets/buttons/xl_border_button.dart';
-import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/views/view_register_company/web/web_register_company_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../utils/widgets/buttons/text_button.dart';
 
 class WebNoCompany extends StatelessWidget {
   const WebNoCompany({Key? key}) : super(key: key);

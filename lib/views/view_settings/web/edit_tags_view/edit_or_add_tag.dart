@@ -3,10 +3,12 @@ import 'package:agency_time/utils/widgets/custom_app_bar.dart';
 import 'package:agency_time/models/tag.dart';
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/utils/constants/colors.dart';
-import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/utils/widgets/custom_input_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../utils/widgets/buttons/main_button.dart';
+import '../../../../utils/widgets/buttons/text_button.dart';
 
 class editTag extends StatelessWidget {
   const editTag({required this.isNewTag, required this.tags, Key? key})

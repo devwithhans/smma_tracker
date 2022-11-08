@@ -4,11 +4,11 @@ import 'package:agency_time/utils/constants/currencies.dart';
 import 'package:agency_time/utils/constants/spacings.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/constants/validators.dart';
-import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/utils/widgets/custom_input_form.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../utils/widgets/buttons/main_button.dart';
 import './select_currency_dropdown.dart';
 
 class CompanyDetail extends StatelessWidget {

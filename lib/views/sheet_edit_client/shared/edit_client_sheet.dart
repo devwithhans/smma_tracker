@@ -5,12 +5,14 @@ import 'package:agency_time/logic/data_visualisation/blocs/settings_bloc/setting
 import 'package:agency_time/logic/data_visualisation/models/duration_data.dart';
 import 'package:agency_time/logic/data_visualisation/models/month.dart';
 import 'package:agency_time/models/client.dart';
-import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/utils/widgets/custom_input_form.dart';
 import 'package:agency_time/views/view_data_visualisation/data_visualisation_dependencies.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
+
+import '../../../utils/widgets/buttons/main_button.dart';
+import '../../../utils/widgets/buttons/text_button.dart';
 
 class EditClientSheet extends StatelessWidget {
   static String id = 'AddClient';

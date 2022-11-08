@@ -1,10 +1,11 @@
 import 'package:agency_time/models/tag.dart';
 import 'package:agency_time/logic/clients/repos/client_repo.dart';
-import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/utils/widgets/custom_input_form.dart';
 import 'package:agency_time/utils/widgets/filter_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../utils/widgets/buttons/main_button.dart';
 
 class SelectTag extends StatefulWidget {
   const SelectTag({

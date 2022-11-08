@@ -42,7 +42,7 @@ class UserPerformanceView extends StatelessWidget {
                       if (state.relationClients.isEmpty) {
                         return Text('Please wait till we recieve your data');
                       }
-                      List<Client> result = state.relationClients;
+                      List<Client> result = state.allClients;
                       result.sort((a, b) =>
                           sortClientByUsersLastActivity(appUser.id, a, b));
                       return Column(

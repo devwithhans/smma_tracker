@@ -1,21 +1,20 @@
 import 'dart:math';
-
+import 'package:agency_time/bloc_config.dart';
 import 'package:agency_time/features/auth/presentation/signin.dart';
+import 'package:agency_time/features/auth/presentation/widgets/errorText.dart';
+import 'package:agency_time/features/auth/state/authenticate/authenticate_cubit.dart';
 import 'package:agency_time/logic/authentication/login_cubit/login_cubit.dart';
-import 'package:agency_time/utils/constants/text_styles.dart';
+import 'package:agency_time/utils/widgets/buttons/social_button.dart';
 import 'package:agency_time/utils/widgets/complience.dart';
-import 'package:agency_time/utils/widgets/custom_input_form.dart';
-import 'package:agency_time/utils/widgets/loading_screen.dart';
 import 'package:agency_time/utils/widgets/responsive_widgets/splitscreen.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:agency_time/views/dialog_payment/paymeny_view_dependencies.dart';
 
-import '../../../utils/widgets/buttons/main_button.dart';
+import '../../../../utils/widgets/buttons/main_button.dart';
 
-class WebRegisterView extends StatelessWidget {
+class Signup extends StatelessWidget {
   static const String pageName = 'register';
 
-  WebRegisterView({Key? key}) : super(key: key);
+  Signup({Key? key}) : super(key: key);
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -27,11 +26,11 @@ class WebRegisterView extends StatelessWidget {
     bool newsletter = false;
 
     return BlocProvider(
-      create: (context) => AuthenticationCubit(),
+      create: (context) => AuthenticateCubit(),
       child: Scaffold(
-        body: BlocBuilder<AuthenticationCubit, AuthenticationState>(
+        body: BlocBuilder<AuthenticateCubit, AuthenticateState>(
           builder: (context, state) {
-            if (state is LoginLoading) {
+            if (state.status == BlocStatus.loading) {
               return const LoadingScreen();
             }
 
@@ -43,7 +42,7 @@ class WebRegisterView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Register now',
+                    'Sign up now',
                     style: AppTextStyle.boldLarge,
                   ),
                   const SizedBox(height: 5),
@@ -171,14 +170,18 @@ class WebRegisterView extends StatelessWidget {
                             }
                           },
                         ),
+                        SizedBox(height: 20),
+                        SocialButton(
+                          icon: 'assets/google-logo.png',
+                          onPressed: () {
+                            context
+                                .read<AuthenticateCubit>()
+                                .signinWithGoogle();
+                          },
+                          text: 'Continue with google',
+                        ),
                         SizedBox(height: 10),
-                        state is LoginFailed
-                            ? Text(
-                                state.errorMessage,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.red),
-                              )
-                            : SizedBox(),
+                        ErrorText(error: state.error)
                       ],
                     ),
                   ),

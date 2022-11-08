@@ -1,8 +1,9 @@
 import 'package:agency_time/logic/authentication/new_company_cubit/new_company_cubit.dart';
-import 'package:agency_time/utils/widgets/custom_button.dart';
 import 'package:agency_time/utils/widgets/custom_input_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../utils/widgets/buttons/main_button.dart';
 
 class InviteUsers extends StatefulWidget {
   const InviteUsers({

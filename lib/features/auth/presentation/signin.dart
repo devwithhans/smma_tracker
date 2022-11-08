@@ -1,7 +1,9 @@
-import 'package:agency_time/logic/authentication/login_cubit/login_cubit.dart';
-import 'package:agency_time/utils/constants/text_styles.dart';
+import 'package:agency_time/bloc_config.dart';
+import 'package:agency_time/features/auth/presentation/widgets/errorText.dart';
+import 'package:agency_time/features/auth/state/authenticate/authenticate_cubit.dart';
 import 'package:agency_time/utils/constants/validators.dart';
-import 'package:agency_time/utils/widgets/custom_button.dart';
+import 'package:agency_time/utils/widgets/buttons/main_button.dart';
+import 'package:agency_time/utils/widgets/buttons/social_button.dart';
 import 'package:agency_time/utils/widgets/custom_input_form.dart';
 import 'package:agency_time/utils/widgets/loading_screen.dart';
 import 'package:agency_time/utils/widgets/responsive_widgets/splitscreen.dart';
@@ -9,10 +11,10 @@ import 'package:agency_time/views/view_enter_app/web/widgets/web_hero_widget.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class WebLoginView extends StatelessWidget {
-  static String pageName = 'login';
+class Signin extends StatelessWidget {
+  static String pageName = 'signin';
 
-  WebLoginView({Key? key}) : super(key: key);
+  Signin({Key? key}) : super(key: key);
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -21,11 +23,12 @@ class WebLoginView extends StatelessWidget {
     String email = '';
 
     return BlocProvider(
-      create: (context) => AuthenticationCubit(),
+      create: (context) => AuthenticateCubit(),
       child: Scaffold(
-        body: BlocBuilder<AuthenticationCubit, AuthenticationState>(
+        body: BlocBuilder<AuthenticateCubit, AuthenticateState>(
           builder: (context, state) {
-            if (state is LoginLoading) {
+            print(state.status);
+            if (state.status == BlocStatus.loading) {
               return const LoadingScreen();
             }
             return ResponsiveSplitScreen(
@@ -65,25 +68,28 @@ class WebLoginView extends StatelessWidget {
                           maxLines: 1,
                           hintText: 'Enter password',
                         ),
+                        ErrorText(error: state.error),
                         const SizedBox(height: 40),
                         CustomElevatedButton(
-                          text: 'Log Ind',
+                          text: 'Sign in',
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               context
-                                  .read<AuthenticationCubit>()
-                                  .loginUser(password, email);
+                                  .read<AuthenticateCubit>()
+                                  .signinWithPassword(password, email);
                             }
                           },
                         ),
                         const SizedBox(height: 10),
-                        state is LoginFailed
-                            ? Text(
-                                state.errorMessage,
-                                textAlign: TextAlign.center,
-                                style: AppTextStyle.smallRed,
-                              )
-                            : const SizedBox(),
+                        SocialButton(
+                          icon: 'assets/google-logo.png',
+                          onPressed: () {
+                            context
+                                .read<AuthenticateCubit>()
+                                .signinWithGoogle();
+                          },
+                          text: 'Continue with google',
+                        ),
                       ],
                     ),
                   ),

@@ -1,5 +1,6 @@
+import 'package:agency_time/features/auth/presentation/signin.dart';
+import 'package:agency_time/features/auth/presentation/signup.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
-import 'package:agency_time/views/view_enter_app/web/web_login_user_view.dart';
 import 'package:agency_time/views/view_enter_app/web/web_register_user_view.dart';
 import 'package:flutter/material.dart';
 
@@ -23,14 +24,14 @@ class EnterAppHeadline extends StatelessWidget {
       if (pushScreen == EnterAppPushScreen.register) {
         return TextButton(
           onPressed: () {
-            Navigator.pushNamed(context, WebRegisterView.pageName);
+            Navigator.pushNamed(context, Signup.pageName);
           },
           child: const Text('create a new account'),
         );
       } else {
         return TextButton(
           onPressed: () {
-            Navigator.pushNamed(context, WebLoginView.pageName);
+            Navigator.pushNamed(context, Signin.pageName);
           },
           child: const Text('Login to an existing account'),
         );

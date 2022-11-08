@@ -24,16 +24,22 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
     _clientsStream = clientsRepo
         .clientsSubscription()
         .listen((QuerySnapshot<Map<String, dynamic>> event) {
+      print(event);
       for (var clientRaw in event.docs) {
         add(AddClient(client: clientRaw));
       }
-      if (event.docs.isEmpty) {
-        showDialog(
-            context: navigatorKey.currentContext!,
-            builder: (context) => Dialog(
-                child: Center(
-                    child: Container(child: Text('Welcome to SMMA TRacker')))));
-      }
+      // if (event.docs.isEmpty) {
+      //   showDialog(
+      //     context: navigatorKey.currentContext!,
+      //     builder: (context) => Dialog(
+      //       child: Center(
+      //         child: Container(
+      //           child: Text('Welcome to SMMA TRacker'),
+      //         ),
+      //       ),
+      //     ),
+      //   );
+      // }
     });
 
     on<AddClient>(_addClient);
