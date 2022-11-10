@@ -24,6 +24,7 @@ class CustomInputForm extends StatelessWidget {
     this.obscureText = false,
     this.initialValue,
     this.inputFormatters,
+    this.textAlign = TextAlign.start,
     this.customInputStyle = CustomInputStyle.normal,
     Key? key,
   }) : super(key: key);
@@ -47,6 +48,7 @@ class CustomInputForm extends StatelessWidget {
   final TextEditingController? controller;
   final String? suffixText;
   final bool autofocus;
+  final TextAlign textAlign;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -57,7 +59,7 @@ class CustomInputForm extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(fontSize: 15),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                   ),
                   SizedBox(height: 10),
                 ],
@@ -77,6 +79,7 @@ class CustomInputForm extends StatelessWidget {
           autofocus: autofocus,
           maxLines: maxLines,
           onChanged: onChanged,
+          textAlign: textAlign,
           onEditingComplete: onEditingComplete,
           onSaved: onSaved,
           cursorColor: Colors.black,

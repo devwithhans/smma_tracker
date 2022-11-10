@@ -31,7 +31,6 @@ class _FiltersScrollState extends State<FiltersScroll> {
 
   @override
   Widget build(BuildContext context) {
-    print(selected);
     return SizedBox(
       height: 30,
       child: ListView(
@@ -74,7 +73,9 @@ class SelectCard extends StatelessWidget {
   const SelectCard({
     Key? key,
     this.icon,
+    this.preIcon,
     required this.text,
+    this.secondaryText,
     this.onTap,
     this.height,
     this.margin = const EdgeInsets.only(right: 10),
@@ -84,8 +85,10 @@ class SelectCard extends StatelessWidget {
   final bool selected;
   final double? height;
   final String text;
+  final String? secondaryText;
   final EdgeInsetsGeometry? margin;
   final Icon? icon;
+  final Icon? preIcon;
   final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
@@ -102,10 +105,19 @@ class SelectCard extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            preIcon ?? SizedBox(),
             Text(
               text,
               style: TextStyle(color: selected ? Colors.white : Colors.black),
             ),
+            secondaryText != null
+                ? Text(
+                    secondaryText!,
+                    style: TextStyle(
+                        color: selected ? Colors.white : Colors.black,
+                        fontWeight: FontWeight.bold),
+                  )
+                : SizedBox(),
             icon ?? SizedBox(),
           ],
         ),
