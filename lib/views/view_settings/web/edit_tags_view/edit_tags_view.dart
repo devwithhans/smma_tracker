@@ -1,5 +1,5 @@
+import 'package:agency_time/features/auth/models/user.dart';
 import 'package:agency_time/models/company.dart';
-import 'package:agency_time/models/user.dart';
 import 'package:agency_time/utils/widgets/custom_app_bar.dart';
 import 'package:agency_time/models/tag.dart';
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';

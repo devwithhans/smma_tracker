@@ -1,10 +1,8 @@
+import 'package:agency_time/features/auth/models/user.dart';
 import 'package:agency_time/models/client.dart';
 import 'package:agency_time/models/company.dart';
-import 'package:agency_time/models/user.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/functions/sorting.dart';
-import 'package:agency_time/utils/widgets/client_list_result/client_list_result.dart';
-import 'package:agency_time/utils/widgets/client_list_result/two_line_text.dart';
 
 import '../../view_data_visualisation/data_visualisation_dependencies.dart';
 import 'package:intl/intl.dart';

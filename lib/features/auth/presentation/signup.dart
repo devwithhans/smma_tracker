@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:agency_time/bloc_config.dart';
+import 'package:agency_time/features/auth/models/signup_payload.dart';
 import 'package:agency_time/features/auth/presentation/signin.dart';
 import 'package:agency_time/features/auth/presentation/widgets/errorText.dart';
 import 'package:agency_time/features/auth/state/authenticate/authenticate_cubit.dart';
@@ -159,8 +160,8 @@ class Signup extends StatelessWidget {
                           text: 'Register',
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              context.read<AuthenticationCubit>().registerUser(
-                                    registerLoad: RegisterLoad(
+                              context.read<AuthenticateCubit>().registerUser(
+                                    registerLoad: SignupPayload(
                                       email: email,
                                       name: name,
                                       newletter: newsletter,

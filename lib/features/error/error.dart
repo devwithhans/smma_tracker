@@ -39,4 +39,15 @@ class HcError {
     developerMessage: 'Some unhandled error accured in the signup process',
     frontendMessage: 'Something went wrong try again later',
   );
+  static HcError couldNotCreateCompany = HcError(
+    errorCode: 'clould-not-create-company',
+    developerMessage:
+        'Something went wrong when saving the company to the database',
+    frontendMessage: 'Something went wrong try again later',
+  );
+  static HcError noIdea = HcError(
+    errorCode: 'no-idea',
+    developerMessage: 'No idea why this happened',
+    frontendMessage: 'Relax everything is under controle... FUUUUCKKK',
+  );
 }

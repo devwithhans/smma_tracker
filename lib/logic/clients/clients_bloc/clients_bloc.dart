@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:agency_time/bloc_config.dart';
 import 'package:agency_time/logic/clients/repos/client_repo.dart';
 import 'package:agency_time/main.dart';
 import 'package:agency_time/models/client.dart';

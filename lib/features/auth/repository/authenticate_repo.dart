@@ -55,6 +55,12 @@ class AuthenticateRepo {
       'photo_url': user.photoURL,
       'newletter': false
     });
+
+    return AppUser(
+        id: user.uid,
+        firstName: splitName.first,
+        lastName: splitName.length > 1 ? splitName.last : '',
+        email: user.email!);
   }
 
   List<String> splitNames(String fullName) {

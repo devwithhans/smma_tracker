@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:agency_time/features/auth/state/authorize/authorize_cubit.dart';
 import 'package:agency_time/logic/clients/repos/client_repo.dart';
 import 'package:agency_time/logic/data_visualisation/blocs/data_bloc/data_bloc.dart';
 import 'package:agency_time/logic/data_visualisation/blocs/navigation_cubit/navigation_cubit.dart';
@@ -29,7 +30,7 @@ class WebNavigation extends StatelessWidget {
     return BlocProvider(
       create: (context) => ClientsBloc(
           clientsRepo: context.read<ClientsRepo>(),
-          company: context.read<AuthorizationCubit>().state.company!),
+          company: context.read<AuthorizeCubit>().state.company!),
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => NavigationCubit()),

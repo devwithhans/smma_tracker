@@ -1,5 +1,5 @@
+import 'package:agency_time/features/auth/models/user.dart';
 import 'package:agency_time/models/tag.dart';
-import 'package:agency_time/models/user.dart';
 
 class Company {
   String id;
@@ -57,7 +57,7 @@ class Company {
     return Company(
       id: id,
       tags: tags,
-      roles: value['members'],
+      roles: value['members'] ?? {},
       subscription: value['subscription'] != null
           ? Subscription(
               active: value['subscription']['status'] == 'active',

@@ -1,9 +1,9 @@
+import 'package:agency_time/features/auth/models/user.dart';
 import 'package:agency_time/logic/data_visualisation/models/user_tracking.dart';
 import 'package:agency_time/models/company_month.dart';
 import 'package:agency_time/models/employee.dart';
 import 'package:agency_time/models/tag.dart';
 import 'package:agency_time/models/client.dart';
-import 'package:agency_time/models/user.dart';
 import 'package:agency_time/utils/constants/colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';

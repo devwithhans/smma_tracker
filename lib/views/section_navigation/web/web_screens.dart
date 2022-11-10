@@ -8,6 +8,11 @@ import 'package:flutter/material.dart';
 
 List<MenuObject> webScreens = [
   MenuObject(
+    icon: Icons.settings,
+    page: const SettingsView(),
+    title: 'Settings',
+  ),
+  MenuObject(
     icon: Icons.person,
     page: const UserPerformanceView(),
     title: 'My stats',
@@ -31,11 +36,6 @@ List<MenuObject> webScreens = [
     icon: Icons.group,
     page: const WebEmployeesView(),
     title: 'Employees',
-  ),
-  MenuObject(
-    icon: Icons.settings,
-    page: const SettingsView(),
-    title: 'Settings',
   ),
 ];
 

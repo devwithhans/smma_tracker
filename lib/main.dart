@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:agency_time/features/auth/handleAuthStatus.dart';
 import 'package:agency_time/features/auth/presentation/signin.dart';
 import 'package:agency_time/features/auth/presentation/signup.dart';
 import 'package:agency_time/features/auth/state/authorize/authorize_cubit.dart';
@@ -6,8 +7,6 @@ import 'package:agency_time/firebase_options.dart';
 import 'package:agency_time/logic/clients/repos/client_repo.dart';
 import 'package:agency_time/logic/settings/repos/settings_repo.dart';
 import 'package:agency_time/logic/data_visualisation/repos/data_repository.dart';
-import 'package:agency_time/wrapper.dart';
-import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/logic/timer/repositories/timer_repo.dart';
 import 'package:agency_time/views/view_register_company/web/web_register_company_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -91,7 +90,7 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
                 routes: {
-                  '/': (context) => const Wrapper(),
+                  '/': (context) => const HandleAuthStatus(),
                   Signup.pageName: (context) => Signup(),
                   Signin.pageName: (context) => Signin(),
 

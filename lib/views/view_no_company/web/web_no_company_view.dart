@@ -1,3 +1,4 @@
+import 'package:agency_time/features/auth/state/authorize/authorize_cubit.dart';
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/models/invite.dart';
 import 'package:agency_time/utils/constants/spacings.dart';
@@ -15,17 +16,14 @@ class WebNoCompany extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthorizationState authState = context.read<AuthorizationCubit>().state;
-    bool hasInvite = authState.invite != null;
+    AuthorizeState authState = context.read<AuthorizeCubit>().state;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Center(
           child: Container(
             constraints: const BoxConstraints(maxHeight: 1000, maxWidth: 600),
-            child: hasInvite
-                ? HasInvite(invite: authState.invite!)
-                : const NoInvite(),
+            child: NoInvite(),
           ),
         ),
       ),

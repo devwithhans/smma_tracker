@@ -1,12 +1,12 @@
 part of 'authenticate_cubit.dart';
 
 class AuthenticateState extends Equatable {
-  const AuthenticateState({this.status = Status.initial, this.error});
+  const AuthenticateState({this.status = BlocStatus.initial, this.error});
 
-  final Status status;
+  final BlocStatus status;
   final HcError? error;
 
-  AuthenticateState copyWith({Status? status, HcError? error}) {
+  AuthenticateState copyWith({BlocStatus? status, HcError? error}) {
     return AuthenticateState(
       status: status ?? this.status,
       error: error ?? this.error,

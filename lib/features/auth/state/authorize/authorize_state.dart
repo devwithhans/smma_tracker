@@ -28,5 +28,3 @@ class AuthorizeState extends Equatable {
   @override
   List get props => [status, appUser, company];
 }
-
-class AuthorizeInitial extends AuthorizeState {}
