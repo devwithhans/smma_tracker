@@ -1,6 +1,12 @@
-import 'package:agency_time/blocs/auth_cubit/auth_cubit.dart';
-import 'package:agency_time/mobile_views/bottom_navigation.dart';
-import 'package:agency_time/mobile_views/welcome_view.dart';
+import 'package:agency_time/features/auth/presentation/signin.dart';
+import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
+import 'package:agency_time/main.dart';
+import 'package:agency_time/utils/widgets/buttons/main_button.dart';
+import 'package:agency_time/views/section_navigation/web/web_navigation_section.dart';
+import 'package:agency_time/views/view_enter_app/web/web_register_user_view.dart';
+import 'package:agency_time/views/view_no_company/web/web_no_company_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,23 +17,33 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthCubit, AuthState>(
+    return BlocBuilder<AuthorizationCubit, AuthorizationState>(
       builder: ((context, state) {
         print(state.authStatus);
         if (state.authStatus == AuthStatus.signedIn) {
-          return const BottomNav();
-          // const BottomNav();
+          bool hasActiveSubscription = state.company!.subscription != null &&
+              state.company!.roles[state.appUser!.id] == 'owner';
+          // return WebNavigation(hasActiveSubscription: hasActiveSubscription);
+          return WebNavigation();
         }
         if (state.authStatus == AuthStatus.signedOut) {
-          return WelcomeView();
+          return Signin();
+        }
+        if (state.authStatus == AuthStatus.noCompany) {
+          return const WebNoCompany();
         }
         return Scaffold(
           body: Center(
-            child: LottieBuilder.asset(
-              'assets/lottie.json',
-              repeat: false,
-            ),
-          ),
+              child: Column(
+            children: [
+              Text('something went wrong'),
+              CustomElevatedButton(
+                  text: 'LOGOUT',
+                  onPressed: () {
+                    FirebaseAuth.instance.signOut();
+                  })
+            ],
+          )),
         );
       }),
     );

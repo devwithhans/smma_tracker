@@ -5,9 +5,10 @@ class CustomSearchField extends StatelessWidget {
   const CustomSearchField({
     Key? key,
     this.hintText = '',
+    this.initalValue = '',
     required this.onSearch,
   }) : super(key: key);
-
+  final String initalValue;
   final void Function(String value) onSearch;
   final String hintText;
 
@@ -18,6 +19,7 @@ class CustomSearchField extends StatelessWidget {
       autofocus: false,
       onChanged: onSearch,
       cursorColor: kColorGreyText,
+      initialValue: initalValue,
       style: const TextStyle(
         fontSize: 15.0,
       ),
