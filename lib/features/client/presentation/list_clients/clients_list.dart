@@ -5,6 +5,7 @@ import 'package:agency_time/features/client/presentation/add_client/add_client.d
 import 'package:agency_time/features/client/presentation/list_clients/widgets/filters.dart';
 import 'package:agency_time/features/client/presentation/list_clients/widgets/list_header.dart';
 import 'package:agency_time/features/client/presentation/list_clients/widgets/list_result.dart';
+import 'package:agency_time/features/client/repository/client_repo.dart';
 import 'package:agency_time/features/client/state/cubit/get_clients_cubit_cubit.dart';
 import 'package:agency_time/features/client/utils/filters.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
@@ -29,8 +30,8 @@ class _WebClientsViewState extends State<ClientsView> {
   List<Client> searchResult = [];
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-        SideSheet.right(body: AddClientSheet(), context: context, width: 500));
+    // WidgetsBinding.instance.addPostFrameCallback((_) =>
+    //     SideSheet.right(body: AddClientSheet(), context: context, width: 500));
   }
 
   @override
@@ -63,8 +64,9 @@ class _WebClientsViewState extends State<ClientsView> {
                 searchHint: 'Search clients',
                 title: 'Clients',
                 onPlusPressed: () {
-                  SideSheet.right(
-                      body: AddClientSheet(), context: context, width: 500);
+                  context.read<NewClientRepo>().processData();
+                  // SideSheet.right(
+                  //     body: AddClientSheet(), context: context, width: 500);
                 },
                 currentMonth: DateTime.now(),
                 onSearch: (v) {
