@@ -25,7 +25,7 @@ class AuthorizeRepo {
     QuerySnapshot<Map<String, dynamic>> companyRaw = await FirebaseFirestore
         .instance
         .collection('companies')
-        .where('owner', isEqualTo: uid)
+        .where('roles.' + uid, isNull: false)
         .limit(1)
         .get()
         .timeout(Duration(seconds: 2))
@@ -45,6 +45,7 @@ class AuthorizeRepo {
   Future<Company> _addMembersToCompanyDocument(Company company) async {
     List<UserData> members = [];
     List membersUIDs = company.roles.keys.toList();
+    print(membersUIDs);
     for (var uid in membersUIDs) {
       DocumentSnapshot<Map<String, dynamic>> member =
           await FirebaseFirestore.instance.collection('users').doc(uid).get();

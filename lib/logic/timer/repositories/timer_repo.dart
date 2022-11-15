@@ -1,9 +1,8 @@
 import 'package:agency_time/features/auth/models/user.dart';
 import 'package:agency_time/features/auth/state/authorize/authorize_cubit.dart';
+import 'package:agency_time/features/client/models/client.dart';
 import 'package:agency_time/models/tag.dart';
-import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/logic/timer/timer_bloc/timer_bloc.dart';
-import 'package:agency_time/models/client.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 

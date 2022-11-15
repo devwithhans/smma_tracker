@@ -15,6 +15,7 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppUser user = BlocProvider.of<AuthorizeCubit>(context).state.appUser!;
+    AuthorizeState authState = BlocProvider.of<AuthorizeCubit>(context).state;
     Company company = BlocProvider.of<AuthorizeCubit>(context).state.company!;
     return Scaffold(
       body: SafeArea(
@@ -33,6 +34,10 @@ class SettingsView extends StatelessWidget {
                   ),
                   Text(
                     company.companyName,
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                  ),
+                  Text(
+                    authState.admin ? 'ADMIN ACCES' : 'USER ACCES',
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                   ),
                 ],

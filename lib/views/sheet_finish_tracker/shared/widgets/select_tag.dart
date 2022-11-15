@@ -1,3 +1,5 @@
+import 'package:agency_time/features/client/repository/client_repo.dart';
+import 'package:agency_time/logic/clients/new_client_cubit/new_client_cubit.dart';
 import 'package:agency_time/models/tag.dart';
 import 'package:agency_time/logic/clients/repos/client_repo.dart';
 import 'package:agency_time/utils/widgets/custom_input_form.dart';
@@ -37,7 +39,7 @@ class _SelectTagState extends State<SelectTag> {
 
   @override
   Widget build(BuildContext context) {
-    List<Tag> tags = RepositoryProvider.of<ClientsRepo>(context).getTags();
+    List<Tag> tags = RepositoryProvider.of<NewClientRepo>(context).getTags();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

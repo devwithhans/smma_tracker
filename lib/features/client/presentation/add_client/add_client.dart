@@ -1,46 +1,40 @@
-import 'package:agency_time/logic/clients/edit_client_cubit/edit_client_cubit.dart';
+import 'package:agency_time/features/auth/state/authorize/authorize_cubit.dart';
 import 'package:agency_time/logic/clients/new_client_cubit/new_client_cubit.dart';
-import 'package:agency_time/logic/clients/repos/client_repo.dart';
 import 'package:agency_time/logic/data_visualisation/blocs/settings_bloc/settings_bloc.dart';
-import 'package:agency_time/logic/data_visualisation/models/duration_data.dart';
-import 'package:agency_time/logic/data_visualisation/models/month.dart';
-import 'package:agency_time/models/client.dart';
+import 'package:agency_time/utils/widgets/buttons/main_button.dart';
 import 'package:agency_time/utils/widgets/custom_input_form.dart';
 import 'package:agency_time/views/view_data_visualisation/data_visualisation_dependencies.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
-import '../../../features/client/models/client.dart';
-import '../../../utils/widgets/buttons/main_button.dart';
-import '../../../utils/widgets/buttons/text_button.dart';
-
-class EditClientSheet extends StatelessWidget {
+class AddClientSheet extends StatelessWidget {
   static String id = 'AddClient';
 
-  EditClientSheet({required this.client, Key? key}) : super(key: key);
+  AddClientSheet({this.internal = false, Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
-  final Client client;
+  final bool internal;
   @override
   Widget build(BuildContext context) {
-    String name = client.name;
-    String description = '';
-    double mrr = client.selectedMonth!.mrr;
-    double hourlyRateTarget = client.selectedMonth!.hourlyRateTarget;
+    String? name;
+    String? description;
+    double? mrr;
+    double? hourly_rate_target;
 
     return BlocProvider(
-      create: (context) => EditClientCubit(context.read<ClientsRepo>()),
+      create: (context) => NewClientCubit(
+          companyId: context.read<AuthorizeCubit>().state.appUser!.companyId!),
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            'Edit ${client.name}',
+            'Add new ${internal ? 'internal' : 'client'}',
             style: TextStyle(color: Colors.black),
           ),
         ),
-        body: BlocBuilder<EditClientCubit, EditClientState>(
+        body: BlocBuilder<NewClientCubit, NewClientState>(
           builder: (context, state) {
-            if (state is EditClientLoading) {
+            if (state.status == status.loading) {
               return const Center(
                 child: CircularProgressIndicator(color: Colors.black),
               );
@@ -54,29 +48,10 @@ class EditClientSheet extends StatelessWidget {
                     key: _formKey,
                     child: ListView(
                       children: [
-                        CustomTextButton(
-                            text: 'Pause client',
-                            onPressed: () {
-                              context.read<EditClientCubit>().pauseClient(
-                                    id: client.id,
-                                    mrr: client.selectedMonth!.mrr,
-                                    pause: true,
-                                  );
-                            }),
-                        CustomTextButton(
-                            text: 'Activate client',
-                            onPressed: () {
-                              context.read<EditClientCubit>().pauseClient(
-                                    id: client.id,
-                                    mrr: client.selectedMonth!.mrr,
-                                    pause: false,
-                                  );
-                            }),
-                        client.internal
+                        internal
                             ? Column(
                                 children: [
                                   CustomInputForm(
-                                    initialValue: name,
                                     onChanged: (v) {
                                       name = v;
                                     },
@@ -91,7 +66,6 @@ class EditClientSheet extends StatelessWidget {
                                   ),
                                   SizedBox(height: 30),
                                   CustomInputForm(
-                                    initialValue: description,
                                     maxLines: 4,
                                     onChanged: (v) {
                                       description = v;
@@ -104,7 +78,6 @@ class EditClientSheet extends StatelessWidget {
                             : Column(
                                 children: [
                                   CustomInputForm(
-                                    initialValue: name,
                                     onChanged: (v) {
                                       name = v;
                                     },
@@ -118,11 +91,6 @@ class EditClientSheet extends StatelessWidget {
                                   ),
                                   SizedBox(height: 30),
                                   CustomInputForm(
-                                    initialValue: CurrencyTextInputFormatter(
-                                            locale: 'da',
-                                            decimalDigits: 0,
-                                            symbol: '')
-                                        .format(mrr.toString()),
                                     onChanged: (value) {
                                       mrr = value.isNotEmpty
                                           ? double.parse(
@@ -147,13 +115,8 @@ class EditClientSheet extends StatelessWidget {
                                   ),
                                   SizedBox(height: 30),
                                   CustomInputForm(
-                                    initialValue: CurrencyTextInputFormatter(
-                                            locale: 'da',
-                                            decimalDigits: 0,
-                                            symbol: '')
-                                        .format(hourlyRateTarget.toString()),
                                     onChanged: (value) {
-                                      hourlyRateTarget = double.parse(
+                                      hourly_rate_target = double.parse(
                                           value.replaceAll('.', ''));
                                     },
                                     validator: (v) {
@@ -185,15 +148,15 @@ class EditClientSheet extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           CustomElevatedButton(
-                            text: 'Save ${client.name}',
+                            text: 'Add ${internal ? 'task' : 'client'}',
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                context.read<EditClientCubit>().editClient(
-                                      mrr: mrr,
-                                      id: client.id,
-                                      name: name,
+                                context.read<NewClientCubit>().addClient(
+                                      name: name!,
                                       description: description,
-                                      hourlyRateTarget: hourlyRateTarget,
+                                      mrr: mrr,
+                                      internal: internal,
+                                      hourly_rate_target: hourly_rate_target,
                                     );
                               }
                             },

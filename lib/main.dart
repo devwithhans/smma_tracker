@@ -3,8 +3,8 @@ import 'package:agency_time/features/auth/handleAuthStatus.dart';
 import 'package:agency_time/features/auth/presentation/signin.dart';
 import 'package:agency_time/features/auth/presentation/signup.dart';
 import 'package:agency_time/features/auth/state/authorize/authorize_cubit.dart';
+import 'package:agency_time/features/client/repository/client_repo.dart';
 import 'package:agency_time/firebase_options.dart';
-import 'package:agency_time/logic/clients/repos/client_repo.dart';
 import 'package:agency_time/logic/settings/repos/settings_repo.dart';
 import 'package:agency_time/logic/data_visualisation/repos/data_repository.dart';
 import 'package:agency_time/logic/timer/repositories/timer_repo.dart';
@@ -67,7 +67,8 @@ class MyApp extends StatelessWidget {
               create: (context) =>
                   SettingsRepo(context.read<AuthorizeCubit>())),
           RepositoryProvider(
-              create: (context) => ClientsRepo(context.read<AuthorizeCubit>())),
+              create: (context) =>
+                  NewClientRepo(context.read<AuthorizeCubit>())),
         ],
         child: GestureDetector(
             onTap: () {

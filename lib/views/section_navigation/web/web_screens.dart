@@ -1,12 +1,18 @@
+import 'package:agency_time/features/client/presentation/list_clients/clients_list.dart';
 import 'package:agency_time/views/side_menu/view_list_internal/web/web_internal_clients_view.dart';
 import 'package:agency_time/views/view_settings/web/settings_view.dart';
 import 'package:agency_time/views/side_menu/view_performance_company/view_company_performance.dart';
 import 'package:agency_time/views/side_menu/view_performance_user/user_performance_view.dart';
-import 'package:agency_time/views/side_menu/view_list_client/web/web_clients_view.dart';
+import 'package:agency_time/views/view_list_client/web/web_clients_view.dart';
 import 'package:agency_time/views/side_menu/view_list_employee/web/web_employees_view.dart';
 import 'package:flutter/material.dart';
 
 List<MenuObject> webScreens = [
+  MenuObject(
+    icon: Icons.store,
+    page: const ClientsView(),
+    title: 'Clients',
+  ),
   MenuObject(
     icon: Icons.settings,
     page: const SettingsView(),
@@ -21,11 +27,6 @@ List<MenuObject> webScreens = [
     icon: Icons.bar_chart_rounded,
     page: const ViewCompanyPerformance(),
     title: 'Company stats',
-  ),
-  MenuObject(
-    icon: Icons.store,
-    page: const WebClientsView(),
-    title: 'Clients',
   ),
   MenuObject(
     icon: Icons.house_rounded,

@@ -1,5 +1,8 @@
 import 'dart:ui';
 import 'package:agency_time/features/auth/state/authorize/authorize_cubit.dart';
+import 'package:agency_time/features/client/repository/client_repo.dart';
+import 'package:agency_time/features/client/state/cubit/get_clients_cubit_cubit.dart';
+import 'package:agency_time/logic/clients/new_client_cubit/new_client_cubit.dart';
 import 'package:agency_time/logic/clients/repos/client_repo.dart';
 import 'package:agency_time/logic/data_visualisation/blocs/data_bloc/data_bloc.dart';
 import 'package:agency_time/logic/data_visualisation/blocs/navigation_cubit/navigation_cubit.dart';
@@ -17,6 +20,8 @@ import 'package:agency_time/views/section_navigation/web/web_screens.dart';
 import 'package:agency_time/views/section_navigation/web/widgets/web_side_menu.dart';
 import 'package:agency_time/views/view_data_visualisation/data_visualisation_dependencies.dart';
 
+import '../../../features/client/models/client.dart';
+
 class WebNavigation extends StatelessWidget {
   const WebNavigation({this.hasActiveSubscription = true, Key? key})
       : super(key: key);
@@ -28,9 +33,7 @@ class WebNavigation extends StatelessWidget {
     BuildContext context,
   ) {
     return BlocProvider(
-      create: (context) => ClientsBloc(
-          clientsRepo: context.read<ClientsRepo>(),
-          company: context.read<AuthorizeCubit>().state.company!),
+      create: (context) => GetClientsCubit(context.read<NewClientRepo>()),
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => NavigationCubit()),
@@ -38,7 +41,7 @@ class WebNavigation extends StatelessWidget {
             create: (context) => TimerBloc(
               stopWatchRepository: context.read<TimerRepository>(),
               ticker: const Ticker(),
-              clientsBloc: context.read<ClientsBloc>(),
+              clientsBloc: context.read<GetClientsCubit>(),
             ),
           ),
           BlocProvider(

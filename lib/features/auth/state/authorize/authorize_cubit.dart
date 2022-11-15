@@ -49,7 +49,6 @@ class AuthorizeCubit extends Cubit<AuthorizeState> {
     // We recieve the appUser containing values from our database.
 
     AppUser? appUser = await authorizeRepo.getAppUser(user.uid);
-
     // If this value is null, then it means the user has created signed in with a third party platform for the first time.
     // Therefore we create a new user with the values supplied by the thirdparty
 
@@ -73,10 +72,16 @@ class AuthorizeCubit extends Cubit<AuthorizeState> {
     }
 
     //We wanna check if the user is associated with a company
+
     Company? company = await authorizeRepo.getCompany(appUser!.id);
+    String role = '';
+    if (company != null) {
+      role = company.roles[user.uid];
+    }
 
     emit(
       state.copyWith(
+        admin: role == 'admin',
         appUser: appUser,
         company: company,
         status: BlocStatus.succes,

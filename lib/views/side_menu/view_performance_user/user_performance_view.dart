@@ -4,6 +4,7 @@ import 'package:agency_time/models/company.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/functions/sorting.dart';
 
+import '../../../features/client/models/client.dart';
 import '../../view_data_visualisation/data_visualisation_dependencies.dart';
 import 'package:intl/intl.dart';
 
@@ -41,8 +42,8 @@ class UserPerformanceView extends StatelessWidget {
                         return Text('Please wait till we recieve your data');
                       }
                       List<Client> result = state.allClients;
-                      result.sort((a, b) =>
-                          sortClientByUsersLastActivity(appUser.id, a, b));
+                      // result.sort((a, b) =>
+                      //     sortClientByUsersLastActivity(appUser.id, a, b));
                       return Column(
                         children: result.map((e) => Text(e.name)).toList(),
                       );

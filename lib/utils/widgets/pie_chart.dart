@@ -1,4 +1,5 @@
 import 'package:agency_time/features/auth/models/user.dart';
+import 'package:agency_time/features/client/models/client.dart';
 import 'package:agency_time/logic/data_visualisation/models/user_tracking.dart';
 import 'package:agency_time/models/company_month.dart';
 import 'package:agency_time/models/employee.dart';

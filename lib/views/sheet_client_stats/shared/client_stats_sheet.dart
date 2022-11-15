@@ -5,6 +5,7 @@ import 'package:agency_time/views/sheet_edit_client/shared/edit_client_sheet.dar
 import 'package:agency_time/views/view_data_visualisation/data_visualisation_dependencies.dart';
 import 'package:side_sheet/side_sheet.dart';
 
+import '../../../features/client/models/client.dart';
 import '../../../utils/widgets/buttons/text_button.dart';
 
 class ClientStatsSheet extends StatelessWidget {

@@ -9,6 +9,8 @@ import 'package:agency_time/views/view_data_visualisation/data_visualisation_dep
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+
+import '../../../features/client/models/client.dart';
 part 'clients_event.dart';
 part 'clients_state.dart';
 

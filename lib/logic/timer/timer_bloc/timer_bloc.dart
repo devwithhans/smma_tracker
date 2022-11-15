@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:agency_time/features/client/models/client.dart';
+import 'package:agency_time/features/client/state/cubit/get_clients_cubit_cubit.dart';
 import 'package:agency_time/logic/clients/clients_bloc/clients_bloc.dart';
 
 import 'package:agency_time/models/tag.dart';
@@ -13,7 +15,7 @@ part './timer_state.dart';
 
 class TimerBloc extends Bloc<StopWatchEvent, TimerState> {
   StreamSubscription<int>? _tickerSubscription;
-  ClientsBloc clientsBloc;
+  GetClientsCubit clientsBloc;
   TimerRepository stopWatchRepository;
   StreamSubscription? checkIfFinishedStream;
 
@@ -92,8 +94,8 @@ class TimerBloc extends Bloc<StopWatchEvent, TimerState> {
     Duration stopDuration = event.duration;
     DateTime stopTime = state.start!.add(stopDuration);
 
-    clientsBloc.add(
-        OfflineMonthUpdate(duration: stopDuration, clientId: state.client!.id));
+    clientsBloc.offlineMonthUpdate(
+        duration: stopDuration, clientId: state.client!.id);
 
     add(CancelTracking());
 

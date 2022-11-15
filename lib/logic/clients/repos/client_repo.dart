@@ -79,10 +79,6 @@ class ClientsRepo {
         .snapshots();
   }
 
-  List<Tag> getTags() {
-    return authCubit.state.company!.tags;
-  }
-
   Future<List<Tracking>> getTrackings(
       int skip, String clientId, int limit) async {
     AppUser user = authCubit.state.appUser!;

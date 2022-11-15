@@ -1,7 +1,6 @@
 import 'package:agency_time/features/client/models/client.dart';
 import 'package:agency_time/logic/timer/repositories/ui_helper.dart';
 import 'package:agency_time/logic/timer/timer_bloc/timer_bloc.dart';
-import 'package:agency_time/models/client.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/functions/print_duration.dart';
 import 'package:agency_time/utils/widgets/client_list_result/column_row_clickable.dart';
@@ -17,8 +16,8 @@ import 'package:side_sheet/side_sheet.dart';
 
 enum DataLevel { user, admin }
 
-class ClientListResult extends StatelessWidget {
-  const ClientListResult({
+class ListResult extends StatelessWidget {
+  const ListResult({
     Key? key,
     required this.searchResult,
     required this.moneyFormatter,

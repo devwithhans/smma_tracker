@@ -14,7 +14,7 @@ class CompanyRepo {
       'companyName': name,
       'countryCode': countryCode,
       'vatNumber': vatNumber,
-      'owner': userId
+      'roles': {userId: 'admin'}
     });
     await firestore.collection('users').doc(userId).update({
       'companyId': result.id,

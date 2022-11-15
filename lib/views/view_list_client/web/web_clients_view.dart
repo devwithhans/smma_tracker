@@ -1,3 +1,4 @@
+import 'package:agency_time/features/client/presentation/add_client/add_client.dart';
 import 'package:agency_time/logic/clients/clients_bloc/clients_bloc.dart';
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
 import 'package:agency_time/models/client.dart';
@@ -12,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:side_sheet/side_sheet.dart';
+
+import '../../../features/client/models/client.dart';
 
 class WebClientsView extends StatefulWidget {
   const WebClientsView({Key? key}) : super(key: key);

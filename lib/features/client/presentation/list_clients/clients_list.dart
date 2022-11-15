@@ -1,61 +1,72 @@
+import 'package:agency_time/bloc_config.dart';
+import 'package:agency_time/features/auth/state/authorize/authorize_cubit.dart';
 import 'package:agency_time/features/client/models/client.dart';
 import 'package:agency_time/features/client/presentation/add_client/add_client.dart';
-import 'package:agency_time/logic/clients/clients_bloc/clients_bloc.dart';
-import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
-import 'package:agency_time/models/client.dart';
+import 'package:agency_time/features/client/presentation/list_clients/widgets/filters.dart';
+import 'package:agency_time/features/client/presentation/list_clients/widgets/list_header.dart';
+import 'package:agency_time/features/client/presentation/list_clients/widgets/list_result.dart';
+import 'package:agency_time/features/client/state/cubit/get_clients_cubit_cubit.dart';
+import 'package:agency_time/features/client/utils/filters.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/functions/currency_formatter.dart';
-import 'package:agency_time/utils/widgets/client_list_result/client_list_result.dart';
 import 'package:agency_time/utils/widgets/client_list_result/column_row.dart';
-import 'package:agency_time/utils/widgets/client_list_result/web_list_header.dart';
+import 'package:agency_time/utils/widgets/loading_screen.dart';
 import 'package:agency_time/views/sheet_add_client/shared/add_client_sheet.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:side_sheet/side_sheet.dart';
 
-class WebInternalsView extends StatefulWidget {
-  const WebInternalsView({Key? key}) : super(key: key);
+class ClientsView extends StatefulWidget {
+  const ClientsView({Key? key}) : super(key: key);
 
   @override
-  State<WebInternalsView> createState() => _WebInternalsViewState();
+  State<ClientsView> createState() => _WebClientsViewState();
 }
 
-class _WebInternalsViewState extends State<WebInternalsView> {
+class _WebClientsViewState extends State<ClientsView> {
   String searchParameter = '';
   List<Client> searchResult = [];
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+        SideSheet.right(body: AddClientSheet(), context: context, width: 500));
+  }
 
   @override
   Widget build(BuildContext context) {
-    String countryCode =
-        context.read<AuthorizationCubit>().state.company!.countryCode;
+    AuthorizeState authState = context.read<AuthorizeCubit>().state;
+    String countryCode = authState.company!.countryCode;
     NumberFormat moneyFormatter =
         CustomCurrencyFormatter.getFormatter(countryCode: countryCode);
 
+    Map<String, Function> sorts =
+        ClientSorts(authState.appUser!.id).getClientFilters();
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: BlocBuilder<ClientsBloc, ClientsState>(
+      body: BlocBuilder<GetClientsCubit, GetClientsState>(
         builder: (context, state) {
-          searchResult = state.internalClients
+          if (state.status == BlocStatus.loading) {
+            return const LoadingScreen();
+          }
+
+          searchResult = state.allClients
               .where((element) => '${element.name} ${element.name} '
                   .toLowerCase()
                   .contains(searchParameter.toLowerCase()))
               .toList();
+
           return ListView(
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              WebListHeader(
-                searchHint: 'Search internal',
-                title: 'Internals',
+              ListHeader(
+                searchHint: 'Search clients',
+                title: 'Clients',
                 onPlusPressed: () {
                   SideSheet.right(
-                      body: AddClientSheet(
-                        internal: true,
-                      ),
-                      context: context,
-                      width: 500);
+                      body: AddClientSheet(), context: context, width: 500);
                 },
-                currentMonth: state.month ?? DateTime.now(),
+                currentMonth: DateTime.now(),
                 onSearch: (v) {
                   searchParameter = v;
                   setState(() {});
@@ -73,16 +84,21 @@ class _WebInternalsViewState extends State<WebInternalsView> {
                     style: AppTextStyle.boldSmall,
                   ),
                   Text(
+                    'Hourly Rate',
+                    style: AppTextStyle.boldSmall,
+                  ),
+                  Text(
                     'Last tracking',
                     style: AppTextStyle.boldSmall,
                   ),
                 ],
               ),
-              // const RowExplaination(),
               const SizedBox(height: 20),
               const Divider(height: 0),
-              ClientListResult(
-                  searchResult: searchResult, moneyFormatter: moneyFormatter),
+              ListResult(
+                searchResult: searchResult,
+                moneyFormatter: moneyFormatter,
+              ),
               SizedBox(
                 height: 400,
               )

@@ -1,3 +1,5 @@
+import 'package:agency_time/features/auth/state/authorize/authorize_cubit.dart';
+import 'package:agency_time/features/client/models/client.dart';
 import 'package:agency_time/logic/timer/repositories/timer_repo.dart';
 import 'package:agency_time/models/client.dart';
 import 'package:agency_time/models/tag.dart';
@@ -120,7 +122,7 @@ class _FinishTimerViewState extends State<FinishTimerView> {
                                           context)
                                       .addTag(selectedTag!);
                                   context
-                                      .read<AuthorizationCubit>()
+                                      .read<AuthorizeCubit>()
                                       .state
                                       .company!
                                       .tags
