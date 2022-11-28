@@ -1,0 +1,11 @@
+{
+    "ID" : "client_id",
+    "services": {
+        "1" : {
+            "title" : "Facebook Ads",
+            "mrr" : 5000
+        }
+    }
+
+
+}

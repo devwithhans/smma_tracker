@@ -1,3 +1,4 @@
+import 'package:agency_time/features/auth/state/authorize/authorize_cubit.dart';
 import 'package:agency_time/logic/data_visualisation/blocs/data_bloc/data_bloc.dart';
 import 'package:agency_time/models/company.dart';
 
@@ -41,7 +42,7 @@ class _GraphAndCardsState extends State<GraphAndCards> {
 
   @override
   Widget build(BuildContext context) {
-    Company company = context.read<AuthorizationCubit>().state.company!;
+    Company company = context.read<AuthorizeCubit>().state.company!;
     final NumberFormat moneyFormatter = CustomCurrencyFormatter.getFormatter(
         countryCode: company.countryCode, short: false);
 

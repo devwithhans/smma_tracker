@@ -1,3 +1,4 @@
+import 'package:agency_time/features/auth/state/authorize/authorize_cubit.dart';
 import 'package:agency_time/logic/settings/repos/settings_repo.dart';
 import 'package:agency_time/utils/widgets/custom_app_bar.dart';
 import 'package:agency_time/models/tag.dart';
@@ -19,7 +20,7 @@ class editTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
-    final List oldTags = context.read<AuthorizationCubit>().state.company!.tags;
+    final List oldTags = context.read<AuthorizeCubit>().state.company!.tags;
     String tag = tags.tag;
     String description = tags.description;
     int id = tags.id;
@@ -34,9 +35,9 @@ class editTag extends StatelessWidget {
           await RepositoryProvider.of<SettingsRepo>(context).addTag(newTag);
 
           if (isNewTag) {
-            context.read<AuthorizationCubit>().state.company!.tags.add(newTag);
+            context.read<AuthorizeCubit>().state.company!.tags.add(newTag);
           } else {
-            context.read<AuthorizationCubit>().state.company!.tags[newTag.id] =
+            context.read<AuthorizeCubit>().state.company!.tags[newTag.id] =
                 newTag;
           }
 
@@ -59,7 +60,7 @@ class editTag extends StatelessWidget {
 
         int index = oldTags.indexWhere((element) => element.id == newTag.id);
 
-        context.read<AuthorizationCubit>().state.company!.tags[index] = newTag;
+        context.read<AuthorizeCubit>().state.company!.tags[index] = newTag;
 
         Navigator.pop(context);
       } catch (e) {

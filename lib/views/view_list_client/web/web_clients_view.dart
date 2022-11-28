@@ -1,3 +1,4 @@
+import 'package:agency_time/features/auth/state/authorize/authorize_cubit.dart';
 import 'package:agency_time/features/client/presentation/add_client/add_client.dart';
 import 'package:agency_time/logic/clients/clients_bloc/clients_bloc.dart';
 import 'package:agency_time/logic/authorization/auth_cubit/authorization_cubit.dart';
@@ -30,7 +31,7 @@ class _WebClientsViewState extends State<WebClientsView> {
   @override
   Widget build(BuildContext context) {
     String countryCode =
-        context.read<AuthorizationCubit>().state.company!.countryCode;
+        context.read<AuthorizeCubit>().state.company!.countryCode;
     NumberFormat moneyFormatter =
         CustomCurrencyFormatter.getFormatter(countryCode: countryCode);
 
@@ -49,8 +50,8 @@ class _WebClientsViewState extends State<WebClientsView> {
                 searchHint: 'Search clients',
                 title: 'Clients',
                 onPlusPressed: () {
-                  SideSheet.right(
-                      body: AddClientSheet(), context: context, width: 500);
+                  // SideSheet.right(
+                  //     body: AddClientSheet(), context: context, width: 500);
                 },
                 currentMonth: state.month ?? DateTime.now(),
                 onSearch: (v) {

@@ -1,15 +1,17 @@
+import 'package:agency_time/features/client/data_processing/get_mrr.dart';
+import 'package:agency_time/features/insights/models/month.dart';
 import 'package:agency_time/models/company.dart';
-import 'package:agency_time/models/month.dart';
 import 'package:agency_time/utils/functions/data_explanation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class Client {
   bool activeMonth;
   bool internal;
   String id;
   String name;
-  Month? selectedMonth;
-  Month? compareMonth;
+  MonthData? selectedMonth;
+  MonthData? compareMonth;
   Duration durationChange;
   double hourlyRateChange;
   bool paused;
@@ -26,8 +28,8 @@ class Client {
     Map? relations,
     String? id,
     DateTime? updatedAt,
-    Month? selectedMonth,
-    Month? compareMonth,
+    MonthData? selectedMonth,
+    MonthData? compareMonth,
   }) {
     return Client(
       durationChange: durationChange ?? this.durationChange,
@@ -62,16 +64,31 @@ class Client {
       Company company) {
     Map clientMap = clientSnapshot.data();
 
+    List rawFee = clientMap['recurringRevenue'];
+    List<Fee> fees = [];
+    rawFee.forEach(
+      (element) {
+        fees.add(Fee.fromMap(element));
+      },
+    );
+
+    List<Fee> filledFees = getAllMonths(fees);
+
     Map<String, dynamic> monthsAsMap = clientMap['months'] ?? [];
-    List<Month> savedMonths = [];
+    List<MonthData> savedMonths = [];
 
     monthsAsMap.forEach((key, value) {
-      Month? month = Month.convertMonth(value, key, company);
+      MonthData? month = MonthData.getMonthData(
+        fees: filledFees,
+        monthId: key,
+        monthMap: value,
+      );
+
       if (month != null) savedMonths.add(month);
     });
 
-    Month? lastMonth = savedMonths.length < 2 ? null : savedMonths[1];
-    Month thisMonth = savedMonths[0];
+    MonthData? lastMonth = savedMonths.length < 2 ? null : savedMonths[1];
+    MonthData thisMonth = savedMonths[0];
     return Client(
       internal: clientMap['internal'] ?? false,
       id: clientSnapshot.id,
@@ -81,11 +98,11 @@ class Client {
       updatedAt: clientMap['updatedAt'],
       compareMonth: savedMonths.length < 2 ? null : savedMonths[1],
       selectedMonth: savedMonths[0],
-      hourlyRateChange: getChangeProcentage(
-          thisMonth.hourlyRate, lastMonth != null ? lastMonth.hourlyRate : 0),
+      hourlyRateChange: getChangeProcentage(thisMonth.totalHourlyRate,
+          lastMonth != null ? lastMonth.totalHourlyRate : 0),
       durationChange: lastMonth == null
-          ? thisMonth.duration
-          : thisMonth.duration - lastMonth.duration,
+          ? thisMonth.totalDuration
+          : thisMonth.totalDuration - lastMonth.totalDuration,
     );
   }
 }

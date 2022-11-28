@@ -178,11 +178,11 @@ List<PieChartSectionData> overviewShowingSections({
           duration = employeeTestList.first.totalDuration;
         }
       } else {
-        duration = element.selectedMonth!.duration;
+        duration = element.selectedMonth!.totalDuration;
       }
       if (duration > Duration()) {
         double internalProcentage =
-            ((element.selectedMonth!.duration.inSeconds /
+            ((element.selectedMonth!.totalDuration.inSeconds /
                     totalDuration.inSeconds) *
                 100);
         index++;

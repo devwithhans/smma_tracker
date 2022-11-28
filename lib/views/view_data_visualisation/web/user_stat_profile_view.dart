@@ -1,3 +1,4 @@
+import 'package:agency_time/features/auth/state/authorize/authorize_cubit.dart';
 import 'package:agency_time/models/company.dart';
 import 'package:agency_time/models/employee.dart';
 import 'package:agency_time/utils/widgets/custom_app_bar.dart';
@@ -15,7 +16,7 @@ class UserStatProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Company company = context.read<AuthorizationCubit>().state.company!;
+    Company company = context.read<AuthorizeCubit>().state.company!;
 
     final moneyFormatter =
         CustomCurrencyFormatter.getFormatter(countryCode: company.countryCode);

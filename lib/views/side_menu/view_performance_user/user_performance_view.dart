@@ -1,4 +1,5 @@
 import 'package:agency_time/features/auth/models/user.dart';
+import 'package:agency_time/features/auth/state/authorize/authorize_cubit.dart';
 import 'package:agency_time/models/client.dart';
 import 'package:agency_time/models/company.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
@@ -13,8 +14,8 @@ class UserPerformanceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppUser appUser = context.read<AuthorizationCubit>().state.appUser!;
-    Company company = context.read<AuthorizationCubit>().state.company!;
+    AppUser appUser = context.read<AuthorizeCubit>().state.appUser!;
+    Company company = context.read<AuthorizeCubit>().state.company!;
     final moneyFormatter =
         CustomCurrencyFormatter.getFormatter(countryCode: company.countryCode);
     return ListView(

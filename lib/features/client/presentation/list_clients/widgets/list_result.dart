@@ -1,18 +1,17 @@
 import 'package:agency_time/features/client/models/client.dart';
+import 'package:agency_time/features/client/presentation/client_details/client_details.dart';
 import 'package:agency_time/logic/timer/repositories/ui_helper.dart';
 import 'package:agency_time/logic/timer/timer_bloc/timer_bloc.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
 import 'package:agency_time/utils/functions/print_duration.dart';
+import 'package:agency_time/utils/page_router/custom_page_route.dart';
 import 'package:agency_time/utils/widgets/client_list_result/column_row_clickable.dart';
 import 'package:agency_time/utils/widgets/client_list_result/play_button.dart';
 import 'package:agency_time/utils/widgets/client_list_result/two_line_text.dart';
 import 'package:agency_time/utils/widgets/procentage_card.dart';
-import 'package:agency_time/views/sheet_client_stats/shared/client_stats_sheet.dart';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:side_sheet/side_sheet.dart';
 
 enum DataLevel { user, admin }
 
@@ -52,16 +51,17 @@ class ListResult extends StatelessWidget {
           }
           List<Widget> items = [
             TwoLineText(
-                subTitle: moneyFormatter.format(client.selectedMonth!.mrr),
+                subTitle: moneyFormatter.format(client.selectedMonth!.totalMrr),
                 title: '${client.name}${client.paused ? ' paused' : ''}'),
             TwoLineText(
-              title: printDuration(client.selectedMonth!.duration),
+              title: printDuration(client.selectedMonth!.totalDuration),
               subTitle: client.durationChange.isNegative
                   ? '- ${printDuration(client.durationChange)} / last'
                   : '+ ${printDuration(client.durationChange)} / last',
             ),
             TwoLineText(
-              title: moneyFormatter.format(client.selectedMonth!.hourlyRate),
+              title:
+                  moneyFormatter.format(client.selectedMonth!.totalHourlyRate),
               subTitle: ProcentageChange(
                   small: true,
                   procentage: client.hourlyRateChange.isFinite
@@ -73,7 +73,7 @@ class ListResult extends StatelessWidget {
               children: [
                 Text(
                   DateFormat('EEE, dd MMM HH:MM ')
-                      .format(client.selectedMonth!.updatedAt),
+                      .format(client.selectedMonth!.updatedAt!),
                   style: AppTextStyle.medium,
                 ),
                 PlayButton(
@@ -93,12 +93,10 @@ class ListResult extends StatelessWidget {
           }
           return ColumnRowClickable(
             onPressed: () {
-              SideSheet.right(
-                body: ClientStatsSheet(
-                  client: client,
-                ),
-                context: context,
-              );
+              Navigator.push(
+                  context,
+                  CustomPageRoute(
+                      builder: (context) => ClientDetails(client: client)));
             },
             items: items,
           );

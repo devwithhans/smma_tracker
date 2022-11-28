@@ -36,9 +36,9 @@ Future<void> main() async {
     persistenceEnabled: false,
   );
 
-  FlutterError.onError = (details) {
-    FlutterError.presentError(details);
-  };
+  // FlutterError.onError = (details) {
+  //   FlutterError.presentError(details);
+  // };
   runApp(
     const RestartWidget(
       child: MyApp(),

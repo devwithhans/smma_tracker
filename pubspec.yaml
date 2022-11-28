@@ -54,6 +54,7 @@ dependencies:
   currency_picker: ^2.0.11
   dropdown_search: 
   google_sign_in: ^5.4.2
+  easy_sidemenu: ^0.4.1
 
 
 dev_dependencies:
@@ -74,6 +75,7 @@ flutter:
     - assets/indicator.svg
     - assets/lottie.json
     - assets/google-logo.png
+    - assets/cover.png
 
   fonts:
     - family: Poppins

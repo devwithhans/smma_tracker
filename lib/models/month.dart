@@ -1,3 +1,4 @@
+import 'package:agency_time/features/client/data_processing/get_mrr.dart';
 import 'package:agency_time/models/company.dart';
 
 import 'package:agency_time/models/employee.dart';
@@ -55,18 +56,23 @@ class Month {
     );
   }
 
-  static Month? convertMonth(
+  static Month? convertMonth({
     Map<String, dynamic>? value,
-    String monthId,
-    Company company,
-  ) {
+    required Fee fee,
+    required String monthId,
+    required Company company,
+  }) {
     if (value == null || value.isEmpty) {
       return null;
     }
 
-    Duration duration = Duration(seconds: value['duration'] ?? 0);
+    double newMrr = 0;
 
-    double newMrr = value['mrr'] != null ? value['mrr'].toDouble() : 0;
+    fee.services.forEach((key, value) {
+      newMrr = newMrr + value.mrr;
+    });
+
+    Duration duration = Duration(seconds: value['duration'] ?? 0);
 
     List<Employee> employees = [];
     Map employeesData = value['employees'] ?? {};

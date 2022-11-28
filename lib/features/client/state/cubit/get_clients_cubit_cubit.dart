@@ -4,6 +4,7 @@ import 'package:agency_time/bloc_config.dart';
 import 'package:agency_time/features/client/models/client.dart';
 import 'package:agency_time/features/client/repository/client_repo.dart';
 import 'package:agency_time/features/error/error.dart';
+import 'package:agency_time/features/insights/models/month.dart';
 import 'package:agency_time/models/month.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -33,9 +34,8 @@ class GetClientsCubit extends Cubit<GetClientsState> {
 
     List<Client> internals = [];
     try {
-      List<Client> filtered = modifiedClientList
-          .where((element) => element.internal == true)
-          .toList();
+      List<Client> filtered =
+          modifiedClientList.where((element) => element.internal).toList();
       internals.addAll(filtered);
     } catch (e) {
       print(e);
@@ -106,14 +106,14 @@ class GetClientsCubit extends Cubit<GetClientsState> {
     if (clientToUpdateList.isEmpty) return;
 
     Client client = clientToUpdateList.last;
-    Month selectedMonth = client.selectedMonth!;
+    MonthData selectedMonth = client.selectedMonth!;
 
     String userId = clientRepo.authCubit.state.appUser!.id;
     selectedMonth.employees
         .firstWhere((element) => element.member.id == userId)
         .totalDuration += duration;
 
-    selectedMonth.duration += duration;
+    selectedMonth.totalDuration += duration;
 
     newClientList
         .firstWhere((element) => element.id == clientId)

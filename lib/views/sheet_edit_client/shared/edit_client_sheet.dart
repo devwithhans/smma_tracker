@@ -26,7 +26,7 @@ class EditClientSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     String name = client.name;
     String description = '';
-    double mrr = client.selectedMonth!.mrr;
+    double mrr = client.selectedMonth!.totalMrr;
     double hourlyRateTarget = client.selectedMonth!.hourlyRateTarget;
 
     return BlocProvider(
@@ -59,7 +59,7 @@ class EditClientSheet extends StatelessWidget {
                             onPressed: () {
                               context.read<EditClientCubit>().pauseClient(
                                     id: client.id,
-                                    mrr: client.selectedMonth!.mrr,
+                                    mrr: client.selectedMonth!.totalMrr,
                                     pause: true,
                                   );
                             }),
@@ -68,7 +68,7 @@ class EditClientSheet extends StatelessWidget {
                             onPressed: () {
                               context.read<EditClientCubit>().pauseClient(
                                     id: client.id,
-                                    mrr: client.selectedMonth!.mrr,
+                                    mrr: client.selectedMonth!.totalMrr,
                                     pause: false,
                                   );
                             }),

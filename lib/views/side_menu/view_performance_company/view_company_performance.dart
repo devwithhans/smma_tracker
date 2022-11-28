@@ -1,3 +1,5 @@
+import 'package:agency_time/features/auth/state/authorize/authorize_cubit.dart';
+
 import '../../../utils/widgets/buttons/main_button.dart';
 import '../../view_data_visualisation/data_visualisation_dependencies.dart';
 import 'package:agency_time/utils/constants/text_styles.dart';
@@ -9,7 +11,7 @@ class ViewCompanyPerformance extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Company company = context.read<AuthorizationCubit>().state.company!;
+    Company company = context.read<AuthorizeCubit>().state.company!;
 
     // final NumberFormat moneyFormatter = CustomCurrencyFormatter.getFormatter(
     //     countryCode: company.countryCode, short: false);

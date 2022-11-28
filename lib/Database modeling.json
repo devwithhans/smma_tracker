@@ -1,0 +1,92 @@
+
+// CLIENT:
+{
+    "client_id" : "String",
+    "services" : {
+        "service_id" : {
+           "year-month" :  {
+            "mrr" : "Int",
+            "employees" : [s]
+           }
+        }
+    }
+    
+}
+
+
+// CLIENT ACCUMULATION
+{
+    "total_duration" : 123,
+    "services" : {
+        "service_id" : {
+            "total_duration " : 123,
+            "tags" {
+                "tag_id" : 123
+            }
+        }
+    },
+    "employees" : {
+        "employee_id" : {
+            "total_duration" : 123,
+            "services" : {
+                "service_id" : {
+                    "total_duration " : 123,
+                    "tags" {
+                        "tag_id" : 123
+                    }
+                }
+            },
+        }
+    }
+ 
+}
+
+{
+	"month" : DateTime,
+	"duration" : Int,
+	"services" : {
+		"service_id" : {
+			"duration" : Int,
+			"tag_id" : ID,
+		}	
+	},
+	"tags" : {
+		"tag_id" : Int,
+	},
+	"employees" : {
+		"services" : {
+			"service_id" : {
+				"duration" : Int,
+				"tag_id" : ID,
+				}	
+			},
+			"tags" : {
+				"tag_id" : Int,
+			}
+	},
+	"days" : {
+		"1" : {
+{
+	"month" : "DateTime",
+	"duration" : "Int",
+	"services" : {
+		"service_id" : {
+			"duration" : "Int",
+			"tag_id" : "ID",
+		}	
+	},
+	"tags" : {
+		"tag_id" : "Int",
+	},
+	"employees" : {
+		"services" : {
+			"service_id" : {
+				"duration" : "Int",
+				"tag_id" : "ID",
+				}	
+			},
+			"tags" : {
+				"tag_id" : "Int",
+			}
+	},}} 
+}

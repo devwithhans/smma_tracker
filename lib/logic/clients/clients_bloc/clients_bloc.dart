@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:agency_time/bloc_config.dart';
+import 'package:agency_time/features/insights/models/month.dart';
 import 'package:agency_time/logic/clients/repos/client_repo.dart';
 import 'package:agency_time/main.dart';
 import 'package:agency_time/models/client.dart';
@@ -64,14 +65,14 @@ class ClientsBloc extends Bloc<ClientsEvent, ClientsState> {
     if (clientToUpdateList.isEmpty) return;
 
     Client client = clientToUpdateList.last;
-    Month selectedMonth = client.selectedMonth!;
+    MonthData selectedMonth = client.selectedMonth!;
 
     String userId = clientsRepo.authCubit.state.appUser!.id;
     selectedMonth.employees
         .firstWhere((element) => element.member.id == userId)
         .totalDuration += event.duration;
 
-    selectedMonth.duration += event.duration;
+    selectedMonth.totalDuration += event.duration;
 
     newClientList
         .firstWhere((element) => element.id == event.clientId)

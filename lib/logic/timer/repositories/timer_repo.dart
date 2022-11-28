@@ -40,6 +40,7 @@ class TimerRepository {
     Duration? duration,
     int? tag,
     Tag? newTag,
+    String? serviceId,
     required String trackingDocId,
     DateTime? stop,
   }) async {
@@ -49,6 +50,7 @@ class TimerRepository {
       Map<String, dynamic> updateObject = {
         'duration': duration != null ? duration.inSeconds : null,
         'tag': newTag != null ? newTag.id : tag,
+        'serviceId': serviceId ?? '123456789',
         'finished': true,
       };
       if (stop != null) {

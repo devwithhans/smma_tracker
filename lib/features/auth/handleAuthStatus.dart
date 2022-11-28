@@ -21,7 +21,7 @@ class HandleAuthStatus extends StatelessWidget {
 
         if (state.appUser != null) {
           if (state.company != null) {
-            return WebNavigation();
+            return const WebNavigation();
           }
           return const CreateCompany();
         } else {

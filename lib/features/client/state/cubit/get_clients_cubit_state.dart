@@ -5,7 +5,7 @@ class GetClientsState extends Equatable {
     this.status = BlocStatus.initial,
     this.error,
     this.allClients = const [],
-    this.allInternals,
+    this.allInternals = const [],
     this.myClients,
     this.myInternals,
     this.result,
@@ -13,7 +13,7 @@ class GetClientsState extends Equatable {
   final BlocStatus status;
   final HcError? error;
   final List<Client> allClients;
-  final List<Client>? allInternals;
+  final List<Client> allInternals;
   final List<Client>? myClients;
   final List<Client>? myInternals;
   final List<Client>? result;

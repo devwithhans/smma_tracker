@@ -1,4 +1,5 @@
 import 'package:agency_time/features/client/models/client.dart';
+import 'package:agency_time/features/client/presentation/client_details/client_details.dart';
 import 'package:agency_time/logic/timer/repositories/ui_helper.dart';
 import 'package:agency_time/logic/timer/timer_bloc/timer_bloc.dart';
 import 'package:agency_time/models/client.dart';
@@ -52,54 +53,58 @@ class ClientListResult extends StatelessWidget {
             );
           }
           List<Widget> items = [
-            TwoLineText(
-                subTitle: moneyFormatter.format(client.selectedMonth!.mrr),
-                title: '${client.name}${client.paused ? ' paused' : ''}'),
-            TwoLineText(
-              title: printDuration(client.selectedMonth!.duration),
-              subTitle: client.durationChange.isNegative
-                  ? '- ${printDuration(client.durationChange)} / last'
-                  : '+ ${printDuration(client.durationChange)} / last',
-            ),
-            TwoLineText(
-              title: moneyFormatter.format(client.selectedMonth!.hourlyRate),
-              subTitle: ProcentageChange(
-                  small: true,
-                  procentage: client.hourlyRateChange.isFinite
-                      ? client.hourlyRateChange
-                      : 100),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  DateFormat('EEE, dd MMM HH:MM ')
-                      .format(client.selectedMonth!.updatedAt),
-                  style: AppTextStyle.medium,
-                ),
-                PlayButton(
-                    isTracking: isTracking,
-                    onPressed: () {
-                      FinishTimerUIHelper.onToggleTimer(
-                        state: state,
-                        context: context,
-                        client: client,
-                      );
-                    })
-              ],
-            ),
+            // TwoLineText(
+            //     subTitle: moneyFormatter.format(client.selectedMonth!.mrr),
+            //     title: '${client.name}${client.paused ? ' paused' : ''}'),
+            // TwoLineText(
+            //   title: printDuration(client.selectedMonth!.duration),
+            //   subTitle: client.durationChange.isNegative
+            //       ? '- ${printDuration(client.durationChange)} / last'
+            //       : '+ ${printDuration(client.durationChange)} / last',
+            // ),
+            // TwoLineText(
+            //   title: moneyFormatter.format(client.selectedMonth!.hourlyRate),
+            //   subTitle: ProcentageChange(
+            //       small: true,
+            //       procentage: client.hourlyRateChange.isFinite
+            //           ? client.hourlyRateChange
+            //           : 100),
+            // ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     Text(
+            //       DateFormat('EEE, dd MMM HH:MM ')
+            //           .format(client.selectedMonth!.updatedAt),
+            //       style: AppTextStyle.medium,
+            //     ),
+            //     PlayButton(
+            //         isTracking: isTracking,
+            //         onPressed: () {
+            //           FinishTimerUIHelper.onToggleTimer(
+            //             state: state,
+            //             context: context,
+            //             client: client,
+            //           );
+            //         })
+            //   ],
+            // ),
           ];
           if (client.internal) {
             items.removeAt(2);
           }
           return ColumnRowClickable(
             onPressed: () {
-              SideSheet.right(
-                body: ClientStatsSheet(
-                  client: client,
-                ),
-                context: context,
-              );
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => ClientStatsSheet(client: client)));
+              // SideSheet.right(
+              //   body: ClientStatsSheet(
+              //     client: client,
+              //   ),
+              //   context: context,
+              // );
             },
             items: items,
           );

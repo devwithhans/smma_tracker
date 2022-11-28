@@ -22,6 +22,8 @@ import 'package:agency_time/views/view_data_visualisation/data_visualisation_dep
 
 import '../../../features/client/models/client.dart';
 
+var keyTwo = GlobalKey<NavigatorState>();
+
 class WebNavigation extends StatelessWidget {
   const WebNavigation({this.hasActiveSubscription = true, Key? key})
       : super(key: key);
@@ -59,7 +61,7 @@ class WebNavigation extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const WebSideMenu(),
+                      WebSideMenu(),
                       Expanded(
                         flex: 8,
                         child: webScreens[state.currentIndex].page,
